@@ -13,7 +13,7 @@ foreach psr (`cat psrs.list`)
 	setenv chisq `tempo2 -f $psr.par $psr.tim | grep "Fit Chisq" | awk '{print $7}' | cut -d'/' -f1`
 	echo "Initial chisq =  $chisq"
 
-	grep -v "NE_SW" $psr.par > new.par
+	cp $psr.par new.par
 
 	while (1)
 		rm -f ${psr}_fit_results.txt
