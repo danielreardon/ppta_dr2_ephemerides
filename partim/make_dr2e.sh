@@ -45,6 +45,8 @@ foreach psr (`cat $dr1e_dir/psrs.list`)
 	cat $outdir/extra.tim >> $outdir/dr2_nocpsr2.tim
 	cat $outdir/extra.par >> $outdir/dr2_nocpsr2.par
 
+	mkdir -p $outdir/early_only
+	cp $outdir/extra.tim $outdir/early_only/$psr.tim
 	mv $outdir/dr2_nocpsr2.tim $outdir/$psr.tim
 	mv $outdir/dr2_nocpsr2.par $outdir/$psr.par
 
@@ -87,6 +89,9 @@ foreach psr (`cat $dr1e_dir/psrs.list`)
         cat withB.tim >> legacy.tim
         mv legacy.tim $outdir/extra.tim
         rm withB.tim
+
+	mkdir -p $outdir/early_only
+        cp $outdir/extra.tim $outdir/early_only/$psr.tim
 
         cat $outdir/extra.tim >> $outdir/$psr.tim
         cat $outdir/extra.par >> $outdir/$psr.par
