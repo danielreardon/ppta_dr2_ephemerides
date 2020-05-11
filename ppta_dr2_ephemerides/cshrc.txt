@@ -1,0 +1,11 @@
+setenv PSRHOME /fred/oz002/psrhome/
+source $PSRHOME/scripts/uparrow.csh
+source /fred/oz002/psrhome/scripts/psrhome_2019.csh
+
+setenv PGPLOT_DIR /fred/oz002/rshannon/pgplot
+setenv LD_LIBRARY_PATH /fred/oz002/rshannon/lib:$LD_LIBRARY_PATH
+setenv TEMPO2 /fred/oz002/rshannon/tempo2
+setenv TEMPO2_CLOCK_DIR /home/dreardon/tempo2/clock
+alias tempo2-rms /fred/oz002/rshannon/bin/tempo2
+alias tempo2 tempo2-rms
+
