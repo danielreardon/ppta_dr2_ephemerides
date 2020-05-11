@@ -14,14 +14,10 @@ foreach psr (`cat psrs.list`)
 	echo "Initial chisq =  $chisq"
 
 	cp $psr.par new.par
-	rm -f fit_results.txt
-	touch fit_results.txt
 
-	setenv search 1
-
-	while ($search)
-		rm -f fit_results.txt
-		touch fit_results.txt
+	while (1)
+		rm -f ${psr}_fit_results.txt
+		touch ${psr}_fit_results.txt
 
 		foreach param (`cat ../params.txt`)
 
@@ -30,7 +26,7 @@ foreach psr (`cat psrs.list`)
 			else
 				echo $param
         			setenv chisq_new `tempo2 -f new.par $psr.tim -fit $param | grep "Fit Chisq" | awk '{print $7}' | cut -d'/' -f1`
-				echo "$param $chisq_new" >> fit_results.txt 
+				echo "$param $chisq_new" >> ${psr}_fit_results.txt 
 			endif
 
 		end
@@ -43,7 +39,7 @@ foreach psr (`cat psrs.list`)
                 		else
                        	 		echo $param
                         		setenv chisq_new `tempo2 -f new.par $psr.tim -fit $param | grep "Fit Chisq" | awk '{print $7}' | cut -d'/' -f1`
-                        		echo "$param $chisq_new" >> fit_results.txt
+                        		echo "$param $chisq_new" >> ${psr}_fit_results.txt
                 		endif
 
         		end
@@ -57,22 +53,23 @@ foreach psr (`cat psrs.list`)
                         	else
                                 	echo $param
                                 	setenv chisq_new `tempo2 -f new.par $psr.tim -fit $param | grep "Fit Chisq" | awk '{print $7}' | cut -d'/' -f1`
-                                	echo "$param $chisq_new" >> fit_results.txt
+                                	echo "$param $chisq_new" >> ${psr}_fit_results.txt
                         	endif
 
                 	end
         	endif
 
-		setenv new_param `sort -k 2 fit_results.txt | head -1 | awk '{print $1}'`
-		setenv chisq_new `sort -k 2 fit_results.txt | head -1 | awk '{print $2}'`
+		setenv new_param `sort -k 2 ${psr}_fit_results.txt | head -1 | awk '{print $1}'`
+		setenv chisq_new `sort -k 2 ${psr}_fit_results.txt | head -1 | awk '{print $2}'`
 
 		if (`echo "$chisq - $chisq_new > 2.0" | bc`) then
 			echo "Adding $new_param"
 			tempo2 -f new.par $psr.tim -fit $new_param -newpar
+			grep -i "TNChromAmp" $psr.par >> new.par
 			grep -i "TNSubtractChrom" $psr.par >> new.par
 			setenv chisq $chisq_new
         	else
-			setenv search 0
+			break
 		endif
 
 	end

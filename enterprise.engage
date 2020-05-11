@@ -1,0 +1,16 @@
+#!/bin/bash
+#SBATCH --job-name=0437_noise
+#SBATCH --output=/my_working_directory/job_output/0437_noise.out
+#SBATCH --ntasks=16
+#SBATCH --time=2:00:00
+#SBATCH --mem-per-cpu=1g
+#SBATCH --tmp=1G
+srun cp -r $TEMPO2 $JOBFS/tempo2
+srun cp -r $TEMPO2_CLOCK_DIR $JOBFS/tempo2_clock_dir
+srun export TEMPO2=$JOBFS/tempo2
+srun export TEMPO2_CLOCK_DIR=$JOBFS/tempo2_clock_dir
+
+# Navigate to working directory
+srun cd /
+srun python single_psr_noise.py J0437-4715
+	

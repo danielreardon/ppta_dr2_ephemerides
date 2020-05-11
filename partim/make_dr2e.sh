@@ -15,8 +15,8 @@ foreach psr (`cat $dr1e_dir/psrs.list`)
 	cp $dr2_dir/$psr.par $outdir/.
 	cp $dr2_dir/$psr.tim $outdir/.	
 
-	grep -vi "cpsr2" $dr2_dir/$psr.tim | grep -vi "20cm"> $outdir/dr2_nocpsr2.tim
-	grep -vi "cpsr2" $dr2_dir/$psr.par | grep -vi "20cm" | grep -v "NE_SW" | grep -v "START" | grep -v "FINISH" | grep -v "#" > $outdir/dr2_nocpsr2.par
+	grep -vi "20cm_cpsr2" $dr2_dir/$psr.tim > $outdir/dr2_nocpsr2.tim
+	grep -vi "20cm_cpsr2" $dr2_dir/$psr.par | grep -v "NE_SW" | grep -v "START" | grep -v "FINISH" | grep -v "#" > $outdir/dr2_nocpsr2.par
 	sed -i 's/ -q / -group /g' $outdir/dr2_nocpsr2.tim	
 
 	grep -i "cpsr2" $dr1e_dir/$psr.tim | grep -i "20cm\|multi\|h-oh" | grep -v "T2E" > $outdir/extra.tim
