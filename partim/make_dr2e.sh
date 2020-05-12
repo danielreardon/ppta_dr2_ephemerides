@@ -25,7 +25,9 @@ foreach psr (`cat $dr1e_dir/psrs.list`)
         grep -i "cpsr1" $dr1e_dir/$psr.par >> $outdir/extra.par
 	grep -i "fptm" $dr1e_dir/$psr.tim | grep -v "T2E" >> $outdir/extra.tim
         grep -i "fptm" $dr1e_dir/$psr.par >> $outdir/extra.par
-	grep -i "_s21" $dr1e_dir/$psr.tim | grep -v "T2E" >> $outdir/extra.tim
+	grep -i "afb" $dr1e_dir/$psr.tim | grep -v "T2E" >> $outdir/extra.tim
+        grep -i "afb" $dr1e_dir/$psr.par >> $outdir/extra.par
+        grep -i "_s21" $dr1e_dir/$psr.tim | grep -v "T2E" >> $outdir/extra.tim
         grep -i "_s21" $dr1e_dir/$psr.par >> $outdir/extra.par
 	grep -i "_s22" $dr1e_dir/$psr.tim | grep -v "T2E" >> $outdir/extra.tim
         grep -i "_s22" $dr1e_dir/$psr.par >> $outdir/extra.par
@@ -82,6 +84,8 @@ foreach psr (`cat $dr1e_dir/psrs.list`)
         grep -i "cpsr1" $dr1e_dir/$psr.par >> $outdir/extra.par
         grep -i "fptm" $dr1e_dir/$psr.tim | grep -v "T2E" >> $outdir/extra.tim
         grep -i "fptm" $dr1e_dir/$psr.par >> $outdir/extra.par
+        grep -i "afb" $dr1e_dir/$psr.tim | grep -v "T2E" >> $outdir/extra.tim
+        grep -i "afb" $dr1e_dir/$psr.par >> $outdir/extra.par
         grep -i "_s21" $dr1e_dir/$psr.tim | grep -v "T2E" >> $outdir/extra.tim
         grep -i "_s21" $dr1e_dir/$psr.par >> $outdir/extra.par
         grep -i "_s22" $dr1e_dir/$psr.tim | grep -v "T2E" >> $outdir/extra.tim
