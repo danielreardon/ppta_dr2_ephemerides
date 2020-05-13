@@ -47,12 +47,12 @@ foreach psr (`cat $dr1e_dir/psrs.list`)
 	cat $outdir/extra.tim >> $outdir/dr2_nocpsr2.tim
 	cat $outdir/extra.par >> $outdir/dr2_nocpsr2.par
 
-	cd $outdir
-	tempo2 -f dr2_nocpsr2.par dr2_nocpsr2.tim -nofit -fit F0 -fit F1 -fit DM -fit FD1 -newpar
-	cd ..
+	#cd $outdir
+	#tempo2 -f dr2_nocpsr2.par dr2_nocpsr2.tim -nofit -fit F0 -fit F1 -fit DM -fit FD1 -newpar
+	#cd ..
 
-	mkdir -p $outdir/early_only
-	grep -v "TN" $outdir/new.par | grep -v "START" | grep -v "FINISH" > $outdir/early_only/$psr.par
+	#mkdir -p $outdir/early_only
+	#grep -v "TN" $outdir/new.par | grep -v "START" | grep -v "FINISH" > $outdir/early_only/$psr.par
 	touch $outdir/early_only/$psr.tim
 	echo "FORMAT 1" >> $outdir/early_only/$psr.tim
 	echo "MODE 1" >> $outdir/early_only/$psr.tim
@@ -103,12 +103,12 @@ foreach psr (`cat $dr1e_dir/psrs.list`)
         mv legacy.tim $outdir/extra.tim
         rm withB.tim
 
-	cd $outdir
-	tempo2 -f $psr.par $psr.tim -nofit -fit F0 -fit F1 -fit DM -fit FD1 -newpar
-	cd ..
+	#cd $outdir
+	#tempo2 -f $psr.par $psr.tim -nofit -fit F0 -fit F1 -fit DM -fit FD1 -newpar
+	#cd ..
 
-        mkdir -p $outdir/early_only
-    	grep -v "TN" $outdir/new.par | grep -v "START" | grep -v "FINISH" > $outdir/early_only/$psr.par
+        #mkdir -p $outdir/early_only
+    	#grep -v "TN" $outdir/new.par | grep -v "START" | grep -v "FINISH" > $outdir/early_only/$psr.par
         touch $outdir/early_only/$psr.tim
         echo "FORMAT 1"    >> $outdir/early_only/$psr.tim
         echo "MODE 1" >> $outdir/early_only/$psr.tim
