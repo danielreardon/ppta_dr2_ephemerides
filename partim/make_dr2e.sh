@@ -1,8 +1,10 @@
 #!/usr/bin/tcsh
 
-setenv dr1e_dir /fred/oz002/dreardon/ppta_dr2_ephemerides/partim/dr1e
-setenv dr2_dir /fred/oz002/dreardon/ppta_dr2_ephemerides/partim/dr2_boris
-setenv outdir /fred/oz002/dreardon/ppta_dr2_ephemerides/partim/dr2e_cpsr2_replace 
+setenv basedir `pwd`
+
+setenv dr1e_dir $basedir/dr1e
+setenv dr2_dir $basedir/dr2_boris
+setenv outdir $basedir/dr2e_cpsr2_replace 
 
 cd $dr1e_dir
 ls -1 | cut -d. -f1 | sort | uniq | grep -v "psrs" | grep -v "J0437-4715" > psrs.list # do J0437 manually
@@ -31,7 +33,9 @@ foreach psr (`cat $dr1e_dir/psrs.list`)
         grep -i "_s21" $dr1e_dir/$psr.par >> $outdir/extra.par
 	grep -i "_s22" $dr1e_dir/$psr.tim | grep -v "T2E" >> $outdir/extra.tim
         grep -i "_s22" $dr1e_dir/$psr.par >> $outdir/extra.par
-	
+        grep -i "afb" $dr1e_dir/$psr.tim  >> $outdir/extra.tim
+        grep -i "afb" $dr1e_dir/$psr.par >> $outdir/extra.par
+
 	sed -i 's/ -g / -x dr1 -group /g' $outdir/extra.tim
 	sed -i 's/ 7 -f / pks -f /g' $outdir/extra.tim
 	sed -i 's/ -g / -group /g' $outdir/extra.par
@@ -47,9 +51,9 @@ foreach psr (`cat $dr1e_dir/psrs.list`)
 	cat $outdir/extra.tim >> $outdir/dr2_nocpsr2.tim
 	cat $outdir/extra.par >> $outdir/dr2_nocpsr2.par
 
-	cd $outdir
+	pushd $outdir
 	tempo2 -f dr2_nocpsr2.par dr2_nocpsr2.tim -nofit -fit F0 -fit F1 -fit DM -fit FD1 -newpar
-	cd ..
+	popd
 
 	mkdir -p $outdir/early_only
 	grep -v "TN" $outdir/new.par | grep -v "START" | grep -v "FINISH" > $outdir/early_only/$psr.par
@@ -67,7 +71,7 @@ end
 rm $outdir/extra.tim
 rm $outdir/extra.par
 
-setenv outdir /fred/oz002/dreardon/ppta_dr2_ephemerides/partim/dr2e_cpsr2_prepend
+setenv outdir $basedir/dr2e_cpsr2_prepend
 
 echo "PREPENDING DR1 CPSR2_20CM data, with dr1"
 foreach psr (`cat $dr1e_dir/psrs.list`)
@@ -90,6 +94,8 @@ foreach psr (`cat $dr1e_dir/psrs.list`)
         grep -i "_s21" $dr1e_dir/$psr.par >> $outdir/extra.par
         grep -i "_s22" $dr1e_dir/$psr.tim | grep -v "T2E" >> $outdir/extra.tim
         grep -i "_s22" $dr1e_dir/$psr.par >> $outdir/extra.par
+        grep -i "afb" $dr1e_dir/$psr.tim  | grep -v "T2E"  >> $outdir/extra.tim 
+        grep -i "afb" $dr1e_dir/$psr.par >> $outdir/extra.par
 
         sed -i 's/ -g / -x dr1 -group /g' $outdir/extra.tim
         sed -i 's/ 7 -f / pks -f /g' $outdir/extra.tim
@@ -109,6 +115,7 @@ foreach psr (`cat $dr1e_dir/psrs.list`)
 
         mkdir -p $outdir/early_only
     	grep -v "TN" $outdir/new.par | grep -v "START" | grep -v "FINISH" > $outdir/early_only/$psr.par
+        rm $outdir/early_only/${psr}.tim
         touch $outdir/early_only/$psr.tim
         echo "FORMAT 1"    >> $outdir/early_only/$psr.tim
         echo "MODE 1" >> $outdir/early_only/$psr.tim
@@ -116,6 +123,8 @@ foreach psr (`cat $dr1e_dir/psrs.list`)
 
         cat $outdir/extra.tim >> $outdir/$psr.tim
         cat $outdir/extra.par >> $outdir/$psr.par
+        
+        cat $outdir/extra.par >> $outdir/early_only/${psr}.par
 
 end
 
