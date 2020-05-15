@@ -1,6 +1,6 @@
 #!/usr/bin/tcsh
 
-setenv datadir /fred/oz002/dreardon/ephemeris_ppta_dr2/partim/dr2_boris
+setenv datadir /fred/oz002/dreardon/ephemeris_ppta_dr2/partim/dr2_boris/new_params_ver1
 
 mkdir -p $datadir/new_params
 cd $datadir
@@ -13,7 +13,7 @@ foreach psr (`cat psrs.list`)
 	setenv chisq `tempo2 -f $psr.par $psr.tim | grep "Fit Chisq" | awk '{print $7}' | cut -d'/' -f1`
 	echo "Initial chisq =  $chisq"
 
-	grep -v "NE_SW" $psr.par > new.par
+	cp $psr.par > new.par
 
 	while (1)
 		rm -f ${psr}_fit_results.txt
@@ -31,7 +31,7 @@ foreach psr (`cat psrs.list`)
 
 		end
         
-        	if ( { grep -q -E "BINARY.*T2" $psr.par  } ) then
+        	if ( { grep -q -E "ECC" $psr.par  } ) then
 			foreach param (`cat ../t2_params.txt`)
 
            	     		if ( { grep -q $param new.par } ) then
@@ -45,7 +45,7 @@ foreach psr (`cat psrs.list`)
         		end
 		endif
 
-		if ( { grep -q -E "BINARY.*ELL1" $psr.par  } ) then
+		if ( { grep -q -E "EPS1" $psr.par  } ) then
                 	foreach param (`cat ../ell1_params.txt`)
 
                        		if ( { grep -q $param new.par } ) then
