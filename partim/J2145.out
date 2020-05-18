@@ -1,0 +1,61 @@
+
+The following have been reloaded with a version change:
+  1) numpy/1.16.3-python-3.6.4 => numpy/1.14.1-python-2.7.14
+  2) python/3.6.4 => python/2.7.14
+  3) scipy/1.3.0-python-3.6.4 => scipy/1.0.0-python-2.7.14
+  4) tempo2/cf86df0 => tempo2/b381f57
+
+
+The following have been reloaded with a version change:
+  1) tempo2/b381f57 => tempo2/cf86df0
+
+
+The following have been reloaded with a version change:
+  1) numpy/1.14.1-python-2.7.14 => numpy/1.16.3-python-3.6.4
+  2) python/2.7.14 => python/3.6.4
+
+
+The following have been reloaded with a version change:
+  1) scipy/1.0.0-python-2.7.14 => scipy/1.3.0-python-3.6.4
+
+testing KOM=0, KIN=180
+testing KOM=0, KIN=161.805
+testing KOM=0, KIN=154.158
+testing KOM=0, KIN=148.212
+testing KOM=0, KIN=143.13
+testing KOM=0, KIN=138.59
+testing KOM=0, KIN=134.427
+testing KOM=0, KIN=130.542
+testing KOM=0, KIN=126.87
+testing KOM=0, KIN=123.367
+testing KOM=0, KIN=120
+testing KOM=0, KIN=116.744
+testing KOM=0, KIN=113.578
+testing KOM=0, KIN=110.487
+testing KOM=0, KIN=107.458
+testing KOM=0, KIN=104.478
+testing KOM=0, KIN=101.537
+testing KOM=0, KIN=98.6269
+testing KOM=0, KIN=95.7392
+testing KOM=0, KIN=92.866
+testing KOM=0, KIN=90
+testing KOM=0, KIN=87.134
+testing KOM=0, KIN=84.2608
+testing KOM=0, KIN=81.3731
+testing KOM=0, KIN=78.463
+testing KOM=0, KIN=75.5225
+testing KOM=0, KIN=72.5424
+testing KOM=0, KIN=69.5127
+testing KOM=0, KIN=66.4218
+testing KOM=0, KIN=63.2563
+testing KOM=0, KIN=60
+testing KOM=0, KIN=56.633
+testing KOM=0, KIN=53.1301
+testing KOM=0, KIN=49.4584
+testing KOM=0, KIN=45.573
+testing KOM=0, KIN=41.4096
+testing KOM=0, KIN=36.8699
+testing KOM=0, KIN=31.7883
+testing KOM=0, KIN=25.8419
+testing KOM=0, KIN=18.1949
+testing KOM=0, KIN=0

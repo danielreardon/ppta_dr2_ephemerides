@@ -1,0 +1,10 @@
+This program comes with ABSOLUTELY NO WARRANTY.
+This is free software, and you are welcome to redistribute it
+under conditions of GPL license.
+
+[tempo2Util.C:395] Warning: [TIM1] Please place MODE flags in the parameter file 
+Updating TOA errors using TN parameters.
+[clkcorr.C:157] Note, using '/home/dreardon/tempo2/clock' to look for extra clock files
+[tempo2Util.C:396] [TROP2] Assume standard atmospheric pressure (no data) for site pks at MJD 53041.7
+[tempo2Util.C:396] [TROP1] Assume zero zenith wet delay (no data) for site pks  at MJD 53041.7
+[tempo2Util.C:400] Warning: [DUP1] duplicated warnings have been suppressed.

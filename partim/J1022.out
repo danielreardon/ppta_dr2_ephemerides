@@ -1,0 +1,229 @@
+
+The following have been reloaded with a version change:
+  1) numpy/1.16.3-python-3.6.4 => numpy/1.14.1-python-2.7.14
+  2) python/3.6.4 => python/2.7.14
+  3) scipy/1.3.0-python-3.6.4 => scipy/1.0.0-python-2.7.14
+  4) tempo2/cf86df0 => tempo2/b381f57
+
+
+The following have been reloaded with a version change:
+  1) tempo2/b381f57 => tempo2/cf86df0
+
+
+The following have been reloaded with a version change:
+  1) numpy/1.14.1-python-2.7.14 => numpy/1.16.3-python-3.6.4
+  2) python/2.7.14 => python/3.6.4
+
+
+The following have been reloaded with a version change:
+  1) scipy/1.0.0-python-2.7.14 => scipy/1.3.0-python-3.6.4
+
+testing KOM=0, KIN=70.0035
+testing KOM=0, KIN=109.996
+7676.36
+testing KOM=2, KIN=70.0035
+testing KOM=2, KIN=109.996
+7676.36
+testing KOM=4, KIN=70.0035
+testing KOM=4, KIN=109.996
+7676.37
+testing KOM=6, KIN=70.0035
+testing KOM=6, KIN=109.996
+7676.37
+testing KOM=8, KIN=70.0035
+testing KOM=8, KIN=109.996
+7676.39
+testing KOM=10, KIN=70.0035
+testing KOM=10, KIN=109.996
+7676.38
+testing KOM=12, KIN=70.0035
+testing KOM=12, KIN=109.996
+7676.39
+testing KOM=14, KIN=70.0035
+testing KOM=14, KIN=109.996
+7676.40
+testing KOM=16, KIN=70.0035
+testing KOM=16, KIN=109.996
+7676.41
+testing KOM=18, KIN=70.0035
+testing KOM=18, KIN=109.996
+7676.40
+testing KOM=20, KIN=70.0035
+testing KOM=20, KIN=109.996
+7676.42
+testing KOM=22, KIN=70.0035
+testing KOM=22, KIN=109.996
+7676.41
+testing KOM=24, KIN=70.0035
+testing KOM=24, KIN=109.996
+7676.42
+testing KOM=26, KIN=70.0035
+testing KOM=26, KIN=109.996
+7676.41
+testing KOM=28, KIN=70.0035
+testing KOM=28, KIN=109.996
+7676.41
+testing KOM=30, KIN=70.0035
+testing KOM=30, KIN=109.996
+7676.41
+testing KOM=32, KIN=70.0035
+testing KOM=32, KIN=109.996
+7676.42
+testing KOM=34, KIN=70.0035
+testing KOM=34, KIN=109.996
+7676.42
+testing KOM=36, KIN=70.0035
+testing KOM=36, KIN=109.996
+7676.42
+testing KOM=38, KIN=70.0035
+testing KOM=38, KIN=109.996
+7676.42
+testing KOM=40, KIN=70.0035
+testing KOM=40, KIN=109.996
+7676.42
+testing KOM=42, KIN=70.0035
+testing KOM=42, KIN=109.996
+7676.42
+testing KOM=44, KIN=70.0035
+testing KOM=44, KIN=109.996
+7676.41
+testing KOM=46, KIN=70.0035
+testing KOM=46, KIN=109.996
+7676.42
+testing KOM=48, KIN=70.0035
+testing KOM=48, KIN=109.996
+7676.41
+testing KOM=50, KIN=70.0035
+testing KOM=50, KIN=109.996
+7676.41
+testing KOM=52, KIN=70.0035
+testing KOM=52, KIN=109.996
+7676.43
+testing KOM=54, KIN=70.0035
+testing KOM=54, KIN=109.996
+7676.40
+testing KOM=56, KIN=70.0035
+testing KOM=56, KIN=109.996
+7676.41
+testing KOM=58, KIN=70.0035
+testing KOM=58, KIN=109.996
+7676.42
+testing KOM=60, KIN=70.0035
+testing KOM=60, KIN=109.996
+7676.41
+testing KOM=62, KIN=70.0035
+testing KOM=62, KIN=109.996
+7676.41
+testing KOM=64, KIN=70.0035
+testing KOM=64, KIN=109.996
+7676.41
+testing KOM=66, KIN=70.0035
+testing KOM=66, KIN=109.996
+7676.41
+testing KOM=68, KIN=70.0035
+testing KOM=68, KIN=109.996
+7676.41
+testing KOM=70, KIN=70.0035
+testing KOM=70, KIN=109.996
+7676.40
+testing KOM=72, KIN=70.0035
+testing KOM=72, KIN=109.996
+7676.40
+testing KOM=74, KIN=70.0035
+testing KOM=74, KIN=109.996
+7676.39
+testing KOM=76, KIN=70.0035
+testing KOM=76, KIN=109.996
+7676.41
+testing KOM=78, KIN=70.0035
+testing KOM=78, KIN=109.996
+7676.40
+testing KOM=80, KIN=70.0035
+testing KOM=80, KIN=109.996
+7676.40
+testing KOM=82, KIN=70.0035
+testing KOM=82, KIN=109.996
+7676.42
+testing KOM=84, KIN=70.0035
+testing KOM=84, KIN=109.996
+7676.41
+testing KOM=86, KIN=70.0035
+testing KOM=86, KIN=109.996
+7676.41
+testing KOM=88, KIN=70.0035
+testing KOM=88, KIN=109.996
+7676.39
+testing KOM=90, KIN=70.0035
+testing KOM=90, KIN=109.996
+7676.40
+testing KOM=92, KIN=70.0035
+testing KOM=92, KIN=109.996
+7676.39
+testing KOM=94, KIN=70.0035
+testing KOM=94, KIN=109.996
+7676.37
+testing KOM=96, KIN=70.0035
+testing KOM=96, KIN=109.996
+7676.36
+testing KOM=98, KIN=70.0035
+testing KOM=98, KIN=109.996
+7676.33
+testing KOM=100, KIN=70.0035
+testing KOM=100, KIN=109.996
+7676.27
+testing KOM=102, KIN=70.0035
+testing KOM=102, KIN=109.996
+7676.19
+testing KOM=104, KIN=70.0035
+testing KOM=104, KIN=109.996
+7676.06
+testing KOM=106, KIN=70.0035
+testing KOM=106, KIN=109.996
+7675.80
+testing KOM=108, KIN=70.0035
+testing KOM=108, KIN=109.996
+7675.40
+testing KOM=110, KIN=70.0035
+testing KOM=110, KIN=109.996
+7674.68
+testing KOM=112, KIN=70.0035
+testing KOM=112, KIN=109.996
+7673.31
+testing KOM=114, KIN=70.0035
+testing KOM=114, KIN=109.996
+7669.83
+testing KOM=116, KIN=70.0035
+testing KOM=116, KIN=109.996
+7702.16
+testing KOM=118, KIN=70.0035
+testing KOM=118, KIN=109.996
+7694.62
+testing KOM=120, KIN=70.0035
+testing KOM=120, KIN=109.996
+7713.79
+testing KOM=122, KIN=70.0035
+testing KOM=122, KIN=109.996
+7669.66
+testing KOM=124, KIN=70.0035
+testing KOM=124, KIN=109.996
+7690.38
+testing KOM=126, KIN=70.0035
+testing KOM=126, KIN=109.996
+7689.42
+testing KOM=128, KIN=70.0035
+testing KOM=128, KIN=109.996
+7689.32
+testing KOM=130, KIN=70.0035
+testing KOM=130, KIN=109.996
+7689.33
+testing KOM=132, KIN=70.0035
+testing KOM=132, KIN=109.996
+7689.32
+testing KOM=134, KIN=70.0035
+testing KOM=134, KIN=109.996
+7689.37
+testing KOM=136, KIN=70.0035
+testing KOM=136, KIN=109.996
+7689.57
+testing KOM=138, KIN=70.0035
+testing KOM=138, KIN=109.996

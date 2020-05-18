@@ -1,0 +1,303 @@
+
+The following have been reloaded with a version change:
+  1) numpy/1.16.3-python-3.6.4 => numpy/1.14.1-python-2.7.14
+  2) python/3.6.4 => python/2.7.14
+  3) scipy/1.3.0-python-3.6.4 => scipy/1.0.0-python-2.7.14
+  4) tempo2/cf86df0 => tempo2/b381f57
+
+
+The following have been reloaded with a version change:
+  1) tempo2/b381f57 => tempo2/cf86df0
+
+
+The following have been reloaded with a version change:
+  1) numpy/1.14.1-python-2.7.14 => numpy/1.16.3-python-3.6.4
+  2) python/2.7.14 => python/3.6.4
+
+
+The following have been reloaded with a version change:
+  1) scipy/1.0.0-python-2.7.14 => scipy/1.3.0-python-3.6.4
+
+testing KOM=0, KIN=62.1865
+testing KOM=0, KIN=117.814
+6876.50
+testing KOM=2, KIN=62.1865
+testing KOM=2, KIN=117.814
+6876.50
+testing KOM=4, KIN=62.1865
+testing KOM=4, KIN=117.814
+6876.53
+testing KOM=6, KIN=62.1865
+testing KOM=6, KIN=117.814
+6876.48
+testing KOM=8, KIN=62.1865
+testing KOM=8, KIN=117.814
+6876.49
+testing KOM=10, KIN=62.1865
+testing KOM=10, KIN=117.814
+6876.51
+testing KOM=12, KIN=62.1865
+testing KOM=12, KIN=117.814
+6876.51
+testing KOM=14, KIN=62.1865
+testing KOM=14, KIN=117.814
+6876.49
+testing KOM=16, KIN=62.1865
+testing KOM=16, KIN=117.814
+6876.53
+testing KOM=18, KIN=62.1865
+testing KOM=18, KIN=117.814
+6876.50
+testing KOM=20, KIN=62.1865
+testing KOM=20, KIN=117.814
+6876.49
+testing KOM=22, KIN=62.1865
+testing KOM=22, KIN=117.814
+6876.51
+testing KOM=24, KIN=62.1865
+testing KOM=24, KIN=117.814
+6876.51
+testing KOM=26, KIN=62.1865
+testing KOM=26, KIN=117.814
+6876.52
+testing KOM=28, KIN=62.1865
+testing KOM=28, KIN=117.814
+6876.49
+testing KOM=30, KIN=62.1865
+testing KOM=30, KIN=117.814
+6876.49
+testing KOM=32, KIN=62.1865
+testing KOM=32, KIN=117.814
+6876.51
+testing KOM=34, KIN=62.1865
+testing KOM=34, KIN=117.814
+6876.51
+testing KOM=36, KIN=62.1865
+testing KOM=36, KIN=117.814
+6876.51
+testing KOM=38, KIN=62.1865
+testing KOM=38, KIN=117.814
+6876.52
+testing KOM=40, KIN=62.1865
+testing KOM=40, KIN=117.814
+6876.50
+testing KOM=42, KIN=62.1865
+testing KOM=42, KIN=117.814
+6876.49
+testing KOM=44, KIN=62.1865
+testing KOM=44, KIN=117.814
+6876.50
+testing KOM=46, KIN=62.1865
+testing KOM=46, KIN=117.814
+6876.50
+testing KOM=48, KIN=62.1865
+testing KOM=48, KIN=117.814
+6876.51
+testing KOM=50, KIN=62.1865
+testing KOM=50, KIN=117.814
+6876.50
+testing KOM=52, KIN=62.1865
+testing KOM=52, KIN=117.814
+6876.49
+testing KOM=54, KIN=62.1865
+testing KOM=54, KIN=117.814
+6876.52
+testing KOM=56, KIN=62.1865
+testing KOM=56, KIN=117.814
+6876.51
+testing KOM=58, KIN=62.1865
+testing KOM=58, KIN=117.814
+6876.51
+testing KOM=60, KIN=62.1865
+testing KOM=60, KIN=117.814
+6876.52
+testing KOM=62, KIN=62.1865
+testing KOM=62, KIN=117.814
+6876.48
+testing KOM=64, KIN=62.1865
+testing KOM=64, KIN=117.814
+6876.51
+testing KOM=66, KIN=62.1865
+testing KOM=66, KIN=117.814
+6876.50
+testing KOM=68, KIN=62.1865
+testing KOM=68, KIN=117.814
+6876.52
+testing KOM=70, KIN=62.1865
+testing KOM=70, KIN=117.814
+6876.52
+testing KOM=72, KIN=62.1865
+testing KOM=72, KIN=117.814
+6876.50
+testing KOM=74, KIN=62.1865
+testing KOM=74, KIN=117.814
+6876.51
+testing KOM=76, KIN=62.1865
+testing KOM=76, KIN=117.814
+6876.50
+testing KOM=78, KIN=62.1865
+testing KOM=78, KIN=117.814
+6876.52
+testing KOM=80, KIN=62.1865
+testing KOM=80, KIN=117.814
+6876.52
+testing KOM=82, KIN=62.1865
+testing KOM=82, KIN=117.814
+6876.49
+testing KOM=84, KIN=62.1865
+testing KOM=84, KIN=117.814
+6876.52
+testing KOM=86, KIN=62.1865
+testing KOM=86, KIN=117.814
+6876.51
+testing KOM=88, KIN=62.1865
+testing KOM=88, KIN=117.814
+6876.51
+testing KOM=90, KIN=62.1865
+testing KOM=90, KIN=117.814
+6876.50
+testing KOM=92, KIN=62.1865
+testing KOM=92, KIN=117.814
+6885.46
+testing KOM=94, KIN=62.1865
+testing KOM=94, KIN=117.814
+6876.49
+testing KOM=96, KIN=62.1865
+testing KOM=96, KIN=117.814
+6876.82
+testing KOM=98, KIN=62.1865
+testing KOM=98, KIN=117.814
+6876.48
+testing KOM=100, KIN=62.1865
+testing KOM=100, KIN=117.814
+6876.82
+testing KOM=102, KIN=62.1865
+testing KOM=102, KIN=117.814
+6876.86
+testing KOM=104, KIN=62.1865
+testing KOM=104, KIN=117.814
+6876.80
+testing KOM=106, KIN=62.1865
+testing KOM=106, KIN=117.814
+6876.80
+testing KOM=108, KIN=62.1865
+testing KOM=108, KIN=117.814
+6876.80
+testing KOM=110, KIN=62.1865
+testing KOM=110, KIN=117.814
+6876.81
+testing KOM=112, KIN=62.1865
+testing KOM=112, KIN=117.814
+6876.81
+testing KOM=114, KIN=62.1865
+testing KOM=114, KIN=117.814
+6876.79
+testing KOM=116, KIN=62.1865
+testing KOM=116, KIN=117.814
+6876.81
+testing KOM=118, KIN=62.1865
+testing KOM=118, KIN=117.814
+6876.81
+testing KOM=120, KIN=62.1865
+testing KOM=120, KIN=117.814
+6876.81
+testing KOM=122, KIN=62.1865
+testing KOM=122, KIN=117.814
+6876.82
+testing KOM=124, KIN=62.1865
+testing KOM=124, KIN=117.814
+6876.82
+testing KOM=126, KIN=62.1865
+testing KOM=126, KIN=117.814
+6876.81
+testing KOM=128, KIN=62.1865
+testing KOM=128, KIN=117.814
+6876.80
+testing KOM=130, KIN=62.1865
+testing KOM=130, KIN=117.814
+6876.79
+testing KOM=132, KIN=62.1865
+testing KOM=132, KIN=117.814
+6876.81
+testing KOM=134, KIN=62.1865
+testing KOM=134, KIN=117.814
+6876.81
+testing KOM=136, KIN=62.1865
+testing KOM=136, KIN=117.814
+6876.80
+testing KOM=138, KIN=62.1865
+testing KOM=138, KIN=117.814
+6876.80
+testing KOM=140, KIN=62.1865
+testing KOM=140, KIN=117.814
+6876.81
+testing KOM=142, KIN=62.1865
+testing KOM=142, KIN=117.814
+6876.82
+testing KOM=144, KIN=62.1865
+testing KOM=144, KIN=117.814
+6876.82
+testing KOM=146, KIN=62.1865
+testing KOM=146, KIN=117.814
+6876.82
+testing KOM=148, KIN=62.1865
+testing KOM=148, KIN=117.814
+6876.80
+testing KOM=150, KIN=62.1865
+testing KOM=150, KIN=117.814
+6876.79
+testing KOM=152, KIN=62.1865
+testing KOM=152, KIN=117.814
+6876.79
+testing KOM=154, KIN=62.1865
+testing KOM=154, KIN=117.814
+6876.79
+testing KOM=156, KIN=62.1865
+testing KOM=156, KIN=117.814
+6876.80
+testing KOM=158, KIN=62.1865
+testing KOM=158, KIN=117.814
+6876.80
+testing KOM=160, KIN=62.1865
+testing KOM=160, KIN=117.814
+6876.80
+testing KOM=162, KIN=62.1865
+testing KOM=162, KIN=117.814
+6876.80
+testing KOM=164, KIN=62.1865
+testing KOM=164, KIN=117.814
+6876.81
+testing KOM=166, KIN=62.1865
+testing KOM=166, KIN=117.814
+6876.81
+testing KOM=168, KIN=62.1865
+testing KOM=168, KIN=117.814
+6876.80
+testing KOM=170, KIN=62.1865
+testing KOM=170, KIN=117.814
+6876.79
+testing KOM=172, KIN=62.1865
+testing KOM=172, KIN=117.814
+6876.81
+testing KOM=174, KIN=62.1865
+testing KOM=174, KIN=117.814
+6876.79
+testing KOM=176, KIN=62.1865
+testing KOM=176, KIN=117.814
+6876.81
+testing KOM=178, KIN=62.1865
+testing KOM=178, KIN=117.814
+6876.81
+testing KOM=180, KIN=62.1865
+testing KOM=180, KIN=117.814
+6876.81
+testing KOM=182, KIN=62.1865
+testing KOM=182, KIN=117.814
+6876.81
+testing KOM=184, KIN=62.1865
+testing KOM=184, KIN=117.814
+6876.80
+testing KOM=186, KIN=62.1865
+testing KOM=186, KIN=117.814
+6876.82
+testing KOM=188, KIN=62.1865
