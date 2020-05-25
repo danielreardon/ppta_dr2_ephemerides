@@ -28,6 +28,7 @@ from astropy import units as u
 from astropy.coordinates import SkyCoord
 
 
+
 """
 Definitions
 """
@@ -162,6 +163,9 @@ for par in parfiles:
     bdeg = c.galactic.b.value
     sigb = 0
 
+    if 'BINARY' in params.keys():
+        mass_func = (4*np.pi**2/sc.G) * (params['A1']*sc.c)**3/(params['PB']*86400)**2
+
     # Check if pulsar needs ELL1:
     if 'ECC' in params.keys():
         if params['A1']*params['ECC']**2 < \
@@ -204,16 +208,16 @@ for par in parfiles:
         pbdot_gal = GalDynPsr.pdotint.PdotGal(Ex_pl, Ex_z, pb*86400)
         pbdot_gal_err =GalDynPsr.pdotint.ErrPdotGal(Ex_pl, errpl, Ex_z, errz, pb*86400, pb_err*86400)
 
-        print("Observed Pbdot = ", np.mean(pbdot_posterior), " +/- ", np.std(pbdot_posterior))
-        print("Galactic Pbdot contribution = ", pbdot_gal, " +/- ", pbdot_gal_err)
+        #print("Observed Pbdot = ", np.mean(pbdot_posterior), " +/- ", np.std(pbdot_posterior))
+        #print("Galactic Pbdot contribution = ", pbdot_gal, " +/- ", pbdot_gal_err)
         pbdot_gal_posterior = np.random.normal(loc=pbdot_gal, scale=pbdot_gal_err, size=n_samples)  # sample randomly from pbdot_gal distribution
         pbdot_shklovskii = np.subtract(pbdot_posterior, pbdot_gal_posterior) - pbdot_grav
-        print("Observed Shklovskii contribution = ", np.mean(pbdot_shklovskii), " +/- ", np.std(pbdot_shklovskii))
+        #print("Observed Shklovskii contribution = ", np.mean(pbdot_shklovskii), " +/- ", np.std(pbdot_shklovskii))
         pm = np.sqrt(pmra**2 + pmdec**2)/(sec_per_year*rad_to_mas)
         D_posterior = sc.c*pbdot_shklovskii/(pm**2*pb*86400)/parsec_to_m/1000
         D = np.mean(D_posterior)
         D_err = np.std(D_posterior)
-        print("Shklovskii distance (kpc) = ", D, " +/- ", D_err)
+        print("Shklovskii distance (kpc) = ", round(D, 3), " +/- ", round(D_err,3))
 
     if 'F2' in params.keys():
         print(' ')
@@ -242,13 +246,25 @@ for par in parfiles:
             v_r_new =  (2*p1_int*D*parsec_to_m - p2_obs*(sc.c/pm**2))/(3*p0_int)/1000 # km/s ... assuming p2_int=0
             dv_r = np.abs(v_r - v_r_new)
             v_r = v_r_new
-        print("Observed P2 = ", p2_obs)
-        print("Radial velocity = ", v_r/1000, " km/s")
+        #print("Observed P2 = ", p2_obs)
+        print("Radial velocity = ", round(v_r/1000,1), " km/s")
 
 
-    if 'OMDOT' in params.keys():
+    if 'OMDOT' in params.keys() or 'EPS1DOT' in params.keys() or 'EPS2DOT' in params.keys():
         print(' ')
         print('=== Computing GR contribution ===')
+
+        if 'ECC' in params.keys():
+            ecc = params['ECC']
+        elif 'EPS1' in params.keys():
+            ecc = params['EPS1']**2 + params['EPS2']**2
+
+        Msun = 1.989*10**30  # kg
+        Tsun = sc.G * Msun / (sc.c**3)
+        Mtot = 2.2
+        n = 2*np.pi/(params['PB']*86400)  # s
+        omdot_gr = 3 * ((Tsun*Mtot)**(2/3)) * (n**(5/3)) / (1 - ecc**2)
+        print(round(omdot_gr * 86400 * 365.2425 * 180/np.pi, 5))
 
     print(" ")
 
