@@ -59,3 +59,4 @@ testing KOM=0, KIN=31.7883
 testing KOM=0, KIN=25.8419
 testing KOM=0, KIN=18.1949
 testing KOM=0, KIN=0
+slurmstepd: error: *** JOB 11016042 ON john32 CANCELLED AT 2020-05-19T02:19:47 DUE TO TIME LIMIT ***

@@ -1,0 +1,6 @@
+Details:
+- These .par files were determined using the Boris noise models dr2 subbanded tim files. 
+- New parameters were added if they passed the AIC. 
+- Pulsars were converted to ELL1 model if the error induced by this approximation was less than 0.01*Wrms/sqrt(Ntoa)
+- J1909 was converted to a Kopeikin term model
+- Other binary pulsars have not had Kopeikin terms and Shapiro delays added - this will be done in ver2
