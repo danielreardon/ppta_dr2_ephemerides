@@ -140,7 +140,6 @@ Start of code
 datadir = '/Users/dreardon/Dropbox/Git/ppta_dr2_ephemerides/partim/dr2_boris/new_params_ver1/'
 outdir = '/Users/dreardon/Dropbox/Git/ppta_dr2_ephemerides/partim/dr2_boris/output2/'
 parfiles = sorted(glob.glob(datadir + 'J*.par'))
-print('=======================================')
 
 n_samples = 10000
 # Define other useful constants
@@ -152,7 +151,9 @@ sec_per_year = 86400*365.2425
 for par in parfiles:
     if 'J0437' in par:
         continue
+    print('==============================================================')
     print("Working on: ", par.split('/')[-1].split('.')[0])
+    print('==============================================================')
     params = read_par(par)
 
     #Convert to ecliptic
@@ -169,19 +170,21 @@ for par in parfiles:
     # Check if pulsar needs ELL1:
     if 'ECC' in params.keys():
         if params['A1']*params['ECC']**2 < \
-           0.01*params['TRES']*10**-6/np.sqrt(params['NTOA']):
+           0.1*params['TRES']*10**-6/np.sqrt(params['NTOA']):
             print(params['PSRJ'], " Needs ELL1 model")
             # make ELL1
             make_ell1(par, outdir + params['PSRJ'] + '_ell1.par')
     elif 'EPS1' in params.keys():
-        ecc = params['EPS1']**2 + params['EPS2']**2
+        ecc = np.sqrt(params['EPS1']**2 + params['EPS2']**2)
+        print(ecc)
         if params['A1']*ecc**2 > \
-           0.01*params['TRES']*10**-6/np.sqrt(params['NTOA']):
+           0.1*params['TRES']*10**-6/np.sqrt(params['NTOA']):
             print('WARNING! Pulsar should NOT have ELL1 model')
 
     # Check if pulsar requires Kopeikin terms
     if 'XDOT' in params.keys() and 'OMDOT' in params.keys():
         print('Check for Kopeikin terms')
+
 
     if 'PBDOT' in params.keys():
         print(' ')
@@ -191,10 +194,14 @@ for par in parfiles:
                                            scale=params["PBDOT_ERR"], size=n_samples)  # observed
         pbdot_grav = 0
         if 'PX' in params.keys():
-            dkpc = 1/params['PX']
+            D_prior = 1/np.random.normal(loc=params["PX"],
+                                           scale=params["PX_ERR"], size=n_samples) # observed
+            dkpc = np.mean(D_prior[(D_prior > 0)*(D_prior < 100)])
+            sigd = np.std(D_prior[(D_prior > 0)*(D_prior < 100)])
+            print("Parallax distance (kpc) = ", round(dkpc, 3), " +/- ", round(sigd, 3))
         else:
             dkpc = 1
-        sigd = 0.2*dkpc
+            sigd = 0.2*dkpc
         pb = params['PB']
         pb_err = params['PB_ERR']
         pmra = params['PMRA']
@@ -218,6 +225,10 @@ for par in parfiles:
         D = np.mean(D_posterior)
         D_err = np.std(D_posterior)
         print("Shklovskii distance (kpc) = ", round(D, 3), " +/- ", round(D_err,3))
+        if 'PX' in params.keys():
+            Davg = np.average([dkpc, D], weights=[1/sigd, 1/D_err])
+            Davg_err = 1
+            print("Combined distance (kpc) = ", round(Davg, 3), " +/- ", round(Davg_err,3))
 
     if 'F2' in params.keys():
         print(' ')
@@ -249,6 +260,11 @@ for par in parfiles:
         #print("Observed P2 = ", p2_obs)
         print("Radial velocity = ", round(v_r/1000,1), " km/s")
 
+    if 'XDOT' in params.keys():
+        print(' ')
+        print('=== Computing limit on i from XDOT ===')
+        i_limit =  180/np.pi * np.arctan(params['A1'] * np.sqrt(params['PMRA']**2 + params['PMDEC']**2)/(rad_to_mas*sec_per_year) / params['XDOT'])
+        print("i <= ", int(np.ceil(i_limit)))
 
     if 'OMDOT' in params.keys() or 'EPS1DOT' in params.keys() or 'EPS2DOT' in params.keys():
         print(' ')
@@ -256,15 +272,32 @@ for par in parfiles:
 
         if 'ECC' in params.keys():
             ecc = params['ECC']
+            ecc_err = params['ECC_ERR']
         elif 'EPS1' in params.keys():
-            ecc = params['EPS1']**2 + params['EPS2']**2
+            eps1_posterior = np.random.normal(loc=params["EPS1"],
+                                           scale=params["EPS1_ERR"], size=n_samples)  # observed
+            eps2_posterior = np.random.normal(loc=params["EPS2"],
+                                           scale=params["EPS2_ERR"], size=n_samples)  # observed
+            ecc_posterior = np.sqrt(eps1_posterior**2 + eps2_posterior**2)
+
+
+        if 'EPS1DOT' in params.keys():
+            eps1dot_posterior = np.random.normal(loc=params["EPS1DOT"],
+                                           scale=params["EPS1DOT_ERR"], size=n_samples)  # observed
+            eps2dot_posterior = np.random.normal(loc=params["EPS2DOT"],
+                                           scale=params["EPS2DOT_ERR"], size=n_samples)  # observed
+
+            omdot_posterior = (86400*365.2425*180/np.pi)*np.sqrt(eps1dot_posterior**2 + eps2dot_posterior**2)/ecc
+            omdot = np.mean(omdot_posterior)
+            omdot_err = np.std(omdot_posterior)
+            print("Observed OMDOT = ", omdot, " +/- ", omdot_err)
 
         Msun = 1.989*10**30  # kg
         Tsun = sc.G * Msun / (sc.c**3)
-        Mtot = 2.2
+        Mtot = 1.6
         n = 2*np.pi/(params['PB']*86400)  # s
         omdot_gr = 3 * ((Tsun*Mtot)**(2/3)) * (n**(5/3)) / (1 - ecc**2)
-        print(round(omdot_gr * 86400 * 365.2425 * 180/np.pi, 5))
+        print("OMDOT_gr = {0}, for Mtot = {1}".format(round(omdot_gr * 86400 * 365.2425 * 180/np.pi, 5), Mtot))
 
     print(" ")
 
