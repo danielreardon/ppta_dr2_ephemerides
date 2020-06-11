@@ -25,7 +25,7 @@ import scipy.constants as sc
 import matplotlib.pyplot as plt
 import scipy.stats as stats
 from astropy import units as u
-from astropy.coordinates import SkyCoord
+from astropy.coordinates import SkyCoord, ICRS, BarycentricTrueEcliptic
 
 
 
@@ -138,8 +138,10 @@ Start of code
 """
 
 datadir = '/Users/dreardon/Dropbox/Git/ppta_dr2_ephemerides/partim/dr2_boris/new_params_ver1/'
-outdir = '/Users/dreardon/Dropbox/Git/ppta_dr2_ephemerides/partim/dr2_boris/output2/'
+outdir = '/Users/dreardon/Dropbox/Git/ppta_dr2_ephemerides/partim/dr2_boris/new_params_ver1/output/'
 parfiles = sorted(glob.glob(datadir + 'J*.par'))
+
+outfile = outdir + 'derived_params.txt'
 
 n_samples = 10000
 # Define other useful constants
@@ -151,12 +153,14 @@ sec_per_year = 86400*365.2425
 for par in parfiles:
     if 'J0437' in par:
         continue
-    print('==============================================================')
-    print("Working on: ", par.split('/')[-1].split('.')[0])
-    print('==============================================================')
+    print(par.split('/')[-1].split('.')[0])
     params = read_par(par)
 
-    #Convert to ecliptic
+    with open(outfile, 'a+') as f:
+        f.write(par.split('/')[-1].split('.')[0] + '\n')
+
+
+    #Convert to Galactic
     c = SkyCoord(params['RAJ'] + ' ' + params['DECJ'],
                  unit=(u.hourangle, u.deg))
     ldeg = c.galactic.l.value
@@ -164,21 +168,38 @@ for par in parfiles:
     bdeg = c.galactic.b.value
     sigb = 0
 
+    #Convert to Ecliptic
+    #ecliptic transformation:
+    elat = c.barycentrictrueecliptic.lat.value
+    elon = c.barycentrictrueecliptic.lon.value
+    #proper motion transformation:
+    pm = ICRS(ra=c.ra.deg*u.degree, dec=c.dec.deg*u.deg,
+              pm_ra_cosdec = params['PMRA']*u.mas/u.yr,
+              pm_dec = params['PMDEC']*u.mas/u.yr)
+    pm_ecliptic = pm.transform_to(BarycentricTrueEcliptic)
+    pmlat = pm_ecliptic.pm_lat.value
+    pmlon = pm_ecliptic.pm_lon_coslat.value
+    with open(outfile, 'a+') as f:
+        f.write("ELAT" + '\t' + str(elat) + '\n')
+        f.write("ELONG" + '\t' + str(elon) + '\n')
+        f.write("PMELAT" + '\t' + str(pmlat) + '\n')
+        f.write("PMELONG" + '\t' + str(pmlon) + '\n')
+
+
     if 'BINARY' in params.keys():
         mass_func = (4*np.pi**2/sc.G) * (params['A1']*sc.c)**3/(params['PB']*86400)**2
 
     # Check if pulsar needs ELL1:
     if 'ECC' in params.keys():
         if params['A1']*params['ECC']**2 < \
-           0.1*params['TRES']*10**-6/np.sqrt(params['NTOA']):
-            print(params['PSRJ'], " Needs ELL1 model")
+           0.01*params['TRES']*10**-6/np.sqrt(params['NTOA']):
+            print(params['PSRJ'], "WARNING! Needs ELL1 model")
             # make ELL1
             make_ell1(par, outdir + params['PSRJ'] + '_ell1.par')
     elif 'EPS1' in params.keys():
         ecc = np.sqrt(params['EPS1']**2 + params['EPS2']**2)
-        print(ecc)
         if params['A1']*ecc**2 > \
-           0.1*params['TRES']*10**-6/np.sqrt(params['NTOA']):
+           0.01*params['TRES']*10**-6/np.sqrt(params['NTOA']):
             print('WARNING! Pulsar should NOT have ELL1 model')
 
     # Check if pulsar requires Kopeikin terms
@@ -186,9 +207,22 @@ for par in parfiles:
         print('Check for Kopeikin terms')
 
 
+    if 'PX' in params.keys():
+        D_prior = 1/np.random.normal(loc=params["PX"],
+                                       scale=params["PX_ERR"], size=n_samples) # observed
+        #plt.hist(D_prior, bins=100)
+        #plt.show()
+        dkpc = np.median(D_prior[(D_prior > 0)*(D_prior < 100)])
+        sigd = np.std(D_prior[(D_prior > 0)*(D_prior < 100)])
+        #sigd = dkpc*params["PX_ERR"]/params["PX"]
+        #print("Parallax distance (kpc) = ", round(dkpc, 3), " +/- ", round(sigd, 3))
+        with open(outfile, 'a+') as f:
+            f.write("D_PX" + '\t' + str(dkpc) + '\t' + str(sigd) + '\n')
+
+
     if 'PBDOT' in params.keys():
-        print(' ')
-        print('=== Computing Shklovskii distance ===')
+        #print(' ')
+        #print('=== Computing Shklovskii distance ===')
         # Pulsar distance from Shklovskii effect
         pbdot_posterior = np.random.normal(loc=params["PBDOT"],
                                            scale=params["PBDOT_ERR"], size=n_samples)  # observed
@@ -196,9 +230,9 @@ for par in parfiles:
         if 'PX' in params.keys():
             D_prior = 1/np.random.normal(loc=params["PX"],
                                            scale=params["PX_ERR"], size=n_samples) # observed
-            dkpc = np.mean(D_prior[(D_prior > 0)*(D_prior < 100)])
-            sigd = np.std(D_prior[(D_prior > 0)*(D_prior < 100)])
-            print("Parallax distance (kpc) = ", round(dkpc, 3), " +/- ", round(sigd, 3))
+            dkpc = np.median(D_prior[(D_prior > 0)*(D_prior < 100)])
+            #sigd = np.std(D_prior[(D_prior > 0)*(D_prior < 100)])
+            sigd = dkpc*params["PX_ERR"]/params["PX"]
         else:
             dkpc = 1
             sigd = 0.2*dkpc
@@ -224,15 +258,17 @@ for par in parfiles:
         D_posterior = sc.c*pbdot_shklovskii/(pm**2*pb*86400)/parsec_to_m/1000
         D = np.mean(D_posterior)
         D_err = np.std(D_posterior)
-        print("Shklovskii distance (kpc) = ", round(D, 3), " +/- ", round(D_err,3))
+        #print("Shklovskii distance (kpc) = ", round(D, 3), " +/- ", round(D_err,3))
+        with open(outfile, 'a+') as f:
+            f.write("D_SHK" + '\t' + str(D) + '\t' + str(D_err) + '\n')
         if 'PX' in params.keys():
             Davg = np.average([dkpc, D], weights=[1/sigd, 1/D_err])
             Davg_err = 1
-            print("Combined distance (kpc) = ", round(Davg, 3), " +/- ", round(Davg_err,3))
+            #print("Combined distance (kpc) = ", round(Davg, 3), " +/- ", round(Davg_err,3))
 
     if 'F2' in params.keys():
-        print(' ')
-        print('=== Computing radial velocity from F2 ===')
+        #print(' ')
+        #rint('=== Computing radial velocity from F2 ===')
         f0 = params['F0']
         try:
             f0err = params['F0_ERR']
@@ -242,6 +278,9 @@ for par in parfiles:
         f1_err = params['F1_ERR']
         f2 = params['F2']
         f2_err = params['F2_ERR']
+        pmra = params['PMRA']
+        pmdec = params['PMDEC']
+        pm = np.sqrt(pmra**2 + pmdec**2)/(sec_per_year*rad_to_mas)
         p0_obs = 1/f0
         p1_obs = -f1/f0**2
         p2_obs = f1*(2*f1/f0**3) - (1/f0**2)*(f2)
@@ -258,17 +297,21 @@ for par in parfiles:
             dv_r = np.abs(v_r - v_r_new)
             v_r = v_r_new
         #print("Observed P2 = ", p2_obs)
-        print("Radial velocity = ", round(v_r/1000,1), " km/s")
+        #print("Radial velocity = ", round(v_r/1000,1), " +/- ", round(f2_err/f2 * v_r/1000, 1), " km/s")
+        with open(outfile, 'a+') as f:
+            f.write("V_R" + '\t' + str(round(v_r/1000,1)) + '\t' + str(round(f2_err/f2 * v_r/1000, 1)) + '\n')
 
     if 'XDOT' in params.keys():
-        print(' ')
-        print('=== Computing limit on i from XDOT ===')
-        i_limit =  180/np.pi * np.arctan(params['A1'] * np.sqrt(params['PMRA']**2 + params['PMDEC']**2)/(rad_to_mas*sec_per_year) / params['XDOT'])
-        print("i <= ", int(np.ceil(i_limit)))
+        #print(' ')
+        #print('=== Computing limit on i from XDOT ===')
+        i_limit =  np.abs(180/np.pi * np.arctan(params['A1'] * np.sqrt(params['PMRA']**2 + params['PMDEC']**2)/(rad_to_mas*sec_per_year) / params['XDOT']))
+        #print("i <= ", int(np.ceil(i_limit)))
+        with open(outfile, 'a+') as f:
+            f.write("INC" + '\t' + "<" + str(i_limit)+ '\n')
 
     if 'OMDOT' in params.keys() or 'EPS1DOT' in params.keys() or 'EPS2DOT' in params.keys():
-        print(' ')
-        print('=== Computing GR contribution ===')
+        #print(' ')
+        #print('=== Computing GR contribution ===')
 
         if 'ECC' in params.keys():
             ecc = params['ECC']
@@ -290,14 +333,22 @@ for par in parfiles:
             omdot_posterior = (86400*365.2425*180/np.pi)*np.sqrt(eps1dot_posterior**2 + eps2dot_posterior**2)/ecc
             omdot = np.mean(omdot_posterior)
             omdot_err = np.std(omdot_posterior)
-            print("Observed OMDOT = ", omdot, " +/- ", omdot_err)
+            #print("Observed OMDOT = ", omdot, " +/- ", omdot_err)
+            with open(outfile, 'a+') as f:
+                f.write("OMDOT" + '\t' + str(omdot) + '\t' + str(omdot_err) + '\n')
 
         Msun = 1.989*10**30  # kg
         Tsun = sc.G * Msun / (sc.c**3)
         Mtot = 1.6
         n = 2*np.pi/(params['PB']*86400)  # s
         omdot_gr = 3 * ((Tsun*Mtot)**(2/3)) * (n**(5/3)) / (1 - ecc**2)
-        print("OMDOT_gr = {0}, for Mtot = {1}".format(round(omdot_gr * 86400 * 365.2425 * 180/np.pi, 5), Mtot))
+        omdot_gr = round(omdot_gr * 86400 * 365.2425 * 180/np.pi, 5)
+        #print("OMDOT_gr = {0}, for Mtot = {1}".format(omdot_gr, Mtot))
+        with open(outfile, 'a+') as f:
+            f.write("OMDOT_GR" + '\t' + str(omdot_gr) + ' for M_TOT = ' + str(Mtot) + '\n')
+
+    with open(outfile, 'a+') as f:
+        f.write('\n')
 
     print(" ")
 
