@@ -137,8 +137,8 @@ def make_ell1(par, output):
 Start of code
 """
 
-datadir = '/Users/dreardon/Dropbox/Git/ppta_dr2_ephemerides/partim/dr2_boris/new_params_ver1/'
-outdir = '/Users/dreardon/Dropbox/Git/ppta_dr2_ephemerides/partim/dr2_boris/new_params_ver1/output/'
+datadir = '/Users/dreardon/Dropbox/Git/ppta_dr2_ephemerides/publish_collection/dr2/'
+outdir = '/Users/dreardon/Dropbox/Git/ppta_dr2_ephemerides/publish_collection/dr2/output/'
 parfiles = sorted(glob.glob(datadir + 'J*.par'))
 
 outfile = outdir + 'derived_params.txt'
@@ -149,6 +149,22 @@ M_sun = 1.98847542e+30  # kg
 rad_to_mas = 180*3600*1000/np.pi
 parsec_to_m = 3.08567758e+16
 sec_per_year = 86400*365.2425
+
+data = np.loadtxt('/Users/dreardon/Dropbox/Git/ppta_dr2_ephemerides/publish_collection/dr2/2241/J2241-5236.tasc.txt', skiprows=1)
+
+#font = {'family' : 'normal',
+#        'weight' : 'normal',
+#        'size'   : 18}
+#
+#matplotlib.rc('font', **font)
+#
+#plt.errorbar(data[:, 0], (data[:, 1] - np.mean(data[:, 1]))*86400, yerr=data[:, 2]*86400, fmt='o', alpha=0.8)
+#plt.xlabel('MJD')
+#plt.ylabel(r'$\Delta T_{\rm asc}$ (s)')
+#plt.ylim([-0.2, 0.4])
+#plt.grid()
+#plt.show()
+
 
 for par in parfiles:
     if 'J0437' in par:
@@ -209,16 +225,17 @@ for par in parfiles:
 
 
     if 'PX' in params.keys():
-        D_prior = 1/np.random.normal(loc=params["PX"],
-                                       scale=params["PX_ERR"], size=n_samples) # observed
-        #plt.hist(D_prior, bins=100)
-        #plt.show()
-        dkpc = np.median(D_prior[(D_prior > 0)*(D_prior < 100)])
-        sigd = np.std(D_prior[(D_prior > 0)*(D_prior < 100)])
-        #sigd = dkpc*params["PX_ERR"]/params["PX"]
-        #print("Parallax distance (kpc) = ", round(dkpc, 3), " +/- ", round(sigd, 3))
-        with open(outfile, 'a+') as f:
-            f.write("D_PX" + '\t' + str(dkpc) + '\t' + str(sigd) + '\n')
+        if 'PX_ERR' in params.keys():
+            D_prior = 1/np.random.normal(loc=params["PX"],
+                                           scale=params["PX_ERR"], size=n_samples) # observed
+            #plt.hist(D_prior, bins=100)
+            #plt.show()
+            dkpc = np.median(D_prior[(D_prior > 0)*(D_prior < 100)])
+            sigd = np.std(D_prior[(D_prior > 0)*(D_prior < 100)])
+            #sigd = dkpc*params["PX_ERR"]/params["PX"]
+            #print("Parallax distance (kpc) = ", round(dkpc, 3), " +/- ", round(sigd, 3))
+            with open(outfile, 'a+') as f:
+                f.write("D_PX" + '\t' + str(dkpc) + '\t' + str(sigd) + '\n')
 
 
     if 'PBDOT' in params.keys():
@@ -274,9 +291,10 @@ for par in parfiles:
         else:
             D = D
     elif 'PX' in params.keys():
-        D_prior = 1/np.random.normal(loc=params["PX"],
-                                           scale=params["PX_ERR"], size=n_samples) # observed
-        D = np.median(D_prior[(D_prior > 0)*(D_prior < 100)])
+        if 'PX_ERR' in params.keys():
+            D_prior = 1/np.random.normal(loc=params["PX"],
+                                               scale=params["PX_ERR"], size=n_samples) # observed
+            D = np.median(D_prior[(D_prior > 0)*(D_prior < 100)])
 
 
     # Predict F2 for a given radial velocity
@@ -357,10 +375,10 @@ for par in parfiles:
 
     if 'H3' in params.keys():
         if 'H4' in params.keys():
-            h3 = params["H3"]
-            h3_err = params["H3_ERR"]
-            h4 = params["H4"]
-            h4_err = params["H4_ERR"]
+            h3 = params["H3"]*10**6
+            h3_err = params["H3_ERR"]*10**6
+            h4 = params["H4"]*10**6
+            h4_err = params["H4_ERR"]*10**6
             h3 = np.random.normal(loc=h3, scale=h3_err, size=n_samples)
             h4 = np.random.normal(loc=h4, scale=h4_err, size=n_samples)
             sini = 2 * h3 * h4 / ( h3**2 + h4**2 )
@@ -368,18 +386,18 @@ for par in parfiles:
             m2 = h3**4 / h4**3
             mtot2 = (m2 * sini)**3 / mass_func
             mp = np.sqrt(mtot2) - m2
-            plt.hist(mp, bins=100)
-            plt.xlabel('Pulsar mass')
-            plt.show()
+#            plt.hist(mp, bins=100)
+#            plt.xlabel('Pulsar mass')
+#            plt.show()
             print('Median m2: ', np.median(m2), ", inclination: ", np.median(inc), ", Pulsar mass: ", np.median(mp))
             print('1-sigma range:', np.percentile(mp, q=16), np.percentile(mp, q=84))
-            plt.scatter(m2, inc)
-            plt.xlabel('companion mass')
-            plt.ylabel('inclination (deg)')
-            plt.show()
+#            plt.scatter(m2, inc)
+#            plt.xlabel('companion mass')
+#            plt.ylabel('inclination (deg)')
+#            plt.show()
         elif 'STIG' in params.keys():
-            h3 = params["H3"]
-            h3_err = params["H3_ERR"]
+            h3 = params["H3"]*10**6
+            h3_err = params["H3_ERR"]*10**6
             stig = params["STIG"]
             stig_err = params["STIG_ERR"]
             h3 = np.random.normal(loc=h3, scale=h3_err, size=n_samples)
@@ -390,15 +408,37 @@ for par in parfiles:
             m2 = h3**4 / h4**3
             mtot2 = (m2 * sini)**3 / mass_func
             mp = np.sqrt(mtot2) - m2
-            plt.hist(mp, bins=100)
-            plt.xlabel('Pulsar mass')
-            plt.show()
+#            plt.hist(mp, bins=100)
+#            plt.xlabel('Pulsar mass')
+#            plt.show()
             print('Median m2: ', np.median(m2), ", inclination: ", np.median(inc), ", Pulsar mass: ", np.median(mp))
             print('1-sigma range:', np.percentile(mp, q=16), np.percentile(mp, q=84))
-            plt.scatter(m2, inc)
-            plt.xlabel('companion mass')
-            plt.ylabel('inclination (deg)')
-            plt.show()
+#            plt.scatter(m2, inc)
+#            plt.xlabel('companion mass')
+#            plt.ylabel('inclination (deg)')
+#            plt.show()
+
+    if 'M2' in params.keys():
+        m2 = np.random.normal(loc=params["M2"], scale=params["M2_ERR"], size=n_samples)
+        if 'KIN' in params.keys():
+            kin = np.random.normal(loc=params["KIN"], scale=params["KIN_ERR"], size=n_samples)
+            sini = np.sin(kin*np.pi/180)
+            inc=kin
+        else:
+            sini = np.random.normal(loc=params["SINI"], scale=params["SINI_ERR"], size=n_samples)
+            inc = np.arcsin(sini)*180/np.pi
+        mtot2 = (m2 * sini)**3 / mass_func
+        mp = np.sqrt(mtot2) - m2
+#        plt.hist(mp, bins=100)
+#        plt.xlabel('Pulsar mass')
+#        plt.show()
+        print('Median m2: ', np.median(m2), ", inclination: ", np.median(inc), ", Pulsar mass: ", np.median(mp))
+        print('1-sigma range:', np.percentile(mp, q=16), np.percentile(mp, q=84))
+#        plt.scatter(m2, inc)
+#        plt.xlabel('companion mass')
+#        plt.ylabel('inclination (deg)')
+#        plt.show()
+
 
     if 'OMDOT' in params.keys() or 'EPS1DOT' in params.keys() or 'EPS2DOT' in params.keys():
         #print(' ')
