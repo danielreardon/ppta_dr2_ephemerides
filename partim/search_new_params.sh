@@ -1,6 +1,6 @@
 #!/usr/bin/tcsh
 
-setenv datadir /fred/oz002/dreardon/ephemeris_ppta_dr2/partim/dr2_boris/new_params_ver1
+setenv datadir /fred/oz002/dreardon/ppta_dr2_ephemerides/partim/dr2e_cpsr2_prepend/
 
 mkdir -p $datadir/new_params
 cd $datadir
@@ -13,7 +13,7 @@ foreach psr (`cat psrs.list`)
 	setenv chisq `tempo2 -f $psr.par $psr.tim | grep "Fit Chisq" | awk '{print $7}' | cut -d'/' -f1`
 	echo "Initial chisq =  $chisq"
 
-	cp $psr.par > new.par
+	cp $psr.par new.par
 
 	while (1)
 		rm -f ${psr}_fit_results.txt
