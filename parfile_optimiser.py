@@ -153,7 +153,8 @@ sec_per_year = 86400*365.2425
 for par in parfiles:
     if 'J0437' in par:
         continue
-    print(par.split('/')[-1].split('.')[0])
+    psrname = par.split('/')[-1].split('.')[0]
+    #print(par.split('/')[-1].split('.')[0])
     params = read_par(par)
 
     with open(outfile, 'a+') as f:
@@ -203,8 +204,8 @@ for par in parfiles:
             print('WARNING! Pulsar should NOT have ELL1 model')
 
     # Check if pulsar requires Kopeikin terms
-    if 'XDOT' in params.keys() and 'OMDOT' in params.keys():
-        print('Check for Kopeikin terms')
+#    if 'XDOT' in params.keys() and 'OMDOT' in params.keys():
+        #print('Check for Kopeikin terms')
 
 
     if 'PX' in params.keys():
@@ -266,6 +267,48 @@ for par in parfiles:
             Davg_err = 1
             #print("Combined distance (kpc) = ", round(Davg, 3), " +/- ", round(Davg_err,3))
 
+    D = 1
+    if 'PBDOT' in params.keys():
+        if 'PX' in params.keys():
+            D = Davg
+        else:
+            D = D
+    elif 'PX' in params.keys():
+        D_prior = 1/np.random.normal(loc=params["PX"],
+                                           scale=params["PX_ERR"], size=n_samples) # observed
+        D = np.median(D_prior[(D_prior > 0)*(D_prior < 100)])
+
+
+    # Predict F2 for a given radial velocity
+    vr_array = []
+    f2_array = []
+    for i in range(0, 1):
+        f0 = params['F0']
+        f1 = params['F1']
+        pmra = params['PMRA']
+        pmdec = params['PMDEC']
+        pm = np.sqrt(pmra**2 + pmdec**2)/(sec_per_year*rad_to_mas)
+        p0 = 1/f0
+        p1 = -f1/f0**2
+        if "J1909" in psrname:
+            v_r = -100000
+        else:
+            v_r = np.random.normal(loc=0, scale=75000)  # radial velocity m/s
+
+        p2 = (pm**2/sc.c) * (2 * p1 * D*parsec_to_m*1000 - 3 * p0 * v_r)
+        f2 = p1*(2*p1/p0**3) - (1/p0**2)*(p2)
+
+        vr_array.append(v_r/1000)
+        f2_array.append(f2)
+    #plt.scatter(np.log10(np.abs(f2_array)), vr_array)
+    #plt.title(psrname)
+    #plt.xlabel('log10(F2)')
+    #plt.ylabel('V_r')
+    #plt.show()
+    sign = np.sign(np.random.normal(loc=0, scale=1))
+    print(psrname, sign*10**np.median(np.log10(np.abs(f2_array))), D)
+
+
     if 'F2' in params.keys():
         #print(' ')
         #rint('=== Computing radial velocity from F2 ===')
@@ -284,22 +327,25 @@ for par in parfiles:
         p0_obs = 1/f0
         p1_obs = -f1/f0**2
         p2_obs = f1*(2*f1/f0**3) - (1/f0**2)*(f2)
+        #print(f2)
         Ex_pl =  GalDynPsr.modelLb.Expl(ldeg, sigl, bdeg, sigb, dkpc, sigd) # excess term parallel to the Galactic plane
         Ex_z =  GalDynPsr.modelLb.Exz(ldeg, sigl, bdeg, sigb, dkpc, sigd) # excess term perpendicular to the Galactic plane
+
 
         dv_r = np.Inf
         v_r = 0
         # iterate Doppler correction
         while dv_r > np.abs(0.01*v_r):
-            p0_int = p0_obs/(1 - v_r*1000/sc.c) # approximate Doppler correction
+            p0_int = p0_obs/(1 - v_r/sc.c) # approximate Doppler correction
             p1_int = p1_obs - GalDynPsr.pdotint.PdotGal(Ex_pl, Ex_z, p0_int) # Shklovskii correction
-            v_r_new =  (2*p1_int*D*parsec_to_m - p2_obs*(sc.c/pm**2))/(3*p0_int)/1000 # km/s ... assuming p2_int=0
+            v_r_new =  (2*p1_int*D*parsec_to_m - p2_obs*(sc.c/pm**2))/(3*p0_int) # km/s ... assuming p2_int=0
             dv_r = np.abs(v_r - v_r_new)
             v_r = v_r_new
         #print("Observed P2 = ", p2_obs)
         #print("Radial velocity = ", round(v_r/1000,1), " +/- ", round(f2_err/f2 * v_r/1000, 1), " km/s")
+        p2 =  (2*p1_int*D*parsec_to_m - v_r*(3*p0_int))/(sc.c/pm**2)
         with open(outfile, 'a+') as f:
-            f.write("V_R" + '\t' + str(round(v_r/1000,1)) + '\t' + str(round(f2_err/f2 * v_r/1000, 1)) + '\n')
+            f.write("V_R" + '\t' + str(round(v_r,1)) + '\t' + str(round(f2_err/f2 * v_r, 1)) + '\n')
 
     if 'XDOT' in params.keys():
         #print(' ')
@@ -308,6 +354,51 @@ for par in parfiles:
         #print("i <= ", int(np.ceil(i_limit)))
         with open(outfile, 'a+') as f:
             f.write("INC" + '\t' + "<" + str(i_limit)+ '\n')
+
+    if 'H3' in params.keys():
+        if 'H4' in params.keys():
+            h3 = params["H3"]
+            h3_err = params["H3_ERR"]
+            h4 = params["H4"]
+            h4_err = params["H4_ERR"]
+            h3 = np.random.normal(loc=h3, scale=h3_err, size=n_samples)
+            h4 = np.random.normal(loc=h4, scale=h4_err, size=n_samples)
+            sini = 2 * h3 * h4 / ( h3**2 + h4**2 )
+            inc = np.arcsin(sini)*180/np.pi
+            m2 = h3**4 / h4**3
+            mtot2 = (m2 * sini)**3 / mass_func
+            mp = np.sqrt(mtot2) - m2
+            plt.hist(mp, bins=100)
+            plt.xlabel('Pulsar mass')
+            plt.show()
+            print('Median m2: ', np.median(m2), ", inclination: ", np.median(inc), ", Pulsar mass: ", np.median(mp))
+            print('1-sigma range:', np.percentile(mp, q=16), np.percentile(mp, q=84))
+            plt.scatter(m2, inc)
+            plt.xlabel('companion mass')
+            plt.ylabel('inclination (deg)')
+            plt.show()
+        elif 'STIG' in params.keys():
+            h3 = params["H3"]
+            h3_err = params["H3_ERR"]
+            stig = params["STIG"]
+            stig_err = params["STIG_ERR"]
+            h3 = np.random.normal(loc=h3, scale=h3_err, size=n_samples)
+            stig = np.random.normal(loc=stig, scale=stig_err, size=n_samples)
+            h4 = stig * h3
+            sini = 2 * h3 * h4 / ( h3**2 + h4**2 )
+            inc = np.arcsin(sini)*180/np.pi
+            m2 = h3**4 / h4**3
+            mtot2 = (m2 * sini)**3 / mass_func
+            mp = np.sqrt(mtot2) - m2
+            plt.hist(mp, bins=100)
+            plt.xlabel('Pulsar mass')
+            plt.show()
+            print('Median m2: ', np.median(m2), ", inclination: ", np.median(inc), ", Pulsar mass: ", np.median(mp))
+            print('1-sigma range:', np.percentile(mp, q=16), np.percentile(mp, q=84))
+            plt.scatter(m2, inc)
+            plt.xlabel('companion mass')
+            plt.ylabel('inclination (deg)')
+            plt.show()
 
     if 'OMDOT' in params.keys() or 'EPS1DOT' in params.keys() or 'EPS2DOT' in params.keys():
         #print(' ')
@@ -349,6 +440,4 @@ for par in parfiles:
 
     with open(outfile, 'a+') as f:
         f.write('\n')
-
-    print(" ")
 
