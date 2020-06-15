@@ -7,7 +7,7 @@ setenv dr2_dir $basedir/dr2_boris
 setenv outdir $basedir/dr2e_cpsr2_replace 
 
 cd $dr1e_dir
-ls -1 | cut -d. -f1 | sort | uniq | grep -v "psrs" | grep -v "J0437-4715" > psrs.list # do J0437 manually
+ls -1 | cut -d. -f1 | sort | uniq | grep -v "psrs" | grep "J0437-4715" > psrs.list # do J0437 manually
 cd ../..
 
 echo "REPLACING ALL CPSR2_20CM data, with dr1"
