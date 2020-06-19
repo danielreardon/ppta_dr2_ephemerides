@@ -139,13 +139,14 @@ Start of code
 
 datadir = '/Users/dreardon/Dropbox/Git/ppta_dr2_ephemerides/publish_collection/dr2/'
 outdir = '/Users/dreardon/Dropbox/Git/ppta_dr2_ephemerides/publish_collection/dr2/output/'
-parfiles = sorted(glob.glob(datadir + 'J*.par'))
+parfiles = sorted(glob.glob(datadir + 'J1125*.par'))
 
 outfile = outdir + 'derived_params.txt'
 
 n_samples = 10000
 # Define other useful constants
 M_sun = 1.98847542e+30  # kg
+Tsun = 4.926790353700459e-06  #s
 rad_to_mas = 180*3600*1000/np.pi
 parsec_to_m = 3.08567758e+16
 sec_per_year = 86400*365.2425
@@ -167,9 +168,14 @@ data = np.loadtxt('/Users/dreardon/Dropbox/Git/ppta_dr2_ephemerides/publish_coll
 
 
 for par in parfiles:
+    print(par)
     if 'J0437' in par:
         continue
     psrname = par.split('/')[-1].split('.')[0]
+
+    print('=========================')
+    print(psrname)
+    print('=========================')
     #print(par.split('/')[-1].split('.')[0])
     params = read_par(par)
 
@@ -205,6 +211,8 @@ for par in parfiles:
 
     if 'BINARY' in params.keys():
         mass_func = (4*np.pi**2/sc.G) * (params['A1']*sc.c)**3/(params['PB']*86400)**2
+        mass_func = mass_func/M_sun
+        print('Mass function = ', mass_func)
 
     # Check if pulsar needs ELL1:
     if 'ECC' in params.keys():
@@ -296,37 +304,6 @@ for par in parfiles:
                                                scale=params["PX_ERR"], size=n_samples) # observed
             D = np.median(D_prior[(D_prior > 0)*(D_prior < 100)])
 
-
-    # Predict F2 for a given radial velocity
-    vr_array = []
-    f2_array = []
-    for i in range(0, 1):
-        f0 = params['F0']
-        f1 = params['F1']
-        pmra = params['PMRA']
-        pmdec = params['PMDEC']
-        pm = np.sqrt(pmra**2 + pmdec**2)/(sec_per_year*rad_to_mas)
-        p0 = 1/f0
-        p1 = -f1/f0**2
-        if "J1909" in psrname:
-            v_r = -100000
-        else:
-            v_r = np.random.normal(loc=0, scale=75000)  # radial velocity m/s
-
-        p2 = (pm**2/sc.c) * (2 * p1 * D*parsec_to_m*1000 - 3 * p0 * v_r)
-        f2 = p1*(2*p1/p0**3) - (1/p0**2)*(p2)
-
-        vr_array.append(v_r/1000)
-        f2_array.append(f2)
-    #plt.scatter(np.log10(np.abs(f2_array)), vr_array)
-    #plt.title(psrname)
-    #plt.xlabel('log10(F2)')
-    #plt.ylabel('V_r')
-    #plt.show()
-    sign = np.sign(np.random.normal(loc=0, scale=1))
-    print(psrname, sign*10**np.median(np.log10(np.abs(f2_array))), D)
-
-
     if 'F2' in params.keys():
         #print(' ')
         #rint('=== Computing radial velocity from F2 ===')
@@ -382,19 +359,23 @@ for par in parfiles:
             h3 = np.random.normal(loc=h3, scale=h3_err, size=n_samples)
             h4 = np.random.normal(loc=h4, scale=h4_err, size=n_samples)
             sini = 2 * h3 * h4 / ( h3**2 + h4**2 )
+            m2 = h3**4 / h4**3  # in us
+            m2 = m2/(Tsun*10**6)
+            cut = np.argwhere((m2 > mass_func) * (m2 < 10))
+            m2 = m2[cut]
+            sini = sini[cut]
             inc = np.arcsin(sini)*180/np.pi
-            m2 = h3**4 / h4**3
             mtot2 = (m2 * sini)**3 / mass_func
             mp = np.sqrt(mtot2) - m2
-#            plt.hist(mp, bins=100)
-#            plt.xlabel('Pulsar mass')
-#            plt.show()
+            plt.hist(mp, bins=100)
+            plt.xlabel('Pulsar mass')
+            plt.show()
             print('Median m2: ', np.median(m2), ", inclination: ", np.median(inc), ", Pulsar mass: ", np.median(mp))
             print('1-sigma range:', np.percentile(mp, q=16), np.percentile(mp, q=84))
-#            plt.scatter(m2, inc)
-#            plt.xlabel('companion mass')
-#            plt.ylabel('inclination (deg)')
-#            plt.show()
+            plt.scatter(m2, inc, alpha=0.5)
+            plt.xlabel('companion mass')
+            plt.ylabel('inclination (deg)')
+            plt.show()
         elif 'STIG' in params.keys():
             h3 = params["H3"]*10**6
             h3_err = params["H3_ERR"]*10**6
@@ -404,19 +385,23 @@ for par in parfiles:
             stig = np.random.normal(loc=stig, scale=stig_err, size=n_samples)
             h4 = stig * h3
             sini = 2 * h3 * h4 / ( h3**2 + h4**2 )
-            inc = np.arcsin(sini)*180/np.pi
             m2 = h3**4 / h4**3
+            m2 = m2/(Tsun*10**6)
+            cut = np.argwhere((m2 > mass_func) * (m2 < 10))
+            m2 = m2[cut]
+            sini = sini[cut]
+            inc = np.arcsin(sini)*180/np.pi
             mtot2 = (m2 * sini)**3 / mass_func
             mp = np.sqrt(mtot2) - m2
-#            plt.hist(mp, bins=100)
-#            plt.xlabel('Pulsar mass')
-#            plt.show()
+            plt.hist(mp, bins=100)
+            plt.xlabel('Pulsar mass')
+            plt.show()
             print('Median m2: ', np.median(m2), ", inclination: ", np.median(inc), ", Pulsar mass: ", np.median(mp))
             print('1-sigma range:', np.percentile(mp, q=16), np.percentile(mp, q=84))
-#            plt.scatter(m2, inc)
-#            plt.xlabel('companion mass')
-#            plt.ylabel('inclination (deg)')
-#            plt.show()
+            plt.scatter(m2, inc, alpha=0.5)
+            plt.xlabel('companion mass')
+            plt.ylabel('inclination (deg)')
+            plt.show()
 
     if 'M2' in params.keys():
         m2 = np.random.normal(loc=params["M2"], scale=params["M2_ERR"], size=n_samples)
@@ -427,17 +412,21 @@ for par in parfiles:
         else:
             sini = np.random.normal(loc=params["SINI"], scale=params["SINI_ERR"], size=n_samples)
             inc = np.arcsin(sini)*180/np.pi
+        cut = np.argwhere((m2 > mass_func) * (m2 < 10))
+        m2 = m2[cut]
+        sini = sini[cut]
+        inc = np.arcsin(sini)*180/np.pi
         mtot2 = (m2 * sini)**3 / mass_func
         mp = np.sqrt(mtot2) - m2
-#        plt.hist(mp, bins=100)
-#        plt.xlabel('Pulsar mass')
-#        plt.show()
+        plt.hist(mp, bins=100)
+        plt.xlabel('Pulsar mass')
+        plt.show()
         print('Median m2: ', np.median(m2), ", inclination: ", np.median(inc), ", Pulsar mass: ", np.median(mp))
         print('1-sigma range:', np.percentile(mp, q=16), np.percentile(mp, q=84))
-#        plt.scatter(m2, inc)
-#        plt.xlabel('companion mass')
-#        plt.ylabel('inclination (deg)')
-#        plt.show()
+        plt.scatter(m2, inc, alpha=0.5)
+        plt.xlabel('companion mass')
+        plt.ylabel('inclination (deg)')
+        plt.show()
 
 
     if 'OMDOT' in params.keys() or 'EPS1DOT' in params.keys() or 'EPS2DOT' in params.keys():
@@ -481,3 +470,4 @@ for par in parfiles:
     with open(outfile, 'a+') as f:
         f.write('\n')
 
+    print(" ")
