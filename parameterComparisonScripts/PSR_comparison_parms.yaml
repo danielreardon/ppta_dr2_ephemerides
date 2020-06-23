@@ -1,0 +1,95 @@
+##### IMPORTANT INFORMATION #####
+##### DO NOT MODIFY THIS FILE #####
+##### MAKE A COPY OF THIS FILE AND CUSTOMIZE #####
+
+########## Directory Structure information #########
+
+dirstruct   :
+                                # Directory information
+
+    projectdir  : '/fred/oz002/nthyagar/projects/dr2_ephemerides/'
+                                # Primary project folder for storing 
+                                # inputs/outputs
+
+    PTA_data_dir: 'PTA_DataReleases/'
+                                # Folder containing data releases
+                                # from various PTA
+
+    outdir      : 'outputs/'
+                                # Folder for saving figures, and is 
+                                # relative to the projectdir
+    
+    figdir      : 'figures/'    
+                                # Folder for saving figures, and is 
+                                # relative to the outdir
+
+    PTA_dirinfo :
+                                # Information on the PTA data sets
+
+        EPTA_DR1    :
+                                # Information about European Pulsar
+                                # Timing Array
+
+            PSRdir      : '/fred/oz002/nthyagar/projects/dr2_ephemerides/PTA_DataReleases/eptaDR1/EPTA_v2.2_git/'
+                                # Directory containing information about
+                                # the pulsars
+
+        NG_11yr     :
+                                # Information about NANOGrav 11-yr data
+
+            PSRdir      : '/fred/oz002/nthyagar/projects/dr2_ephemerides/PTA_DataReleases/NANOGrav_11y/par/'
+                                # Directory containing information about
+                                # the pulsars
+
+        NG_12.5yr_NB:
+                                # Information about NANOGrav 12.5-yr
+                                # narrowband data
+
+            PSRdir      : '/fred/oz002/nthyagar/projects/dr2_ephemerides/PTA_DataReleases/NANOGrav_12yv3/narrowband/par/'
+                                # Directory containing information about
+                                # the pulsars
+
+        NG_12.5yr_WB:
+                                # Information about NANOGrav 12.5-yr
+                                # wideband data
+
+            PSRdir      : '/fred/oz002/nthyagar/projects/dr2_ephemerides/PTA_DataReleases/NANOGrav_12yv3/wideband/par/'
+                                # Directory containing information about
+                                # the pulsars
+
+        PPTA_15yr   :
+                                # Information about PPTA 15-yr data
+
+            PSRdir      : '/fred/oz002/nthyagar/projects/dr2_ephemerides/PTA_DataReleases/ppta15/'
+                                # Directory containing information about
+                                # the pulsars
+
+        PPTA_DR2E   :
+                                # Information about PPTA DR2E data
+
+            PSRdir      : '/fred/oz002/nthyagar/projects/dr2_ephemerides/publish_collection/dr2/'
+                                # Directory containing information about
+                                # the pulsars
+
+############## Comparison parameters ##############
+
+compareParms:
+                                # information relevant for comparison
+
+    params      : ['PX']
+                                # List of parameters for which the
+                                # comparison is to be made
+
+    PTA         : ['EPTA_DR1',
+                   'NG_11yr',
+                   'NG_12.5yr_NB',
+                   'NG_12.5yr_WB',
+                   'PPTA_15yr',
+                   'PPTA_DR2E'
+                  ]
+                                # The PTA's whose data is to be used
+                                # in the comparison 
+                                
+    ref_PTA     : 'PPTA_DR2E'
+                                # The reference PTA to which other
+                                # PTA values will be normalized to
