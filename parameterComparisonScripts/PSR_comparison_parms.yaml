@@ -57,17 +57,23 @@ dirstruct   :
                                 # Directory containing information about
                                 # the pulsars
 
-        PPTA_15yr   :
-                                # Information about PPTA 15-yr data
+        PPTA_DR1    :
+                                # Information about PPTA 15-yr (DR1) data
 
             PSRdir      : '/fred/oz002/nthyagar/projects/dr2_ephemerides/PTA_DataReleases/ppta15/'
                                 # Directory containing information about
                                 # the pulsars
 
-        PPTA_DR2E   :
+        PPTA_DR2    :
                                 # Information about PPTA DR2E data
 
             PSRdir      : '/fred/oz002/nthyagar/projects/dr2_ephemerides/publish_collection/dr2/'
+                                # Directory containing information about
+                                # the pulsars
+        PPTA_DR2E   :
+                                # Information about PPTA DR2E data
+
+            PSRdir      : '/fred/oz002/nthyagar/projects/dr2_ephemerides/publish_collection/dr2e/'
                                 # Directory containing information about
                                 # the pulsars
 
@@ -84,12 +90,22 @@ compareParms:
                    'NG_11yr',
                    'NG_12.5yr_NB',
                    'NG_12.5yr_WB',
-                   'PPTA_15yr',
+                   'PPTA_DR1',
+                   'PPTA_DR2',
                    'PPTA_DR2E'
                   ]
-                                # The PTA's whose data is to be used
-                                # in the comparison 
+                                # The PTA's whose data are to be 
+                                # compared
                                 
-    ref_PTA     : 'PPTA_15yr'
+    ref_PTA     : 'PPTA_DR2'
                                 # The reference PTA to which other
                                 # PTA values will be normalized to
+
+    plot_PTAs   : ['EPTA_DR1',
+                   'NG_12.5yr_NB',
+                   'PPTA_DR1',
+                   'PPTA_DR2',
+                   'PPTA_DR2E'
+                  ]
+                                # The PTA's whose data are to be 
+                                # plotted
