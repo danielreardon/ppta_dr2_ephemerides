@@ -90,6 +90,6 @@ compareParms:
                                 # The PTA's whose data is to be used
                                 # in the comparison 
                                 
-    ref_PTA     : 'PPTA_DR2E'
+    ref_PTA     : 'PPTA_15yr'
                                 # The reference PTA to which other
                                 # PTA values will be normalized to
