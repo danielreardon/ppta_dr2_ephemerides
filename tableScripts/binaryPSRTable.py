@@ -166,15 +166,19 @@ def writeSkyPos(psrDeets,tabFile):
 
 
 # point to list of pulsars to include in the table
-# (split into two groups as table too wide)
-psrNames = np.genfromtxt('psrLists/psrListSolitary-all.list',dtype=str)
+# (split into three groups as table too wide)
+whichGroup = 'group3'
+psrNames = np.genfromtxt('psrLists/psrListBinary-{}.list'.format(whichGroup),dtype=str)
 
 
 # read in pulsar details
 psrDetails = []
 for psr in psrNames:
 
-    parLoc = '/fred/oz002/hmiddleton/ppta_ephemeris/repositories/ppta_dr2_ephemerides/publish_collection/dr2/{}.par'.format(psr)
+    if psr == 'J1713+0747' or psr == 'J1909-3744':
+        parLoc = '/fred/oz002/hmiddleton/ppta_ephemeris/repositories/ppta_dr2_ephemerides/publish_collection/dr2/{}.kop.par'.format(psr)
+    else: 
+        parLoc = '/fred/oz002/hmiddleton/ppta_ephemeris/repositories/ppta_dr2_ephemerides/publish_collection/dr2/{}.par'.format(psr)
     #parLoc = '/fred/oz002/dreardon/ppta_dr2_ephemerides/partim/dr2_boris/new_params_ver1/{}.par'.format(psr)
 
     psrPars = readParFile.read_par(parLoc)
@@ -186,10 +190,11 @@ for psr in psrNames:
 
 # place to save the table
 # clearing file and making table top matter
-tableFile='table.tex'
+tableFile='binaryTable-{}.tex'.format(whichGroup)
 table = open(tableFile,'w')
 table.write("""
 \\begin{table*}
+\\footnotesize
 \\begin{tabular}{llllllll}
 \\hline\\hline \\\\\
 """)
@@ -217,16 +222,18 @@ writeSkyPos(psrDetails,tableFile)
 
 # parameters that can all be treated the same 
 
-params = (['F0','F1','DM','PMRA','PMDEC','PX'])
+params = (['F0','F1','DM','PMRA','PMDEC','PX',\
+           'PB','A1','TASC',\
+           'PBDOT','A1DOT',\
+           'TO','OM','OMDOT','ECC','ECCDOT',\
+           'EPS1','EPS2','EPS1DOT','EPS2DOT',\
+           'M2','SINI',\
+           'H3','H4','STIG',\
+           'KOM','KIN'])
+
+# getting the parameter labels / names for the table headings
 parameterNames = parameterLabels.getParamLabels()
-"""
-parameterNames = ([r'Pulse frequency, $\nu$ (${\rm s}^{-1}$)',
-                   r'First frequency derivative, $\nu$ (${\rm s}^{-2}$)',
-                   r'Dispersion measure, DM (${\rm cm}^{-3}\,{\rm pc}$)',
-                   r'Proper motion in RA (${\rm mas}\,{\rm yr}^{-1}$)',
-                   r'Proper motion in DEC (${\rm mas}\,{\rm yr}^{-1}$)',
-                   r'Parallax, $\pi$ (${\rm mas}$)'])
-"""
+
 
 # write parameters from list 
 for ipar, par in enumerate(params):
@@ -241,10 +248,38 @@ for ipar, par in enumerate(params):
         parameter = ufloat(psrDetails[ipsr][par], psrDetails[ipsr][str(par+'_ERR')])
         paramList.append(parameter)
       except:
-        print('no parameter!')
-        # if doesn't exist, write 0.0 for now
-        #paramList.append(ufloat(0.0,0.0))
-        paramList.append('-')
+
+        # dealing with different names 
+        if par == 'ECC':
+          try: 
+            parE = 'E'
+            parameter = ufloat(psrDetails[ipsr][parE], psrDetails[ipsr][str(parE+'_ERR')])
+            paramList.append(parameter)
+            print ('got E')
+          except:
+            pass
+        elif par == 'ECCDOT': 
+          try:
+            parEDOT = 'EDOT'
+            parameter = ufloat(psrDetails[ipsr][parEDOT], psrDetails[ipsr][str(parEDOT+'_ERR')])
+            paramList.append(parameter)
+            print ('got EDOT')
+          except:
+            pass
+        elif par == 'A1DOT':
+          try: 
+            parXDOT = 'XDOT'
+            parameter = ufloat(psrDetails[ipsr][parXDOT], psrDetails[ipsr][str(parXDOT+'_ERR')])
+            paramList.append(parameter)
+            print ('got XDOT')
+          except:
+            pass
+        else:
+
+          print('no parameter!')
+          # if doesn't exist, write 0.0 for now
+          #paramList.append(ufloat(0.0,0.0))
+          paramList.append('-')
 
   # write parameter line
   writeLine(paramList,tableFile,parameterNames[par])
