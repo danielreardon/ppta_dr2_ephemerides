@@ -17,7 +17,7 @@ Shapiro delays. It will then compute derived parameters.
 import glob
 import matplotlib.pyplot as plt
 import numpy as np
-import sys
+import sys, os
 from decimal import Decimal, InvalidOperation
 import libstempo as T
 import GalDynPsr
@@ -132,16 +132,23 @@ def make_ell1(par, output):
     return
 
 
+def is_valid(array):
+    """
+    Returns boolean array of values that are finite an not nan
+    """
+    return np.isfinite(array)*(~np.isnan(array))
+
 
 """
 Start of code
 """
 
-datadir = '/Users/dreardon/Dropbox/Git/ppta_dr2_ephemerides/publish_collection/dr2/'
-outdir = '/Users/dreardon/Dropbox/Git/ppta_dr2_ephemerides/publish_collection/dr2/output/'
-parfiles = sorted(glob.glob(datadir + 'J1125*.par'))
+datadir = '/Users/dreardon/Dropbox/Git/ppta_dr2_ephemerides/publish_collection/dr2e/'
+outdir = '/Users/dreardon/Dropbox/Git/ppta_dr2_ephemerides/publish_collection/dr2e/output/'
+parfiles = sorted(glob.glob(datadir + '*.par'))
 
 outfile = outdir + 'derived_params.txt'
+os.remove(outfile)
 
 n_samples = 10000
 # Define other useful constants
@@ -166,21 +173,20 @@ data = np.loadtxt('/Users/dreardon/Dropbox/Git/ppta_dr2_ephemerides/publish_coll
 #plt.grid()
 #plt.show()
 
-
 for par in parfiles:
-    print(par)
+    #print(par)
     if 'J0437' in par:
         continue
     psrname = par.split('/')[-1].split('.')[0]
 
-    print('=========================')
-    print(psrname)
-    print('=========================')
+    #print('=========================')
+    print(par.split('/')[-1])
+    #print('=========================')
     #print(par.split('/')[-1].split('.')[0])
     params = read_par(par)
 
     with open(outfile, 'a+') as f:
-        f.write(par.split('/')[-1].split('.')[0] + '\n')
+        f.write(par.split('/')[-1] + '\n')
 
 
     #Convert to Galactic
@@ -212,7 +218,9 @@ for par in parfiles:
     if 'BINARY' in params.keys():
         mass_func = (4*np.pi**2/sc.G) * (params['A1']*sc.c)**3/(params['PB']*86400)**2
         mass_func = mass_func/M_sun
-        print('Mass function = ', mass_func)
+        #print('Mass function = ', mass_func)
+        with open(outfile, 'a+') as f:
+            f.write("MASS_FUNC" + '\t' + str(mass_func) + '\n')
 
     # Check if pulsar needs ELL1:
     if 'ECC' in params.keys():
@@ -238,12 +246,13 @@ for par in parfiles:
                                            scale=params["PX_ERR"], size=n_samples) # observed
             #plt.hist(D_prior, bins=100)
             #plt.show()
+            D_array = D_prior[(D_prior > 0)*(D_prior < 100)]
             dkpc = np.median(D_prior[(D_prior > 0)*(D_prior < 100)])
             sigd = np.std(D_prior[(D_prior > 0)*(D_prior < 100)])
             #sigd = dkpc*params["PX_ERR"]/params["PX"]
             #print("Parallax distance (kpc) = ", round(dkpc, 3), " +/- ", round(sigd, 3))
             with open(outfile, 'a+') as f:
-                f.write("D_PX" + '\t' + str(dkpc) + '\t' + str(sigd) + '\n')
+                f.write("D_PX(med/16th/84th)" + '\t' + str(np.median(D_array)) + '\t' + str(np.percentile(D_array, q=16)) + '\t' + str(np.percentile(D_array, q=84)) + '\n')
 
 
     if 'PBDOT' in params.keys():
@@ -286,7 +295,8 @@ for par in parfiles:
         D_err = np.std(D_posterior)
         #print("Shklovskii distance (kpc) = ", round(D, 3), " +/- ", round(D_err,3))
         with open(outfile, 'a+') as f:
-            f.write("D_SHK" + '\t' + str(D) + '\t' + str(D_err) + '\n')
+            #f.write("D_SHK" + '\t' + str(D) + '\t' + str(D_err) + '\n')
+            f.write("D_SHK(med/16th/84th)" + '\t' + str(np.median(D_posterior)) + '\t' + str(np.percentile(D_posterior, q=16)) + '\t' + str(np.percentile(D_posterior, q=84)) + '\n')
         if 'PX' in params.keys():
             Davg = np.average([dkpc, D], weights=[1/sigd, 1/D_err])
             Davg_err = 1
@@ -304,52 +314,59 @@ for par in parfiles:
                                                scale=params["PX_ERR"], size=n_samples) # observed
             D = np.median(D_prior[(D_prior > 0)*(D_prior < 100)])
 
-    if 'F2' in params.keys():
-        #print(' ')
-        #rint('=== Computing radial velocity from F2 ===')
-        f0 = params['F0']
-        try:
-            f0err = params['F0_ERR']
-        except KeyError:
-            continue
-        f1 = params['F1']
-        f1_err = params['F1_ERR']
-        f2 = params['F2']
-        f2_err = params['F2_ERR']
-        pmra = params['PMRA']
-        pmdec = params['PMDEC']
-        pm = np.sqrt(pmra**2 + pmdec**2)/(sec_per_year*rad_to_mas)
-        p0_obs = 1/f0
-        p1_obs = -f1/f0**2
-        p2_obs = f1*(2*f1/f0**3) - (1/f0**2)*(f2)
-        #print(f2)
-        Ex_pl =  GalDynPsr.modelLb.Expl(ldeg, sigl, bdeg, sigb, dkpc, sigd) # excess term parallel to the Galactic plane
-        Ex_z =  GalDynPsr.modelLb.Exz(ldeg, sigl, bdeg, sigb, dkpc, sigd) # excess term perpendicular to the Galactic plane
-
-
-        dv_r = np.Inf
-        v_r = 0
-        # iterate Doppler correction
-        while dv_r > np.abs(0.01*v_r):
-            p0_int = p0_obs/(1 - v_r/sc.c) # approximate Doppler correction
-            p1_int = p1_obs - GalDynPsr.pdotint.PdotGal(Ex_pl, Ex_z, p0_int) # Shklovskii correction
-            v_r_new =  (2*p1_int*D*parsec_to_m - p2_obs*(sc.c/pm**2))/(3*p0_int) # km/s ... assuming p2_int=0
-            dv_r = np.abs(v_r - v_r_new)
-            v_r = v_r_new
-        #print("Observed P2 = ", p2_obs)
-        #print("Radial velocity = ", round(v_r/1000,1), " +/- ", round(f2_err/f2 * v_r/1000, 1), " km/s")
-        p2 =  (2*p1_int*D*parsec_to_m - v_r*(3*p0_int))/(sc.c/pm**2)
-        with open(outfile, 'a+') as f:
-            f.write("V_R" + '\t' + str(round(v_r,1)) + '\t' + str(round(f2_err/f2 * v_r, 1)) + '\n')
+#    if 'F2' in params.keys():
+#        #print(' ')
+#        #rint('=== Computing radial velocity from F2 ===')
+#        f0 = params['F0']
+#        try:
+#            f0err = params['F0_ERR']
+#        except KeyError:
+#            continue
+#        f1 = params['F1']
+#        f1_err = params['F1_ERR']
+#        f2 = params['F2']
+#        f2_err = params['F2_ERR']
+#        pmra = params['PMRA']
+#        pmdec = params['PMDEC']
+#        pm = np.sqrt(pmra**2 + pmdec**2)/(sec_per_year*rad_to_mas)
+#        p0_obs = 1/f0
+#        p1_obs = -f1/f0**2
+#        p2_obs = f1*(2*f1/f0**3) - (1/f0**2)*(f2)
+#        #print(f2)
+#        Ex_pl =  GalDynPsr.modelLb.Expl(ldeg, sigl, bdeg, sigb, dkpc, sigd) # excess term parallel to the Galactic plane
+#        Ex_z =  GalDynPsr.modelLb.Exz(ldeg, sigl, bdeg, sigb, dkpc, sigd) # excess term perpendicular to the Galactic plane
+#
+#
+#        dv_r = np.Inf
+#        v_r = 0
+#        # iterate Doppler correction
+#        while dv_r > np.abs(0.01*v_r):
+#            p0_int = p0_obs/(1 - v_r/sc.c) # approximate Doppler correction
+#            p1_int = p1_obs - GalDynPsr.pdotint.PdotGal(Ex_pl, Ex_z, p0_int) # Shklovskii correction
+#            v_r_new =  (2*p1_int*D*parsec_to_m - p2_obs*(sc.c/pm**2))/(3*p0_int) # km/s ... assuming p2_int=0
+#            dv_r = np.abs(v_r - v_r_new)
+#            v_r = v_r_new
+#        #print("Observed P2 = ", p2_obs)
+#        #print("Radial velocity = ", round(v_r/1000,1), " +/- ", round(f2_err/f2 * v_r/1000, 1), " km/s")
+#        p2 =  (2*p1_int*D*parsec_to_m - v_r*(3*p0_int))/(sc.c/pm**2)
+#        with open(outfile, 'a+') as f:
+#            f.write("V_R" + '\t' + str(round(v_r,1)) + '\t' + str(round(f2_err/f2 * v_r, 1)) + '\n')
 
     if 'XDOT' in params.keys():
         #print(' ')
         #print('=== Computing limit on i from XDOT ===')
-        i_limit =  np.abs(180/np.pi * np.arctan(params['A1'] * np.sqrt(params['PMRA']**2 + params['PMDEC']**2)/(rad_to_mas*sec_per_year) / params['XDOT']))
+        xdot = np.random.normal(loc=params["XDOT"], scale=params["XDOT_ERR"], size=n_samples)
+        a1 = np.random.normal(loc=params["A1"], scale=params["A1_ERR"], size=n_samples)
+        pmra = np.random.normal(loc=params["PMRA"], scale=params["PMRA_ERR"], size=n_samples)
+        pmdec = np.random.normal(loc=params["PMDEC"], scale=params["PMDEC_ERR"], size=n_samples)
+
+
+        i_limit =  np.abs(180/np.pi * np.arctan(a1 * np.sqrt(pmra**2 + pmdec**2)/(rad_to_mas*sec_per_year) / xdot))
         #print("i <= ", int(np.ceil(i_limit)))
         with open(outfile, 'a+') as f:
-            f.write("INC" + '\t' + "<" + str(i_limit)+ '\n')
+            f.write("INC_LIM(med/std)" + '\t' + "<" + str(np.median(i_limit))+ '\t'+ str(np.std(i_limit)) +'\n')
 
+    mtot2 = 0
     if 'H3' in params.keys():
         if 'H4' in params.keys():
             h3 = params["H3"]*10**6
@@ -366,16 +383,29 @@ for par in parfiles:
             sini = sini[cut]
             inc = np.arcsin(sini)*180/np.pi
             mtot2 = (m2 * sini)**3 / mass_func
-            mp = np.sqrt(mtot2) - m2
-            plt.hist(mp, bins=100)
-            plt.xlabel('Pulsar mass')
-            plt.show()
-            print('Median m2: ', np.median(m2), ", inclination: ", np.median(inc), ", Pulsar mass: ", np.median(mp))
-            print('1-sigma range:', np.percentile(mp, q=16), np.percentile(mp, q=84))
-            plt.scatter(m2, inc, alpha=0.5)
-            plt.xlabel('companion mass')
-            plt.ylabel('inclination (deg)')
-            plt.show()
+            mp = np.sqrt(mtot2[is_valid(mtot2)*is_valid(m2)]) - m2[is_valid(mtot2)*is_valid(m2)]
+            mp = mp[is_valid(mp)]
+            mtot2 = mtot2[is_valid(mtot2)]
+            inc = inc[is_valid(inc)]
+
+            with open(outfile, 'a+') as f:
+                f.write("INC(med/16th/84th)" + '\t' + str(np.median(inc)) + '\t' + str(np.percentile(inc, q=16)) + '\t' + str(np.percentile(inc, q=84)) + '\n')
+            with open(outfile, 'a+') as f:
+                f.write("M2(med/16th/84th)" + '\t' + str(np.median(m2)) + '\t' + str(np.percentile(m2, q=16)) + '\t' + str(np.percentile(m2, q=84)) + '\n')
+            with open(outfile, 'a+') as f:
+                f.write("MP(med/16th/84th)" + '\t' + str(np.median(mp)) + '\t' + str(np.percentile(mp, q=16)) + '\t' + str(np.percentile(mp, q=84)) + '\n')
+            with open(outfile, 'a+') as f:
+                f.write("MTOT(med/16th/84th)" + '\t' + str(np.median(mtot2)) + '\t' + str(np.percentile(mtot2, q=16)) + '\t' + str(np.percentile(mtot2, q=84)) + '\n')
+
+            #plt.hist(mp, bins=100)
+            #plt.xlabel('Pulsar mass')
+            #plt.show()
+            #print('Median m2: ', np.median(m2), ", inclination: ", np.median(inc), ", Pulsar mass: ", np.median(mp))
+            #print('1-sigma range:', np.percentile(mp, q=16), np.percentile(mp, q=84))
+            #plt.scatter(m2, inc, alpha=0.5)
+            #plt.xlabel('companion mass')
+            #plt.ylabel('inclination (deg)')
+            #plt.show()
         elif 'STIG' in params.keys():
             h3 = params["H3"]*10**6
             h3_err = params["H3_ERR"]*10**6
@@ -392,16 +422,29 @@ for par in parfiles:
             sini = sini[cut]
             inc = np.arcsin(sini)*180/np.pi
             mtot2 = (m2 * sini)**3 / mass_func
-            mp = np.sqrt(mtot2) - m2
-            plt.hist(mp, bins=100)
-            plt.xlabel('Pulsar mass')
-            plt.show()
-            print('Median m2: ', np.median(m2), ", inclination: ", np.median(inc), ", Pulsar mass: ", np.median(mp))
-            print('1-sigma range:', np.percentile(mp, q=16), np.percentile(mp, q=84))
-            plt.scatter(m2, inc, alpha=0.5)
-            plt.xlabel('companion mass')
-            plt.ylabel('inclination (deg)')
-            plt.show()
+            mp = np.sqrt(mtot2[is_valid(mtot2)*is_valid(m2)]) - m2[is_valid(mtot2)*is_valid(m2)]
+            mp = mp[is_valid(mp)]
+            mtot2 = mtot2[is_valid(mtot2)]
+            inc = inc[is_valid(inc)]
+
+            with open(outfile, 'a+') as f:
+                f.write("INC(med/16th/84th)" + '\t' + str(np.median(inc)) + '\t' + str(np.percentile(inc, q=16)) + '\t' + str(np.percentile(inc, q=84)) + '\n')
+            with open(outfile, 'a+') as f:
+                f.write("M2(med/16th/84th)" + '\t' + str(np.median(m2)) + '\t' + str(np.percentile(m2, q=16)) + '\t' + str(np.percentile(m2, q=84)) + '\n')
+            with open(outfile, 'a+') as f:
+                f.write("MP(med/16th/84th)" + '\t' + str(np.median(mp)) + '\t' + str(np.percentile(mp, q=16)) + '\t' + str(np.percentile(mp, q=84)) + '\n')
+            with open(outfile, 'a+') as f:
+                f.write("MTOT(med/16th/84th)" + '\t' + str(np.median(mtot2)) + '\t' + str(np.percentile(mtot2, q=16)) + '\t' + str(np.percentile(mtot2, q=84)) + '\n')
+
+            #plt.hist(mp, bins=100)
+            #plt.xlabel('Pulsar mass')
+            #plt.show()
+            #print('Median m2: ', np.median(m2), ", inclination: ", np.median(inc), ", Pulsar mass: ", np.median(mp))
+            #print('1-sigma range:', np.percentile(mp, q=16), np.percentile(mp, q=84))
+            #plt.scatter(m2, inc, alpha=0.5)
+            #plt.xlabel('companion mass')
+            #plt.ylabel('inclination (deg)')
+            #plt.show()
 
     if 'M2' in params.keys():
         m2 = np.random.normal(loc=params["M2"], scale=params["M2_ERR"], size=n_samples)
@@ -417,16 +460,28 @@ for par in parfiles:
         sini = sini[cut]
         inc = np.arcsin(sini)*180/np.pi
         mtot2 = (m2 * sini)**3 / mass_func
-        mp = np.sqrt(mtot2) - m2
-        plt.hist(mp, bins=100)
-        plt.xlabel('Pulsar mass')
-        plt.show()
-        print('Median m2: ', np.median(m2), ", inclination: ", np.median(inc), ", Pulsar mass: ", np.median(mp))
-        print('1-sigma range:', np.percentile(mp, q=16), np.percentile(mp, q=84))
-        plt.scatter(m2, inc, alpha=0.5)
-        plt.xlabel('companion mass')
-        plt.ylabel('inclination (deg)')
-        plt.show()
+        mp = np.sqrt(mtot2[is_valid(mtot2)*is_valid(m2)]) - m2[is_valid(mtot2)*is_valid(m2)]
+        mp = mp[is_valid(mp)]
+        mtot2 = mtot2[is_valid(mtot2)]
+        inc = inc[is_valid(inc)]
+
+        if not 'KIN' in params.keys():
+            with open(outfile, 'a+') as f:
+                f.write("INC(med/16th/84th)" + '\t' + str(np.median(inc)) + '\t' + str(np.percentile(inc, q=16)) + '\t' + str(np.percentile(inc, q=84)) + '\n')
+        with open(outfile, 'a+') as f:
+            f.write("MP(med/16th/84th)" + '\t' + str(np.median(mp)) + '\t' + str(np.percentile(mp, q=16)) + '\t' + str(np.percentile(mp, q=84)) + '\n')
+        with open(outfile, 'a+') as f:
+            f.write("MTOT(med/16th/84th)" + '\t' + str(np.median(mtot2)) + '\t' + str(np.percentile(mtot2, q=16)) + '\t' + str(np.percentile(mtot2, q=84)) + '\n')
+
+        #plt.hist(mp, bins=100)
+        #plt.xlabel('Pulsar mass')
+        #plt.show()
+        #print('Median m2: ', np.median(m2), ", inclination: ", np.median(inc), ", Pulsar mass: ", np.median(mp))
+        #print('1-sigma range:', np.percentile(mp, q=16), np.percentile(mp, q=84))
+        #plt.scatter(m2, inc, alpha=0.5)
+        #plt.xlabel('companion mass')
+        #plt.ylabel('inclination (deg)')
+        #plt.show()
 
 
     if 'OMDOT' in params.keys() or 'EPS1DOT' in params.keys() or 'EPS2DOT' in params.keys():
@@ -459,7 +514,8 @@ for par in parfiles:
 
         Msun = 1.989*10**30  # kg
         Tsun = sc.G * Msun / (sc.c**3)
-        Mtot = 1.6
+        Mtot = [1.6 if (np.std(mtot2)>0.2 or mtot2==0) else np.median(mtot2)]
+        Mtot = Mtot[0]
         n = 2*np.pi/(params['PB']*86400)  # s
         omdot_gr = 3 * ((Tsun*Mtot)**(2/3)) * (n**(5/3)) / (1 - ecc**2)
         omdot_gr = round(omdot_gr * 86400 * 365.2425 * 180/np.pi, 5)
