@@ -143,8 +143,8 @@ def is_valid(array):
 Start of code
 """
 
-datadir = '/Users/dreardon/Dropbox/Git/ppta_dr2_ephemerides/publish_collection/dr2e/'
-outdir = '/Users/dreardon/Dropbox/Git/ppta_dr2_ephemerides/publish_collection/dr2e/output/'
+datadir = '/Users/dreardon/Dropbox/Git/ppta_dr2_ephemerides/publish_collection/dr2/'
+outdir = '/Users/dreardon/Dropbox/Git/ppta_dr2_ephemerides/publish_collection/dr2/output/'
 parfiles = sorted(glob.glob(datadir + '*.par'))
 
 outfile = outdir + 'derived_params.txt'
