@@ -134,7 +134,3 @@ TNChromIdx 4
 TNChromC 111
 TNsubtractRed 1
 TNsubtractChrom 1
-CLK_CORR_CHAIN dr2e.clk gps2utc.clk utc2tai.clk tai2tt_bipm2018.clk
-CLK_CORR_CHAIN dr2e.clk gps2utc.clk utc2tai.clk tai2tt_bipm2018.clk
-CLK_CORR_CHAIN pks2gps.dr2e.clk gps2utc.clk utc2tai.clk tai2tt_bipm2018.clk
-CLK_CORR_CHAIN pks2gps.dr2e.clk gps2utc.clk utc2tai.clk tai2tt_bipm2018.clk
