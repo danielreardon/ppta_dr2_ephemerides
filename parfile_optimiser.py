@@ -143,8 +143,8 @@ def is_valid(array):
 Start of code
 """
 
-datadir = '/Users/dreardon/Dropbox/Git/ppta_dr2_ephemerides/publish_collection/dr2/'
-outdir = '/Users/dreardon/Dropbox/Git/ppta_dr2_ephemerides/publish_collection/dr2/output/'
+datadir = '/Users/dreardon/Dropbox/Git/ppta_dr2_ephemerides/publish_collection/dr2/ecliptic/'
+outdir = '/Users/dreardon/Dropbox/Git/ppta_dr2_ephemerides/publish_collection/dr2/ecliptic/output/'
 parfiles = sorted(glob.glob(datadir + '*.par'))
 
 outfile = outdir + 'derived_params.txt'
@@ -189,30 +189,37 @@ for par in parfiles:
         f.write(par.split('/')[-1] + '\n')
 
 
-    #Convert to Galactic
-    c = SkyCoord(params['RAJ'] + ' ' + params['DECJ'],
+    if 'ecliptic' in datadir:
+        params_position = read_par(par)
+        c = SkyCoord(params['ELONG'], params['ELAT'], frame=BarycentricTrueEcliptic,
+                 unit=(u.deg, u.deg))
+    else:
+        c = SkyCoord(params['RAJ'] + ' ' + params['DECJ'],
                  unit=(u.hourangle, u.deg))
+    #Convert to Galactic
+
     ldeg = c.galactic.l.value
     sigl = 0
     bdeg = c.galactic.b.value
     sigb = 0
 
-    #Convert to Ecliptic
-    #ecliptic transformation:
-    elat = c.barycentrictrueecliptic.lat.value
-    elon = c.barycentrictrueecliptic.lon.value
-    #proper motion transformation:
-    pm = ICRS(ra=c.ra.deg*u.degree, dec=c.dec.deg*u.deg,
-              pm_ra_cosdec = params['PMRA']*u.mas/u.yr,
-              pm_dec = params['PMDEC']*u.mas/u.yr)
-    pm_ecliptic = pm.transform_to(BarycentricTrueEcliptic)
-    pmlat = pm_ecliptic.pm_lat.value
-    pmlon = pm_ecliptic.pm_lon_coslat.value
-    with open(outfile, 'a+') as f:
-        f.write("ELAT" + '\t' + str(elat) + '\n')
-        f.write("ELONG" + '\t' + str(elon) + '\n')
-        f.write("PMELAT" + '\t' + str(pmlat) + '\n')
-        f.write("PMELONG" + '\t' + str(pmlon) + '\n')
+    if not 'ecliptic' in datadir:
+        #Convert to Ecliptic
+        #ecliptic transformation:
+        elat = c.barycentrictrueecliptic.lat.value
+        elon = c.barycentrictrueecliptic.lon.value
+        #proper motion transformation:
+        pm = ICRS(ra=c.ra.deg*u.degree, dec=c.dec.deg*u.deg,
+                  pm_ra_cosdec = params['PMRA']*u.mas/u.yr,
+                  pm_dec = params['PMDEC']*u.mas/u.yr)
+        pm_ecliptic = pm.transform_to(BarycentricTrueEcliptic)
+        pmlat = pm_ecliptic.pm_lat.value
+        pmlon = pm_ecliptic.pm_lon_coslat.value
+        with open(outfile, 'a+') as f:
+            f.write("ELAT" + '\t' + str(elat) + '\n')
+            f.write("ELONG" + '\t' + str(elon) + '\n')
+            f.write("PMELAT" + '\t' + str(pmlat) + '\n')
+            f.write("PMELONG" + '\t' + str(pmlon) + '\n')
 
 
     if 'BINARY' in params.keys():
@@ -273,8 +280,17 @@ for par in parfiles:
             sigd = 0.2*dkpc
         pb = params['PB']
         pb_err = params['PB_ERR']
-        pmra = params['PMRA']
-        pmdec = params['PMDEC']
+        if 'ecliptic' in datadir:
+            pmelat = params['PMELAT']
+            pmelong = params['PMELONG']
+            pm_tot = np.sqrt(pmelat**2 + pmelong**2)
+            pm = pm_tot/(sec_per_year*rad_to_mas)
+        else:
+            pmra = params['PMRA']
+            pmdec = params['PMDEC']
+            pm_tot = np.sqrt(pmelat**2 + pmelong**2)
+            pm = pm_tot/(sec_per_year*rad_to_mas)
+
 
         # Expected Shklovskii and Galactic terms
         Ex_pl =  GalDynPsr.modelLb.Expl(ldeg, sigl, bdeg, sigb, dkpc, sigd) # excess term parallel to the Galactic plane
@@ -289,7 +305,7 @@ for par in parfiles:
         pbdot_gal_posterior = np.random.normal(loc=pbdot_gal, scale=pbdot_gal_err, size=n_samples)  # sample randomly from pbdot_gal distribution
         pbdot_shklovskii = np.subtract(pbdot_posterior, pbdot_gal_posterior) - pbdot_grav
         #print("Observed Shklovskii contribution = ", np.mean(pbdot_shklovskii), " +/- ", np.std(pbdot_shklovskii))
-        pm = np.sqrt(pmra**2 + pmdec**2)/(sec_per_year*rad_to_mas)
+
         D_posterior = sc.c*pbdot_shklovskii/(pm**2*pb*86400)/parsec_to_m/1000
         D = np.mean(D_posterior)
         D_err = np.std(D_posterior)
@@ -357,11 +373,20 @@ for par in parfiles:
         #print('=== Computing limit on i from XDOT ===')
         xdot = np.random.normal(loc=params["XDOT"], scale=params["XDOT_ERR"], size=n_samples)
         a1 = np.random.normal(loc=params["A1"], scale=params["A1_ERR"], size=n_samples)
-        pmra = np.random.normal(loc=params["PMRA"], scale=params["PMRA_ERR"], size=n_samples)
-        pmdec = np.random.normal(loc=params["PMDEC"], scale=params["PMDEC_ERR"], size=n_samples)
+
+        if 'ecliptic' in datadir:
+            pmelat = np.random.normal(loc=params["PMELAT"], scale=params["PMELAT_ERR"], size=n_samples)
+            pmelong = np.random.normal(loc=params["PMELONG"], scale=params["PMELONG_ERR"], size=n_samples)
+            pm_tot = np.sqrt(pmelat**2 + pmelong**2)
+            pm = pm_tot/(sec_per_year*rad_to_mas)
+        else:
+            pmra = np.random.normal(loc=params["PMRA"], scale=params["PMRA_ERR"], size=n_samples)
+            pmdec = np.random.normal(loc=params["PMDEC"], scale=params["PMDEC_ERR"], size=n_samples)
+            pm_tot = np.sqrt(pmelat**2 + pmelong**2)
+            pm = pm_tot/(sec_per_year*rad_to_mas)
 
 
-        i_limit =  np.abs(180/np.pi * np.arctan(a1 * np.sqrt(pmra**2 + pmdec**2)/(rad_to_mas*sec_per_year) / xdot))
+        i_limit =  np.abs(180/np.pi * np.arctan(a1 * pm / xdot))
         #print("i <= ", int(np.ceil(i_limit)))
         with open(outfile, 'a+') as f:
             f.write("INC_LIM(med/std)" + '\t' + "<" + str(np.median(i_limit))+ '\t'+ str(np.std(i_limit)) +'\n')
@@ -427,14 +452,17 @@ for par in parfiles:
             mtot2 = mtot2[is_valid(mtot2)]
             inc = inc[is_valid(inc)]
 
-            with open(outfile, 'a+') as f:
-                f.write("INC(med/16th/84th)" + '\t' + str(np.median(inc)) + '\t' + str(np.percentile(inc, q=16)) + '\t' + str(np.percentile(inc, q=84)) + '\n')
-            with open(outfile, 'a+') as f:
-                f.write("M2(med/16th/84th)" + '\t' + str(np.median(m2)) + '\t' + str(np.percentile(m2, q=16)) + '\t' + str(np.percentile(m2, q=84)) + '\n')
-            with open(outfile, 'a+') as f:
-                f.write("MP(med/16th/84th)" + '\t' + str(np.median(mp)) + '\t' + str(np.percentile(mp, q=16)) + '\t' + str(np.percentile(mp, q=84)) + '\n')
-            with open(outfile, 'a+') as f:
-                f.write("MTOT(med/16th/84th)" + '\t' + str(np.median(mtot2)) + '\t' + str(np.percentile(mtot2, q=16)) + '\t' + str(np.percentile(mtot2, q=84)) + '\n')
+            try:
+                with open(outfile, 'a+') as f:
+                    f.write("INC(med/16th/84th)" + '\t' + str(np.median(inc)) + '\t' + str(np.percentile(inc, q=16)) + '\t' + str(np.percentile(inc, q=84)) + '\n')
+                with open(outfile, 'a+') as f:
+                    f.write("M2(med/16th/84th)" + '\t' + str(np.median(m2)) + '\t' + str(np.percentile(m2, q=16)) + '\t' + str(np.percentile(m2, q=84)) + '\n')
+                with open(outfile, 'a+') as f:
+                    f.write("MP(med/16th/84th)" + '\t' + str(np.median(mp)) + '\t' + str(np.percentile(mp, q=16)) + '\t' + str(np.percentile(mp, q=84)) + '\n')
+                with open(outfile, 'a+') as f:
+                    f.write("MTOT(med/16th/84th)" + '\t' + str(np.median(mtot2)) + '\t' + str(np.percentile(mtot2, q=16)) + '\t' + str(np.percentile(mtot2, q=84)) + '\n')
+            except Exception as e:
+                print(e)
 
             #plt.hist(mp, bins=100)
             #plt.xlabel('Pulsar mass')
