@@ -83,10 +83,8 @@ JUMP -f H-OH_cpsr2m 1.8923656861774e-05 1
 JUMP -f H-OH_cpsr2n 2.2500039590444e-05 1
 JUMP -f MULTI_fptm 1.9253530894547e-05 1
 JUMP -f H-OH_fptm 2.1421576659033e-05 1
-JUMP -f H-OH_AFB -3254138454.887 1
-JUMP -f MULTI_AFB 4824761237.1346 1
-JUMP -f H-OH_AFB 3254138454.887 1
-JUMP -f MULTI_AFB -4824761237.1346 1
+JUMP -f H-OH_AFB 0 1
+JUMP -f MULTI_AFB 0 1
 TNEF -group CASPSR_40CM 1.13851
 TNEF -group CPSR2_20CM 1.0653
 TNEF -group CPSR2_50CM 1.08691
@@ -125,3 +123,7 @@ TNRedGam 1.04116
 TNRedC 146
 TNsubtractRed 1
 TNsubtractDM 1
+CLK_CORR_CHAIN dr2e.clk gps2utc.clk utc2tai.clk tai2tt_bipm2018.clk
+CLK_CORR_CHAIN dr2e.clk gps2utc.clk utc2tai.clk tai2tt_bipm2018.clk
+CLK_CORR_CHAIN pks2gps.dr2e.clk gps2utc.clk utc2tai.clk tai2tt_bipm2018.clk
+CLK_CORR_CHAIN pks2gps.dr2e.clk gps2utc.clk utc2tai.clk tai2tt_bipm2018.clk

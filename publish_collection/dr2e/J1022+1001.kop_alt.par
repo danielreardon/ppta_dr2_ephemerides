@@ -133,3 +133,7 @@ TNGroupNoise -group CPSR2_50CM -12.3762 0.223783 31
 TNBandNoise 1000 2000 -12.8141 0.0755601 92
 TNsubtractRed 1
 TNsubtractDM 1
+CLK_CORR_CHAIN dr2e.clk gps2utc.clk utc2tai.clk tai2tt_bipm2018.clk
+CLK_CORR_CHAIN dr2e.clk gps2utc.clk utc2tai.clk tai2tt_bipm2018.clk
+CLK_CORR_CHAIN pks2gps.dr2e.clk gps2utc.clk utc2tai.clk tai2tt_bipm2018.clk
+CLK_CORR_CHAIN pks2gps.dr2e.clk gps2utc.clk utc2tai.clk tai2tt_bipm2018.clk
