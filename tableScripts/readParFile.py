@@ -21,6 +21,7 @@ Definitions
 """
 
 
+
 def read_par(parfile):
     """
     Reads a par file and return a dictionary of parameter names and values
@@ -51,6 +52,8 @@ def read_par(parfile):
         else:
             val = sline[1]
 
+
+
         if len(sline) == 3 and sline[2] not in ['0', '1']:
             err = sline[2].replace('D', 'E')
         elif len(sline) == 4:
@@ -77,6 +80,71 @@ def read_par(parfile):
             par[param+"_TYPE"] = p_type
 
     file.close()
+
+    return par
+
+
+
+
+
+
+def get_derived_params(parfilename):
+
+    """
+    For a given par file, find the derived parameters in the "derived_params.txt" file. 
+    (searches for the par file) 
+    """
+    derivedParamsFile = '../publish_collection/dr2/output/derived_params.txt'
+
+    file = open(derivedParamsFile, 'r')
+
+    # this is only true when reading the lines we want 
+    take = False
+
+    par={}
+
+    for line in file.readlines():
+
+        sline = line.split()
+
+        if len(sline)>0 and take==False:
+            if sline[0]==parfilename: 
+                take = True
+        elif len(sline)==0 and take==True:
+            take = False
+        else: pass
+
+
+        err = None
+        p_type = None
+        sixteenth=None
+        eighty_fourth=None
+
+        if len(sline)>1 and line[0] != "J":
+            val = sline[1]
+        if len(sline)>0:
+            param = sline[0]
+
+
+        try:
+          if param != "ELAT" and param != "ELONG" and param != "PMELAT" and param != "PMELONG" and param != "MASS_FUNC" and param != "OMDOT_GR" and len(sline)>=3:
+            sixteenth = sline[2]
+            eighty_fourth = sline[3]
+        except: pass
+
+
+        if take==True and line[0]!="J":
+    
+            par[param] = val
+            if err:
+                par[param+"_ERR"] = float(err)
+            if p_type:
+                par[param+"_TYPE"] = p_type
+            if sixteenth: 
+                par[param+"_16th"] = float(sixteenth)
+            if eighty_fourth:
+                par[param+"_84th"] = float(eighty_fourth)
+
 
     return par
 

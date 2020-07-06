@@ -43,7 +43,7 @@ class ShorthandFormatter(string.Formatter):
 """
 Write the parameter line in latex table format
 """
-def writeLine(parameters,tableFile,parameterName):
+def writeLine(parameters,tableFile,parameterName,fitOrDer):
     table = open(tableFile,'a')
     table.write(parameterName)
 
@@ -62,8 +62,10 @@ def writeLine(parameters,tableFile,parameterName):
         except:
             shortFormat = p
 
-
-        table.write('\t & \t ${}$'.format(shortFormat))
+        if fitOrDer == 0: 
+           table.write('\t & \t $\\mathbf{{ {} }}$'.format(shortFormat))
+        elif fitOrDer == 1: 
+           table.write('\t & \t ${}$'.format(shortFormat))
 
     table.write('\\\\ \n')
     table.close()
@@ -167,8 +169,13 @@ def writeSkyPos(psrDeets,tabFile):
 
 # point to list of pulsars to include in the table
 # (split into three groups as table too wide)
-whichGroup = 'group3'
-psrNames = np.genfromtxt('psrLists/psrListBinary-{}.list'.format(whichGroup),dtype=str)
+import argparse
+parser = argparse.ArgumentParser(description='which group of pulsars to make the table for')
+parser.add_argument('--groupNo', type=int, help='integer (1,2,3,4) for group of psrs')
+args = parser.parse_args()
+whichGroup = int(args.groupNo)
+
+psrNames = np.genfromtxt('psrLists/psrListBinary-group{}.list'.format(whichGroup),dtype=str)
 
 
 # read in pulsar details
@@ -185,12 +192,27 @@ for psr in psrNames:
     psrDetails.append(psrPars)
 
 
+# read in derived pulsar details
+psrDerived = []
+for psr in psrNames:
 
+    if psr == 'J1713+0747' or psr == 'J1909-3744':
+        parName = '{}.kop.par'.format(psr)
+    else: 
+        parname = '{}.par'.format(psr)
+
+    psrDer = readParFile.get_derived_params(parname)
+    psrDerived.append(psrDer)
+
+
+
+print (psrDerived[0]['ELAT'])
+print (psrDerived[1]['ELAT'])
 
 
 # place to save the table
 # clearing file and making table top matter
-tableFile='binaryTable-{}.tex'.format(whichGroup)
+tableFile='binaryTable-group{}.tex'.format(whichGroup)
 table = open(tableFile,'w')
 table.write("""
 \\begin{table*}
@@ -211,7 +233,7 @@ table.close()
 
 ## write number of toas row
 names = [ psrDetails[i]['NTOA'] for i in range(len(psrNames)) ]
-writeLine(names,tableFile,'Number of TOAs')
+writeLine(names,tableFile,'Number of TOAs',1)
 
 ## write MJD range row
 writeMJDRange(psrDetails,tableFile)
@@ -222,14 +244,51 @@ writeSkyPos(psrDetails,tableFile)
 
 # parameters that can all be treated the same 
 
-params = (['F0','F1','DM','PMRA','PMDEC','PX',\
-           'PB','A1','TASC',\
-           'PBDOT','A1DOT',\
-           'TO','OM','OMDOT','ECC','ECCDOT',\
-           'EPS1','EPS2','EPS1DOT','EPS2DOT',\
-           'M2','SINI',\
-           'H3','H4','STIG',\
-           'KOM','KIN'])
+fittedParams = (['F0','F1','DM','PMRA','PMDEC','PX',\
+                'PB','A1','TASC',\
+                'PBDOT','A1DOT',\
+                'TO','OM','OMDOT','ECC','ECCDOT',\
+                'EPS1','EPS2','EPS1DOT','EPS2DOT',\
+                'M2','SINI',\
+                'H3','H4','STIG',\
+                'KOM','KIN'])
+
+derivedParams = (['ELAT','ELONG','PMELONG','PMELAT','PMELONG','MASS_FUNC',\
+                  'D_PX(med/16th/84th)', 'D_SHK(med/16th/84th)',\
+                  'INC(med/16th/84th)',\
+                  'M2(med/16th/84th)', 'MP(med/16th/84th)', 'MTOT(med/16th/84th)',\
+                  'OMDOT_GR'])
+
+
+fittedOrDerived = {}
+for p in fittedParams: 
+  fittedOrDerived[p] = 0
+for p in derivedParams: 
+  fittedOrDerived[p] = 1
+
+
+# parameters in the order that we want them to appear in the table
+# parameters to think about: INC_Lim (automatically display <) and M2 (can be fitted or derived?)
+params = (['ELAT','ELONG',\
+           'F0', 'F1',\
+           'DM',\
+           'PMRA', 'PMDEC', 'PMELAT', 'PMELONG',\
+           'PB', 'PBDOT', 'A1', 'A1DOT', 'TASC',\
+           'TO', 'OM', 'OMDOT', 'OMDOT_GR',\
+           'ECC', 'ECCDOT', \
+           'EPS1', 'EPS2', 'EPS1DOT', 'EPS2DOT',\
+           'SINI',\
+           'D_PX(med/16th/84th)', 'D_SHK(med/16th/84th)',\
+           'INC(med/16th/84th)',\
+           'MASS_FUNC',\
+           'MP(med/16th/84th)', 'MTOT(med/16th/84th)',\
+           'H3', 'H4', 'STIG', \
+           'KOM', 'KIN' ])
+
+
+
+
+
 
 # getting the parameter labels / names for the table headings
 parameterNames = parameterLabels.getParamLabels()
@@ -244,11 +303,13 @@ for ipar, par in enumerate(params):
 
   for ipsr, psr in enumerate(psrNames):
 
+    print(fittedOrDerived[par])    
+    if fittedOrDerived[par]==0: 
       try: 
         parameter = ufloat(psrDetails[ipsr][par], psrDetails[ipsr][str(par+'_ERR')])
         paramList.append(parameter)
       except:
-
+        """
         # dealing with different names 
         if par == 'ECC':
           try: 
@@ -275,14 +336,20 @@ for ipar, par in enumerate(params):
           except:
             pass
         else:
+        """
+        print('no parameter!')
+        paramList.append('-')
 
-          print('no parameter!')
-          # if doesn't exist, write 0.0 for now
-          #paramList.append(ufloat(0.0,0.0))
-          paramList.append('-')
+    else:
+       try: 
+         parameter =  psrDerived[ipsr][par]
+         paramList.append(parameter)
+         print(parameter)
+       except: 
+         paramList.append('-')
 
   # write parameter line
-  writeLine(paramList,tableFile,parameterNames[par])
+  writeLine(paramList,tableFile,parameterNames[par],fittedOrDerived[par])
 
 
 # end table stuff
