@@ -67,13 +67,13 @@ dirstruct   :
         PPTA_DR2    :
                                 # Information about PPTA DR2E data
 
-            PSRdir      : '/fred/oz002/nthyagar/projects/dr2_ephemerides/publish_collection/dr2/'
+            PSRdir      : '/fred/oz002/dreardon/ppta_dr2_ephemerides/publish_collection/dr2/ecliptic/'
                                 # Directory containing information about
                                 # the pulsars
         PPTA_DR2E   :
                                 # Information about PPTA DR2E data
 
-            PSRdir      : '/fred/oz002/nthyagar/projects/dr2_ephemerides/publish_collection/dr2e/'
+            PSRdir      : '/fred/oz002/dreardon/ppta_dr2_ephemerides/publish_collection/dr2e/ecliptic/'
                                 # Directory containing information about
                                 # the pulsars
 
@@ -82,7 +82,7 @@ dirstruct   :
 compareParms:
                                 # information relevant for comparison
 
-    params      : ['PX']
+    params      : ['PX', 'PMELAT', 'PMELONG']
                                 # List of parameters for which the
                                 # comparison is to be made
 
@@ -109,3 +109,4 @@ compareParms:
                   ]
                                 # The PTA's whose data are to be 
                                 # plotted
+				
