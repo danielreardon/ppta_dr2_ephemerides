@@ -10,6 +10,7 @@ from uncertainties import ufloat
 import uncertainties
 import decimal
 import string
+import argparse
 
 from astropy import units as u
 from astropy.coordinates import SkyCoord
@@ -169,29 +170,98 @@ def writeSkyPos(psrDeets,tabFile):
 
 
 
+def get_parameters_for_table(solitaryOrBinary):
 
 
+    # paratmeters from the par files
+    fromParFiles  = (['F0','F1','DM','PMRA','PMDEC','PX',\
+                      'PB','A1','TASC',\
+                      'PBDOT','A1DOT',\
+                      'TO','OM','OMDOT','ECC','ECCDOT',\
+                      'EPS1','EPS2','EPS1DOT','EPS2DOT',\
+                      'M2','SINI',\
+                      'H3','H4','STIG',\
+                      'KOM','KIN'])
+ 
+    # parameters form derived_parameters.txt 
+    fromDerivedParams = (['ELAT','ELONG','PMELONG','PMELAT','PMELONG','MASS_FUNC',\
+                          'D_PX(med/16th/84th)', 'D_SHK(med/16th/84th)',\
+                          'INC(med/16th/84th)',\
+                          'M2(med/16th/84th)', 'MP(med/16th/84th)', 'MTOT(med/16th/84th)',\
+                          'OMDOT_GR'])
+
+    # keeping track of which params are from where 
+    fittedOrDerived = {}
+    for p in fromParFiles:
+        fittedOrDerived[p] = 0
+    for p in fromDerivedParams:
+        fittedOrDerived[p] = 1
 
 
+    # parameters in the order that we want them to appear in the table
+    # some tricky parameters to think about: INC_Lim (automatically display <) and M2 (can be fitted or derived?)
+
+    if solitaryOrBinary == 'solitary':
+
+        params = (['ELAT','ELONG',\
+                   'F0', 'F1',\
+                   'DM',\
+                   'PMRA', 'PMDEC', 'PMELAT', 'PMELONG',\
+                   'D_PX(med/16th/84th)'])
 
 
+    elif solitaryOrBinary == 'binary':
 
+        params = (['ELAT','ELONG',\
+                   'F0', 'F1',\
+                   'DM',\
+                   'PMRA', 'PMDEC', 'PMELAT', 'PMELONG',\
+                   'PB', 'PBDOT', 'A1', 'A1DOT', 'TASC',\
+                   'TO', 'OM', 'OMDOT', 'OMDOT_GR',\
+                   'ECC', 'ECCDOT', \
+                   'EPS1', 'EPS2', 'EPS1DOT', 'EPS2DOT',\
+                   'SINI',\
+                   'D_PX(med/16th/84th)', 'D_SHK(med/16th/84th)',\
+                   'INC(med/16th/84th)',\
+                   'MASS_FUNC',\
+                   'MP(med/16th/84th)', 'MTOT(med/16th/84th)',\
+                   'H3', 'H4', 'STIG', \
+                   'KOM', 'KIN' ])
 
+    return fittedOrDerived, params
 
 
 
 # point to list of pulsars to include in the table
-# (split into three groups as table too wide)
-import argparse
+# (split binary psrs into groups as table too wide)
 parser = argparse.ArgumentParser(description='which group of pulsars to make the table for')
-parser.add_argument('--groupNo', type=int, help='integer (1,2,3,4) for group of psrs')
+parser.add_argument('--solOrBin', type=str, help='choose solitary or binary')
+parser.add_argument('--groupNo', type=int, help='integer (1,2,3,4) for group of psrs',default=0)
 args = parser.parse_args()
+
+solBin = str(args.solOrBin)
 whichGroup = int(args.groupNo)
 
-psrNames = np.genfromtxt('psrLists/psrListBinary-group{}.list'.format(whichGroup),dtype=str)
+if solBin=='solitary':
+    if whichGroup==1 or whichGroup==2:
+        psrNames = np.genfromtxt('psrLists/psrListSolitary-group{}.list'.format(whichGroup),dtype=str)
+        tableFile='localTexTables/solitaryTable-group{}.tex'.format(whichGroup)
+    else: 
+        print('Error: need to choose a group from [1,2] for solitary pulsar table')
+        exit()
+
+elif solBin=='binary':
+    if whichGroup==1 or whichGroup==2 or whichGroup==3 or whichGroup==4:
+        psrNames = np.genfromtxt('psrLists/psrListBinary-group{}.list'.format(whichGroup),dtype=str)
+        tableFile='localTexTables/binaryTable-group{}.tex'.format(whichGroup)
+    else: 
+        print('Error: need to choose a group from [1,2,3,4] for binary pulsar table')
+        exit()
 
 
-# read in pulsar details
+
+
+# read in pulsar details from par files
 psrDetails = []
 for psr in psrNames:
 
@@ -221,14 +291,11 @@ for psr in psrNames:
 
 
 
-print (psrDerived[0]['ELAT'])
-print (psrDerived[1]['ELAT'])
-
 
 
 # a place to save the table
 # clearing file and making table top matter
-tableFile='localTexTables/binaryTable-group{}.tex'.format(whichGroup)
+#tableFile='localTexTables/binaryTable-group{}.tex'.format(whichGroup)
 table = open(tableFile,'w')
 table.write("""
 \\begin{table*}
@@ -259,54 +326,8 @@ writeMJDRange(psrDetails,tableFile)
 writeSkyPos(psrDetails,tableFile)
 
 
-# parameters that can all be treated the same 
 
-fittedParams = (['F0','F1','DM','PMRA','PMDEC','PX',\
-                'PB','A1','TASC',\
-                'PBDOT','A1DOT',\
-                'TO','OM','OMDOT','ECC','ECCDOT',\
-                'EPS1','EPS2','EPS1DOT','EPS2DOT',\
-                'M2','SINI',\
-                'H3','H4','STIG',\
-                'KOM','KIN'])
-
-derivedParams = (['ELAT','ELONG','PMELONG','PMELAT','PMELONG','MASS_FUNC',\
-                  'D_PX(med/16th/84th)', 'D_SHK(med/16th/84th)',\
-                  'INC(med/16th/84th)',\
-                  'M2(med/16th/84th)', 'MP(med/16th/84th)', 'MTOT(med/16th/84th)',\
-                  'OMDOT_GR'])
-
-
-# keep track of whether we look for the parameter in the par or the derived params file`
-fittedOrDerived = {}
-for p in fittedParams: 
-  fittedOrDerived[p] = 0
-for p in derivedParams: 
-  fittedOrDerived[p] = 1
-
-
-# parameters in the order that we want them to appear in the table
-# some tricky parameters to think about: INC_Lim (automatically display <) and M2 (can be fitted or derived?)
-params = (['ELAT','ELONG',\
-           'F0', 'F1',\
-           'DM',\
-           'PMRA', 'PMDEC', 'PMELAT', 'PMELONG',\
-           'PB', 'PBDOT', 'A1', 'A1DOT', 'TASC',\
-           'TO', 'OM', 'OMDOT', 'OMDOT_GR',\
-           'ECC', 'ECCDOT', \
-           'EPS1', 'EPS2', 'EPS1DOT', 'EPS2DOT',\
-           'SINI',\
-           'D_PX(med/16th/84th)', 'D_SHK(med/16th/84th)',\
-           'INC(med/16th/84th)',\
-           'MASS_FUNC',\
-           'MP(med/16th/84th)', 'MTOT(med/16th/84th)',\
-           'H3', 'H4', 'STIG', \
-           'KOM', 'KIN' ])
-
-
-
-
-
+fittedOrDerived, params = get_parameters_for_table(solBin)
 
 # getting the parameter labels / names for the table headings
 parameterNames = parameterLabels.getParamLabels()

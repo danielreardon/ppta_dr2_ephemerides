@@ -43,11 +43,21 @@ class ShorthandFormatter(string.Formatter):
 """
 Write the parameter line in latex table format
 """
-def writeLine(parameters,tableFile,parameterName):
+def writeLine(parameters,tableFile,parameterName,fitOrDer,parLabel=None):
     table = open(tableFile,'a')
     table.write(parameterName)
 
     frmtr = ShorthandFormatter()
+
+    # fix for PMELAT, PMELONG, ELAT, ELONG, PMRA, PMDEC
+    if parLabel == 'PMELAT' or parLabel == 'PMELONG' or parLabel == 'ELAT' or parLabel == 'ELONG':
+        fitOrDer = 0
+    else: pass
+    if parLabel == 'PMRA' or parLabel == 'PMDEC':
+        fitOrDer = 1
+    else: pass
+
+
 
     for p in parameters:
 
@@ -62,8 +72,10 @@ def writeLine(parameters,tableFile,parameterName):
         except:
             shortFormat = p
 
-
-        table.write('\t & \t ${}$'.format(shortFormat))
+        if fitOrDer == 0:
+           table.write('\t & \t $\\mathbf{{ {} }}$'.format(shortFormat))
+        elif fitOrDer == 1:
+           table.write('\t & \t ${}$'.format(shortFormat))
 
     table.write('\\\\ \n')
     table.close()
@@ -119,7 +131,7 @@ def writeSkyPos(psrDeets,tabFile):
     ras  = []
     decs = []
 
-    for i in range(len(psrDeets)):
+    for ipsr in range(len(psrDeets)):
 
         # get sky position 
         pos = SkyCoord(psrDetails[ipsr]['RAJ'] + ' ' +str(psrDetails[ipsr]['DECJ']),unit=(u.hourangle,u.deg))
@@ -135,6 +147,9 @@ def writeSkyPos(psrDeets,tabFile):
         frmtr = ShorthandFormatter()
         shortFormat = frmtr.format("{0:.1u}",decSecondsAndErr)
         decs.append('$'+str(int(pos.dec.dms.d))+'$:$'+str(int(abs(pos.dec.dms.m)))+'$:$'+str(shortFormat)+'$')
+
+        # move on to next pulsar
+        #ipsr+=1
 
 
     # write ra
@@ -153,16 +168,37 @@ def writeSkyPos(psrDeets,tabFile):
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
 # point to list of pulsars to include in the table
-# (split into two groups as table too wide)
-psrNames = np.genfromtxt('psrLists/psrListSolitary-all.list',dtype=str)
+# (split into three groups as table too wide)
+import argparse
+parser = argparse.ArgumentParser(description='which group of pulsars to make the table for')
+parser.add_argument('--groupNo', type=int, help='integer (1,2,3,4) for group of psrs')
+args = parser.parse_args()
+whichGroup = int(args.groupNo)
+
+psrNames = np.genfromtxt('psrLists/psrListBinary-group{}.list'.format(whichGroup),dtype=str)
 
 
 # read in pulsar details
 psrDetails = []
 for psr in psrNames:
 
-    parLoc = '/fred/oz002/hmiddleton/ppta_ephemeris/repositories/ppta_dr2_ephemerides/publish_collection/dr2/{}.par'.format(psr)
+    if psr == 'J1713+0747' or psr == 'J1909-3744':
+        parLoc = '/fred/oz002/hmiddleton/ppta_ephemeris/repositories/ppta_dr2_ephemerides/publish_collection/dr2/{}.kop.par'.format(psr)
+    else: 
+        parLoc = '/fred/oz002/hmiddleton/ppta_ephemeris/repositories/ppta_dr2_ephemerides/publish_collection/dr2/{}.par'.format(psr)
     #parLoc = '/fred/oz002/dreardon/ppta_dr2_ephemerides/partim/dr2_boris/new_params_ver1/{}.par'.format(psr)
 
     psrPars = readParFile.read_par(parLoc)
@@ -171,16 +207,36 @@ for psr in psrNames:
 
 
 
+# read in derived pulsar details
+psrDerived = []
+for psr in psrNames:
 
-# place to save the table
+    if psr == 'J1713+0747' or psr == 'J1909-3744':
+        parName = '{}.kop.par'.format(psr)
+    else: 
+        parname = '{}.par'.format(psr)
+
+    psrDer = readParFile.get_derived_params(parname)
+    psrDerived.append(psrDer)
+
+
+
+print (psrDerived[0]['ELAT'])
+print (psrDerived[1]['ELAT'])
+
+
+
+# a place to save the table
 # clearing file and making table top matter
-tableFile='localTexTables/solitary-table.tex'
+tableFile='localTexTables/binaryTable-group{}.tex'.format(whichGroup)
 table = open(tableFile,'w')
 table.write("""
 \\begin{table*}
+\\footnotesize
 \\begin{tabular}{llllllll}
 \\hline\\hline \\\\\
 """)
+
 
 ## write pulsar name row
 table.write('Pulsar Name ')
@@ -192,11 +248,9 @@ table.close()
 
 # parameters 
 
-"""
 ## write number of toas row
 names = [ psrDetails[i]['NTOA'] for i in range(len(psrNames)) ]
-writeLine(names,tableFile,'Number of TOAs')
-
+writeLine(names,tableFile,'Number of TOAs',1)
 
 ## write MJD range row
 writeMJDRange(psrDetails,tableFile)
@@ -204,40 +258,116 @@ writeMJDRange(psrDetails,tableFile)
 ## write sky position row (RA & DEC)
 writeSkyPos(psrDetails,tableFile)
 
-"""
+
 # parameters that can all be treated the same 
 
-params = (['F0','F1','DM','PMRA','PMDEC','PX'])
+fittedParams = (['F0','F1','DM','PMRA','PMDEC','PX',\
+                'PB','A1','TASC',\
+                'PBDOT','A1DOT',\
+                'TO','OM','OMDOT','ECC','ECCDOT',\
+                'EPS1','EPS2','EPS1DOT','EPS2DOT',\
+                'M2','SINI',\
+                'H3','H4','STIG',\
+                'KOM','KIN'])
+
+derivedParams = (['ELAT','ELONG','PMELONG','PMELAT','PMELONG','MASS_FUNC',\
+                  'D_PX(med/16th/84th)', 'D_SHK(med/16th/84th)',\
+                  'INC(med/16th/84th)',\
+                  'M2(med/16th/84th)', 'MP(med/16th/84th)', 'MTOT(med/16th/84th)',\
+                  'OMDOT_GR'])
+
+
+# keep track of whether we look for the parameter in the par or the derived params file`
+fittedOrDerived = {}
+for p in fittedParams: 
+  fittedOrDerived[p] = 0
+for p in derivedParams: 
+  fittedOrDerived[p] = 1
+
+
+# parameters in the order that we want them to appear in the table
+# some tricky parameters to think about: INC_Lim (automatically display <) and M2 (can be fitted or derived?)
+params = (['ELAT','ELONG',\
+           'F0', 'F1',\
+           'DM',\
+           'PMRA', 'PMDEC', 'PMELAT', 'PMELONG',\
+           'PB', 'PBDOT', 'A1', 'A1DOT', 'TASC',\
+           'TO', 'OM', 'OMDOT', 'OMDOT_GR',\
+           'ECC', 'ECCDOT', \
+           'EPS1', 'EPS2', 'EPS1DOT', 'EPS2DOT',\
+           'SINI',\
+           'D_PX(med/16th/84th)', 'D_SHK(med/16th/84th)',\
+           'INC(med/16th/84th)',\
+           'MASS_FUNC',\
+           'MP(med/16th/84th)', 'MTOT(med/16th/84th)',\
+           'H3', 'H4', 'STIG', \
+           'KOM', 'KIN' ])
+
+
+
+
+
+
+# getting the parameter labels / names for the table headings
 parameterNames = parameterLabels.getParamLabels()
-"""
-parameterNames = ([r'Pulse frequency, $\nu$ (${\rm s}^{-1}$)',
-                   r'First frequency derivative, $\nu$ (${\rm s}^{-2}$)',
-                   r'Dispersion measure, DM (${\rm cm}^{-3}\,{\rm pc}$)',
-                   r'Proper motion in RA (${\rm mas}\,{\rm yr}^{-1}$)',
-                   r'Proper motion in DEC (${\rm mas}\,{\rm yr}^{-1}$)',
-                   r'Parallax, $\pi$ (${\rm mas}$)'])
-"""
+
 
 # write parameters from list 
 for ipar, par in enumerate(params):
 
-  print ('\n ',par) 
+  print ('\n ',par,type(par)) 
 
   paramList = []
 
   for ipsr, psr in enumerate(psrNames):
 
+    print(fittedOrDerived[par])    
+    if fittedOrDerived[par]==0: 
       try: 
         parameter = ufloat(psrDetails[ipsr][par], psrDetails[ipsr][str(par+'_ERR')])
         paramList.append(parameter)
       except:
+        """
+        # dealing with different names - not needed I think  
+        if par == 'ECC':
+          try: 
+            parE = 'E'
+            parameter = ufloat(psrDetails[ipsr][parE], psrDetails[ipsr][str(parE+'_ERR')])
+            paramList.append(parameter)
+            print ('got E')
+          except:
+            pass
+        elif par == 'ECCDOT': 
+          try:
+            parEDOT = 'EDOT'
+            parameter = ufloat(psrDetails[ipsr][parEDOT], psrDetails[ipsr][str(parEDOT+'_ERR')])
+            paramList.append(parameter)
+            print ('got EDOT')
+          except:
+            pass
+        elif par == 'A1DOT':
+          try: 
+            parXDOT = 'XDOT'
+            parameter = ufloat(psrDetails[ipsr][parXDOT], psrDetails[ipsr][str(parXDOT+'_ERR')])
+            paramList.append(parameter)
+            print ('got XDOT')
+          except:
+            pass
+        else:
+        """
         print('no parameter!')
-        # if doesn't exist, write 0.0 for now
-        #paramList.append(ufloat(0.0,0.0))
         paramList.append('-')
 
+    else:
+       try: 
+         parameter =  psrDerived[ipsr][par]
+         paramList.append(parameter)
+         print(parameter)
+       except: 
+         paramList.append('-')
+
   # write parameter line
-  writeLine(paramList,tableFile,parameterNames[par])
+  writeLine(paramList,tableFile,parameterNames[par],fittedOrDerived[par],parLabel=par)
 
 
 # end table stuff
