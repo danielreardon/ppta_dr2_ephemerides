@@ -43,11 +43,21 @@ class ShorthandFormatter(string.Formatter):
 """
 Write the parameter line in latex table format
 """
-def writeLine(parameters,tableFile,parameterName,fitOrDer):
+def writeLine(parameters,tableFile,parameterName,fitOrDer,parLabel=None):
     table = open(tableFile,'a')
     table.write(parameterName)
 
     frmtr = ShorthandFormatter()
+
+    # fix for PMELAT, PMELONG, ELAT, ELONG, PMRA, PMDEC
+    if parLabel == 'PMELAT' or parLabel == 'PMELONG' or parLabel == 'ELAT' or parLabel == 'ELONG':
+        fitOrDer = 0
+    else: pass
+    if parLabel == 'PMRA' or parLabel == 'PMDEC':
+        fitOrDer = 1
+    else: pass
+
+
 
     for p in parameters:
 
@@ -62,9 +72,9 @@ def writeLine(parameters,tableFile,parameterName,fitOrDer):
         except:
             shortFormat = p
 
-        if fitOrDer == 0: 
+        if fitOrDer == 0:
            table.write('\t & \t $\\mathbf{{ {} }}$'.format(shortFormat))
-        elif fitOrDer == 1: 
+        elif fitOrDer == 1:
            table.write('\t & \t ${}$'.format(shortFormat))
 
     table.write('\\\\ \n')
@@ -121,7 +131,7 @@ def writeSkyPos(psrDeets,tabFile):
     ras  = []
     decs = []
 
-    for i in range(len(psrDeets)):
+    for ipsr in range(len(psrDeets)):
 
         # get sky position 
         pos = SkyCoord(psrDetails[ipsr]['RAJ'] + ' ' +str(psrDetails[ipsr]['DECJ']),unit=(u.hourangle,u.deg))
@@ -137,6 +147,9 @@ def writeSkyPos(psrDeets,tabFile):
         frmtr = ShorthandFormatter()
         shortFormat = frmtr.format("{0:.1u}",decSecondsAndErr)
         decs.append('$'+str(int(pos.dec.dms.d))+'$:$'+str(int(abs(pos.dec.dms.m)))+'$:$'+str(shortFormat)+'$')
+
+        # move on to next pulsar
+        #ipsr+=1
 
 
     # write ra
@@ -192,6 +205,8 @@ for psr in psrNames:
     psrDetails.append(psrPars)
 
 
+
+
 # read in derived pulsar details
 psrDerived = []
 for psr in psrNames:
@@ -210,9 +225,10 @@ print (psrDerived[0]['ELAT'])
 print (psrDerived[1]['ELAT'])
 
 
-# place to save the table
+
+# a place to save the table
 # clearing file and making table top matter
-tableFile='binaryTable-group{}.tex'.format(whichGroup)
+tableFile='localTexTables/binaryTable-group{}.tex'.format(whichGroup)
 table = open(tableFile,'w')
 table.write("""
 \\begin{table*}
@@ -220,6 +236,7 @@ table.write("""
 \\begin{tabular}{llllllll}
 \\hline\\hline \\\\\
 """)
+
 
 ## write pulsar name row
 table.write('Pulsar Name ')
@@ -260,6 +277,7 @@ derivedParams = (['ELAT','ELONG','PMELONG','PMELAT','PMELONG','MASS_FUNC',\
                   'OMDOT_GR'])
 
 
+# keep track of whether we look for the parameter in the par or the derived params file`
 fittedOrDerived = {}
 for p in fittedParams: 
   fittedOrDerived[p] = 0
@@ -268,7 +286,7 @@ for p in derivedParams:
 
 
 # parameters in the order that we want them to appear in the table
-# parameters to think about: INC_Lim (automatically display <) and M2 (can be fitted or derived?)
+# some tricky parameters to think about: INC_Lim (automatically display <) and M2 (can be fitted or derived?)
 params = (['ELAT','ELONG',\
            'F0', 'F1',\
            'DM',\
@@ -297,7 +315,7 @@ parameterNames = parameterLabels.getParamLabels()
 # write parameters from list 
 for ipar, par in enumerate(params):
 
-  print ('\n ',par) 
+  print ('\n ',par,type(par)) 
 
   paramList = []
 
@@ -310,7 +328,7 @@ for ipar, par in enumerate(params):
         paramList.append(parameter)
       except:
         """
-        # dealing with different names 
+        # dealing with different names - not needed I think  
         if par == 'ECC':
           try: 
             parE = 'E'
@@ -349,7 +367,7 @@ for ipar, par in enumerate(params):
          paramList.append('-')
 
   # write parameter line
-  writeLine(paramList,tableFile,parameterNames[par],fittedOrDerived[par])
+  writeLine(paramList,tableFile,parameterNames[par],fittedOrDerived[par],parLabel=par)
 
 
 # end table stuff

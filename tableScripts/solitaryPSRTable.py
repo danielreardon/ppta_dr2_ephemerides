@@ -153,18 +153,6 @@ def writeSkyPos(psrDeets,tabFile):
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
 # point to list of pulsars to include in the table
 # (split into two groups as table too wide)
 psrNames = np.genfromtxt('psrLists/psrListSolitary-all.list',dtype=str)
@@ -186,7 +174,7 @@ for psr in psrNames:
 
 # place to save the table
 # clearing file and making table top matter
-tableFile='table.tex'
+tableFile='localTexTables/solitary-table.tex'
 table = open(tableFile,'w')
 table.write("""
 \\begin{table*}
@@ -204,9 +192,11 @@ table.close()
 
 # parameters 
 
+"""
 ## write number of toas row
 names = [ psrDetails[i]['NTOA'] for i in range(len(psrNames)) ]
 writeLine(names,tableFile,'Number of TOAs')
+
 
 ## write MJD range row
 writeMJDRange(psrDetails,tableFile)
@@ -214,7 +204,7 @@ writeMJDRange(psrDetails,tableFile)
 ## write sky position row (RA & DEC)
 writeSkyPos(psrDetails,tableFile)
 
-
+"""
 # parameters that can all be treated the same 
 
 params = (['F0','F1','DM','PMRA','PMDEC','PX'])
