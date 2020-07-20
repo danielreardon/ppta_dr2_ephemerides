@@ -23,8 +23,10 @@ import libstempo as T
 import GalDynPsr
 import scipy.constants as sc
 import matplotlib.pyplot as plt
+import matplotlib
 import scipy.stats as stats
 from astropy import units as u
+from scipy.signal import savgol_filter
 from astropy.coordinates import SkyCoord, ICRS, BarycentricTrueEcliptic
 
 
@@ -148,7 +150,7 @@ outdir = '/Users/dreardon/Dropbox/Git/ppta_dr2_ephemerides/publish_collection/dr
 parfiles = sorted(glob.glob(datadir + '*.par'))
 
 outfile = outdir + 'derived_params.txt'
-os.remove(outfile)
+#os.remove(outfile)
 
 n_samples = 10000
 # Define other useful constants
@@ -158,20 +160,58 @@ rad_to_mas = 180*3600*1000/np.pi
 parsec_to_m = 3.08567758e+16
 sec_per_year = 86400*365.2425
 
+"""
+Make a plot of J2241's noise
+"""
 data = np.loadtxt('/Users/dreardon/Dropbox/Git/ppta_dr2_ephemerides/publish_collection/dr2/2241/J2241-5236.tasc.txt', skiprows=1)
 
-#font = {'family' : 'normal',
-#        'weight' : 'normal',
-#        'size'   : 18}
+font = {'family' : 'normal',
+        'weight' : 'normal',
+        'size'   : 18}
+
+matplotlib.rc('font', **font)
+
+plt.figure(figsize=(10,6))
+plt.errorbar(data[:, 0], (data[:, 1] - np.mean(data[:, 1]))*86400, yerr=data[:, 2]*86400, fmt='o', alpha=0.8)
+plt.xlabel('MJD')
+plt.ylabel(r'$\Delta T_{\rm asc}$ (s)')
+plt.ylim([-0.25, 0.35])
+xl = plt.xlim()
+plt.plot([xl[0], xl[1]], [0, 0], color='k')
+plt.xlim(xl)
+plt.grid()
+plt.savefig('/Users/dreardon/Dropbox/Git/ppta_dr2_ephemerides/J2241_orbit.pdf')
+plt.show()
+
+sys.exit()
+"""
+Make a plot of Shapiro delays
+"""
+#shap_psrs = ['J0613-0200', 'J1017-7156','J1022+1001','J1125-6014', 'J1545-4550', 'J1600-3053', 'J1713+0747', 'J1732-5049', 'J1857+0943', 'J1909-3744', 'J2145-0750']
+shap_psrs = ['J1125-6014']
+shap_psrs = ['J0613-0200', 'J1017-7156', 'J1022+1001', 'J1125-6014', 'J1600-3053', 'J1713+0747', 'J1857+0943', 'J1909-3744']
 #
-#matplotlib.rc('font', **font)
+#for psr in shap_psrs:
+#    print(psr)
+#    if psr in ['J1017-7156', 'J1713+0747', 'J1909-3744']:
+#        data = datadir + 'shapiro/' +  psr + '.kop.par.out'
+#        data_noshap = datadir + '/shapiro/' +  psr + '.kop.par.no_shapiro.out'
+#    else:
+#        data = datadir + 'shapiro/' +  psr + '.par.out'
+#        data_noshap = datadir + '/shapiro/' +  psr + '.par.no_shapiro.out'
+#    data = np.loadtxt(data, usecols=(1,2,3,4,5,6,7,8,9,10,11,12))
+#    #plt.errorbar(data[:, -1], data[:, 4]*10**6, yerr=data[:, 3], fmt='o')
+#    data_noshap = np.loadtxt(data_noshap, usecols=(1,2,3,4,5,6,7,8,9,10,11,12))
+#    #plt.errorbar(data_noshap[:, -1], data_noshap[:, 4]*10**6, yerr=data_noshap[:, 3], fmt='o')
+#    index = np.argsort(data_noshap[:, -1])
+#    plt.scatter(data_noshap[index, -1], savgol_filter(data_noshap[index, 4]*10**6 - data[index, 4]*10**6, 2*int(len(data_noshap[index, 4])/200)+1, 1))
+#    plt.plot([0.25, 0.25], plt.ylim())
+#    plt.show()
 #
-#plt.errorbar(data[:, 0], (data[:, 1] - np.mean(data[:, 1]))*86400, yerr=data[:, 2]*86400, fmt='o', alpha=0.8)
-#plt.xlabel('MJD')
-#plt.ylabel(r'$\Delta T_{\rm asc}$ (s)')
-#plt.ylim([-0.2, 0.4])
-#plt.grid()
-#plt.show()
+#    #plt.scatter(data_noshap[:, -1], data_noshap[:, 4]*10**6 - data[:, 4]*10**6)
+#    #plt.show()
+#
+#sys.exit()
 
 for par in parfiles:
     #print(par)
