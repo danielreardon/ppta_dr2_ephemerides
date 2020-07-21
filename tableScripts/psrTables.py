@@ -91,11 +91,11 @@ Writes the MJD range to the table
 Maybe some missing from the par files
 To do - check par files for start/finish
 """
-def writeMJDRange(psrDeets,tabFile):
+def writeMJDRange(psrDeets,tabFile,label):
 
     # row title
     table = open(tabFile,'a')
-    table.write('MJD range')
+    table.write(label)
 
     # if can't get value, write none for now
     for i in range(len(psrDeets)):
@@ -122,7 +122,7 @@ def writeMJDRange(psrDeets,tabFile):
 """
 Writing the RA and DEC rows
 """
-def writeSkyPos(psrDeets,tabFile):
+def writeSkyPos(psrDeets,tabFile,parLabels):
 
     # row title
     table = open(tabFile,'a')
@@ -154,13 +154,13 @@ def writeSkyPos(psrDeets,tabFile):
 
 
     # write ra
-    table.write('Right ascension (RA), hh:mm:ss')
+    table.write(parLabels['RAJ'])
     for ra in ras:
         table.write('\t & \t {}'.format(ra))
     table.write('\\\\ \n')
   
     # write dec
-    table.write('Declination (DEC), dd:mm:ss')
+    table.write(parLabels['DECJ'])
     for dec in decs:
         table.write('\t & \t {}'.format(dec))
     table.write('\\\\ \n')
@@ -313,17 +313,19 @@ table.write(' \\\\ \n \\\\ \\hline \\\\ \n')
 table.close()
 
 
-# parameters 
+# getting the parameter labels / names for the table headings
+parameterNames = parameterLabels.getParamLabels()
+
 
 ## write number of toas row
 names = [ psrDetails[i]['NTOA'] for i in range(len(psrNames)) ]
-writeLine(names,tableFile,'Number of TOAs',1)
+writeLine(names,tableFile,parameterNames['NTOA'],1)
 
 ## write MJD range row
-writeMJDRange(psrDetails,tableFile)
+writeMJDRange(psrDetails,tableFile,parameterNames['MJDRange'])
 
 ## write sky position row (RA & DEC)
-writeSkyPos(psrDetails,tableFile)
+writeSkyPos(psrDetails,tableFile,parameterNames)
 
 
 
