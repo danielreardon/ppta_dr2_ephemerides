@@ -186,7 +186,7 @@ def get_parameters_for_table(solitaryOrBinary):
     # parameters form derived_parameters.txt 
     fromDerivedParams = (['ELAT','ELONG','PMELONG','PMELAT','PMELONG','MASS_FUNC',\
                           'D_PX(med/16th/84th)', 'D_SHK(med/16th/84th)',\
-                          'INC(med/16th/84th)',\
+                          'INC(med/16th/84th)', 'INC_LIM(med/std)',\
                           'M2(med/16th/84th)', 'MP(med/16th/84th)', 'MTOT(med/16th/84th)',\
                           'OMDOT_GR'])
 
@@ -222,7 +222,7 @@ def get_parameters_for_table(solitaryOrBinary):
                    'EPS1', 'EPS2', 'EPS1DOT', 'EPS2DOT',\
                    'SINI',\
                    'D_PX(med/16th/84th)', 'D_SHK(med/16th/84th)',\
-                   'INC(med/16th/84th)',\
+                   'INC(med/16th/84th)', 'INC_LIM(med/std)',\
                    'MASS_FUNC',\
                    'MP(med/16th/84th)', 'MTOT(med/16th/84th)',\
                    'H3', 'H4', 'STIG', \
@@ -383,15 +383,24 @@ for ipar, par in enumerate(params):
         paramList.append('-')
 
     else:
-       try: 
-         parameter =  psrDerived[ipsr][par]
-         #print('here ', psrDerived[ipsr][par+'_16th'])
-         high = float(psrDerived[ipsr][par+'_84th']) - float(psrDerived[ipsr][par])
-         low  = float(psrDerived[ipsr][par]) - float(psrDerived[ipsr][par+'_16th'])
-         parameterStr =  '{0:.3}^{{ +{1:.3} }}_{{ -{2:.3} }}'.format(float(psrDerived[ipsr][par]), high, low)
-         paramList.append(parameterStr)
-         print('parSTRING ', parameterStr)
-       except: 
+        try: 
+          # check about including errors for these params and how many dp to quote here.
+          if par=='ELAT' or par=='ELONG' or par=='PMELAT' or par=='PMELONG' or par=='MASS_FUNC' or par=='OMDOT_GR':
+            parameter = psrDerived[ipsr][par]
+            paramList.append('{0:.5f}'.format(float(parameter)))
+          elif par=='INC_LIM(med/std)': 
+            parameter = psrDerived[ipsr][par]
+            parameter = parameter.replace('<','')
+            paramList.append('<{0:.4f}'.format(float(parameter)))
+          else: 
+            parameter =  psrDerived[ipsr][par]
+            #print('here ', psrDerived[ipsr][par+'_16th'])
+            high = float(psrDerived[ipsr][par+'_84th']) - float(psrDerived[ipsr][par])
+            low  = float(psrDerived[ipsr][par]) - float(psrDerived[ipsr][par+'_16th'])
+            parameterStr =  '{0:.3}^{{ +{1:.3} }}_{{ -{2:.3} }}'.format(float(psrDerived[ipsr][par]), high, low)
+            paramList.append(parameterStr)
+            print('parSTRING ', parameterStr)
+        except: 
          paramList.append('-')
 
   # write parameter line
