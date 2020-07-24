@@ -1,0 +1,6 @@
+This program comes with ABSOLUTELY NO WARRANTY.
+This is free software, and you are welcome to redistribute it
+under conditions of GPL license.
+
+[clkcorr.C:157] Note, using '/home/dreardon/tempo2/clock' to look for extra clock files
+ERROR [FILE4]: Unable to open timfile >../J1024-0719_ecliptic.tim<

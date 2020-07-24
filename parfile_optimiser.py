@@ -35,6 +35,60 @@ from astropy.coordinates import SkyCoord, ICRS, BarycentricTrueEcliptic
 Definitions
 """
 
+from math import log10, floor
+def round_sig(x, sig=2, small_value=1.0e-9):
+    return round(x, sig - int(floor(log10(max(abs(x), abs(small_value))))) - 1)
+
+def wrms(data, weights):
+    """
+    Given some data and weights, return the weighted rms
+    """
+    return np.sqrt(np.cov(np.array(data).squeeze(),
+                          aweights=np.array(weights).squeeze()))
+
+def read_general2(filename, header=False):
+    """
+    Reads a general2 output into a numpy array
+    """
+    with open(filename, "r") as file:
+        data = []
+        files = []
+        for line in file:
+            if not header and not ('Finish' in line):
+                files.append([(line.split('\t')[0])])
+                data.append([float(x) for x in
+                             (line.replace('\n', '').split('\t')[1:])])
+            elif 'Starting general2 plugin' in line:
+                header = False
+    return np.array(data), files
+
+def average_subbands(times, residuals, errs, freqs, files):
+    """
+    Given an array of residuals and frequencies, average the subbands together
+    """
+
+    times_avg = []
+    residuals_avg = []
+    errs_avg = []
+    freqs_avg = []
+    files = np.array(files).squeeze()
+
+    ref_freq = -np.inf
+    for file in np.unique(files):
+        indicies = np.argwhere(files == file)
+
+        times_avg.append(np.average(times[indicies],
+                                    weights=1/(np.array(errs[indicies])**2)))
+        residuals_avg.append(np.average(residuals[indicies],
+                                        weights=1/(np.array(errs[indicies])**2)))
+        errs_avg.append(np.average(errs[indicies],
+                                   weights=1/(np.array(errs[indicies])**2))/np.sqrt(len(errs[indicies])))
+        freqs_avg.append(np.average(freqs[indicies],
+                                    weights=1/(np.array(errs[indicies])**2)))
+
+    return np.array(times_avg).squeeze(), np.array(residuals_avg).squeeze(), \
+        np.array(errs_avg).squeeze(), np.array(freqs_avg).squeeze()
+
 
 def read_par(parfile):
     """
@@ -145,11 +199,12 @@ def is_valid(array):
 Start of code
 """
 
-datadir = '/Users/dreardon/Dropbox/Git/ppta_dr2_ephemerides/publish_collection/dr2/ecliptic/'
-outdir = '/Users/dreardon/Dropbox/Git/ppta_dr2_ephemerides/publish_collection/dr2/ecliptic/output/'
+datadir = '/Users/dreardon/Dropbox/Git/ppta_dr2_ephemerides/publish_collection/dr2/'
+outdir = '/Users/dreardon/Dropbox/Git/ppta_dr2_ephemerides/publish_collection/dr2/output/'
 parfiles = sorted(glob.glob(datadir + '*.par'))
 
 outfile = outdir + 'derived_params.txt'
+plots = True
 #os.remove(outfile)
 
 n_samples = 10000
@@ -160,58 +215,245 @@ rad_to_mas = 180*3600*1000/np.pi
 parsec_to_m = 3.08567758e+16
 sec_per_year = 86400*365.2425
 
-"""
-Make a plot of J2241's noise
-"""
-data = np.loadtxt('/Users/dreardon/Dropbox/Git/ppta_dr2_ephemerides/publish_collection/dr2/2241/J2241-5236.tasc.txt', skiprows=1)
+if plots:
+    print('Making some plots')
 
-font = {'family' : 'normal',
-        'weight' : 'normal',
-        'size'   : 18}
+    """
+    Make a plot of J2241's noise
+    """
+    data = np.loadtxt('/Users/dreardon/Dropbox/Git/ppta_dr2_ephemerides/publish_collection/dr2/2241/J2241-5236.tasc.txt', skiprows=1)
 
-matplotlib.rc('font', **font)
+    font = {'family' : 'normal',
+            'weight' : 'normal',
+            'size'   : 18}
 
-plt.figure(figsize=(10,6))
-plt.errorbar(data[:, 0], (data[:, 1] - np.mean(data[:, 1]))*86400, yerr=data[:, 2]*86400, fmt='o', alpha=0.8)
-plt.xlabel('MJD')
-plt.ylabel(r'$\Delta T_{\rm asc}$ (s)')
-plt.ylim([-0.25, 0.35])
-xl = plt.xlim()
-plt.plot([xl[0], xl[1]], [0, 0], color='k')
-plt.xlim(xl)
-plt.grid()
-plt.savefig('/Users/dreardon/Dropbox/Git/ppta_dr2_ephemerides/J2241_orbit.pdf')
-plt.show()
+    matplotlib.rc('font', **font)
 
-sys.exit()
-"""
-Make a plot of Shapiro delays
-"""
-#shap_psrs = ['J0613-0200', 'J1017-7156','J1022+1001','J1125-6014', 'J1545-4550', 'J1600-3053', 'J1713+0747', 'J1732-5049', 'J1857+0943', 'J1909-3744', 'J2145-0750']
-shap_psrs = ['J1125-6014']
-shap_psrs = ['J0613-0200', 'J1017-7156', 'J1022+1001', 'J1125-6014', 'J1600-3053', 'J1713+0747', 'J1857+0943', 'J1909-3744']
-#
-#for psr in shap_psrs:
-#    print(psr)
-#    if psr in ['J1017-7156', 'J1713+0747', 'J1909-3744']:
-#        data = datadir + 'shapiro/' +  psr + '.kop.par.out'
-#        data_noshap = datadir + '/shapiro/' +  psr + '.kop.par.no_shapiro.out'
-#    else:
-#        data = datadir + 'shapiro/' +  psr + '.par.out'
-#        data_noshap = datadir + '/shapiro/' +  psr + '.par.no_shapiro.out'
-#    data = np.loadtxt(data, usecols=(1,2,3,4,5,6,7,8,9,10,11,12))
-#    #plt.errorbar(data[:, -1], data[:, 4]*10**6, yerr=data[:, 3], fmt='o')
-#    data_noshap = np.loadtxt(data_noshap, usecols=(1,2,3,4,5,6,7,8,9,10,11,12))
-#    #plt.errorbar(data_noshap[:, -1], data_noshap[:, 4]*10**6, yerr=data_noshap[:, 3], fmt='o')
-#    index = np.argsort(data_noshap[:, -1])
-#    plt.scatter(data_noshap[index, -1], savgol_filter(data_noshap[index, 4]*10**6 - data[index, 4]*10**6, 2*int(len(data_noshap[index, 4])/200)+1, 1))
-#    plt.plot([0.25, 0.25], plt.ylim())
-#    plt.show()
-#
-#    #plt.scatter(data_noshap[:, -1], data_noshap[:, 4]*10**6 - data[:, 4]*10**6)
-#    #plt.show()
-#
-#sys.exit()
+    plt.figure(figsize=(10,6))
+    plt.errorbar(data[:, 0], (data[:, 1] - np.mean(data[:, 1]))*86400, yerr=data[:, 2]*86400, fmt='o', alpha=0.8)
+    p = np.polyfit(data[:, 0], (data[:, 1] - np.mean(data[:, 1]))*86400, 10)
+    plt.xlabel('MJD')
+    plt.ylabel(r'$\Delta T_{\rm asc}$ (s)')
+    plt.ylim([-0.25, 0.35])
+    xl = plt.xlim()
+    plt.plot([xl[0], xl[1]], [0, 0], color='k')
+    plt.xlim(xl)
+    plt.grid()
+    plt.savefig('/Users/dreardon/Dropbox/Git/ppta_dr2_ephemerides/J2241_orbit.pdf')
+    plt.show()
+
+    """
+    Make a plot of Shapiro delays
+    """
+    #shap_psrs = ['J0613-0200', 'J1017-7156','J1022+1001','J1125-6014', 'J1545-4550', 'J1600-3053', 'J1713+0747', 'J1732-5049', 'J1857+0943', 'J1909-3744', 'J2145-0750']
+    shap_psrs = ['J1125-6014']
+    #shap_psrs = ['J0613-0200', 'J1017-7156', 'J1022+1001', 'J1125-6014', 'J1600-3053', 'J1713+0747', 'J1857+0943', 'J1909-3744']
+    alpha=0.8
+
+    for psr in shap_psrs:
+        print(psr)
+        if psr in ['J1017-7156', 'J1713+0747', 'J1909-3744']:
+            data_orig = datadir + 'shapiro/' +  psr + '.kop.par.out'
+            data_noshap = datadir + '/shapiro/' +  psr + '.kop.par.no_shapiro.out'
+        else:
+            data_orig = datadir + 'shapiro/' +  psr + '.par.out'
+            data_noshap = datadir + '/shapiro/' +  psr + '.par.no_shapiro.out'
+
+        # No Shapiro data for plotting
+        data, files = read_general2(data_noshap, header=True)
+        bat = data[:, 0].squeeze()
+        freqs = data[:, 1].squeeze()
+        pre = data[:, 2].squeeze()*10**6
+        post = data[:, 3].squeeze()*10**6
+        errs = data[:, 4].squeeze()
+        posttn = data[:, 5].squeeze()*10**6
+        tndm = data[:, 6].squeeze()*10**6
+        tnred = data[:, 7].squeeze()*10**6
+        binphase = data[:, -1].squeeze()
+
+        # Original data with Shapiro signal
+        data_orig, files_orig = read_general2(data_orig, header=True)
+        bat_orig = data_orig[:, 0].squeeze()
+        freqs_orig = data_orig[:, 1].squeeze()
+        pre_orig = data_orig[:, 2].squeeze()*10**6
+        post_orig = data_orig[:, 3].squeeze()*10**6
+        errs_orig = data_orig[:, 4].squeeze()
+        posttn_orig = data_orig[:, 5].squeeze()*10**6
+        tndm_orig = data_orig[:, 6].squeeze()*10**6
+        tnred_orig = data_orig[:, 7].squeeze()*10**6
+        binphase_orig = data_orig[:, -1].squeeze()
+
+        xdata, ydata, new_errs, new_freqs = average_subbands(binphase, pre-tndm-tnred, errs, freqs, files)
+        plt.subplots(3, 1, sharex=True, figsize=(10, 15))
+        plt.subplot(3, 1, 1)
+        indicies = np.argwhere(new_freqs > 2000)
+        plt.errorbar(xdata[indicies], ydata[indicies], yerr=new_errs[indicies], fmt='.', alpha=alpha, zorder=2, color='mediumblue')
+        indicies = np.argwhere(new_freqs < 1000)
+        plt.errorbar(xdata[indicies], ydata[indicies], yerr=new_errs[indicies], fmt='.', alpha=alpha, zorder=0, color='crimson')
+        indicies = np.argwhere((new_freqs > 1000)*(new_freqs < 2000))
+        plt.errorbar(xdata[indicies], ydata[indicies], yerr=new_errs[indicies], fmt='.', alpha=alpha, zorder=1, color='darkcyan')
+
+        plt.ylim((-20, 15))
+        yl = plt.ylim()
+        plt.plot([0.25, 0.25], yl, 'k--')
+        plt.ylim(yl)
+        plt.xlim((0, 1))
+        plt.ylabel(r'Residual ($\mu s$)')
+        #plt.xlabel('Orbital phase')
+        plt.tick_params(axis='x', which='both', labelbottom=False)
+        plt.grid()
+
+        xdata, ydata, new_errs, new_freqs = average_subbands(binphase, posttn, errs, freqs, files)
+        plt.subplot(3, 1, 2)
+        indicies = np.argwhere(new_freqs > 2000)
+        plt.errorbar(xdata[indicies], ydata[indicies], yerr=new_errs[indicies], fmt='.', alpha=alpha, zorder=2, color='mediumblue')
+        indicies = np.argwhere(new_freqs < 1000)
+        plt.errorbar(xdata[indicies], ydata[indicies], yerr=new_errs[indicies], fmt='.', alpha=alpha, zorder=0, color='crimson')
+        indicies = np.argwhere((new_freqs > 1000)*(new_freqs < 2000))
+        plt.errorbar(xdata[indicies], ydata[indicies], yerr=new_errs[indicies], fmt='.', alpha=alpha, zorder=1, color='darkcyan')
+
+        plt.ylim((-8, 8))
+        yl = plt.ylim()
+        plt.plot([0.25, 0.25], yl, 'k--')
+        plt.ylim(yl)
+        plt.xlim((0, 1))
+        plt.ylabel(r'Residual ($\mu s$)')
+        #plt.xlabel('Orbital phase')
+        plt.tick_params(axis='x', which='both', labelbottom=False)
+        plt.grid()
+
+
+        xdata, ydata, new_errs, new_freqs = average_subbands(binphase_orig, posttn_orig, errs_orig, freqs_orig, files_orig)
+        plt.subplot(3, 1, 3)
+        indicies = np.argwhere(new_freqs > 2000)
+        plt.errorbar(xdata[indicies], ydata[indicies], yerr=new_errs[indicies], fmt='.', alpha=alpha, zorder=2, color='mediumblue')
+        indicies = np.argwhere(new_freqs < 1000)
+        plt.errorbar(xdata[indicies], ydata[indicies], yerr=new_errs[indicies], fmt='.', alpha=alpha, zorder=0, color='crimson')
+        indicies = np.argwhere((new_freqs > 1000)*(new_freqs < 2000))
+        plt.errorbar(xdata[indicies], ydata[indicies], yerr=new_errs[indicies], fmt='.', alpha=alpha, zorder=1, color='darkcyan')
+        plt.ylim((-8, 8))
+        yl = plt.ylim()
+        plt.plot([0.25, 0.25], yl, 'k--')
+        #plt.plot([0, 1], [0, 0], 'k')
+        plt.ylim(yl)
+        plt.xlim((0, 1))
+        plt.ylabel(r'Residual ($\mu s$)')
+        plt.xlabel('Orbital phase')
+        plt.grid()
+
+
+        plt.tight_layout()
+        if '1125' in psr:
+            plt.savefig('/Users/dreardon/Dropbox/Git/ppta_dr2_ephemerides/J1125_Shapiro.pdf')
+        plt.show()
+
+        #plt.scatter(data_noshap[:, -1], data_noshap[:, 4]*10**6 - data[:, 4]*10**6)
+        #plt.show()
+
+
+    """
+    Make residual plots for each pulsar
+    """
+
+    output_files = sorted(glob.glob('/Users/dreardon/Dropbox/Git/ppta_dr2_ephemerides/publish_collection/dr2e/output/*.out'))
+
+    for outfile in output_files:
+        # No Shapiro data for plotting
+        print(outfile)
+        try:
+            data, files = read_general2(outfile, header=True)
+        except:
+            continue
+
+        plt.subplots(3, 1, sharex=True, figsize=(12, 12))
+
+        psrname = outfile.split('/')[-1].split('.')[0].split('_')[0]
+        bat = data[:, 0].squeeze()
+        freqs = data[:, 1].squeeze()
+        pre = data[:, 2].squeeze()*10**6
+        post = data[:, 3].squeeze()*10**6
+        errs = data[:, 4].squeeze()
+        posttn = data[:, 5].squeeze()*10**6
+        tndm = data[:, 6].squeeze()*10**6
+        tnred = data[:, 8].squeeze()*10**6
+        tnchrom = data[:, 10].squeeze()*10**6
+        #binphase = data[:, -1].squeeze()
+
+        from astropy.time import Time
+        t = Time(bat, format='mjd')
+        yrs = t.byear  # observation year
+
+        xdata, ydata, new_errs, new_freqs = average_subbands(yrs, posttn, errs, freqs, files)
+        plt.subplot(3, 1, 3)
+        indicies = np.argwhere(new_freqs > 2000)
+        wrms_10 = wrms(ydata[indicies], 1/new_errs[indicies]**2)
+        plt.errorbar(xdata[indicies], ydata[indicies], yerr=new_errs[indicies], fmt='.', alpha=alpha, zorder=2, color='mediumblue')
+        indicies = np.argwhere((new_freqs > 1000)*(new_freqs < 2000))
+        wrms_20 = wrms(ydata[indicies], 1/new_errs[indicies]**2)
+        plt.errorbar(xdata[indicies], ydata[indicies], yerr=new_errs[indicies], fmt='.', alpha=alpha, zorder=1, color='darkcyan')
+        indicies = np.argwhere(new_freqs < 1000)
+        wrms_40 = wrms(ydata[indicies], 1/new_errs[indicies]**2)
+        plt.errorbar(xdata[indicies], ydata[indicies], yerr=new_errs[indicies], fmt='.', alpha=alpha, zorder=0, color='crimson')
+        yl = plt.ylim()
+        #plt.plot([0, 1], [0, 0], 'k')
+        plt.legend([str(round_sig(wrms_10)) + r'$\,\mu\,$s', str(round_sig(wrms_40)) + r'$\,\mu\,$s', str(round_sig(wrms_20)) + r'$\,\mu\,$s'], loc='upper left', framealpha=0.4)
+        plt.ylim(yl)
+        plt.ylabel(r'Residual ($\mu s$)')
+        plt.xlim((1993.8, 2018.7))
+        plt.xticks(ticks=[1994, 1996, 1998, 2000, 2002, 2004, 2006,2008,2010,2012,2014,2016,2018])
+        plt.xlabel('MJD')
+        plt.grid()
+
+        xdata, ydata, new_errs, new_freqs = average_subbands(yrs, post, errs, freqs, files)
+        plt.subplot(3, 1, 1)
+        indicies = np.argwhere(new_freqs > 2000)
+        wrms_10 = wrms(ydata[indicies], 1/new_errs[indicies]**2)
+        plt.errorbar(xdata[indicies], ydata[indicies], yerr=new_errs[indicies], fmt='.', alpha=alpha, zorder=2, color='mediumblue')
+        indicies = np.argwhere((new_freqs > 1000)*(new_freqs < 2000))
+        wrms_20 = wrms(ydata[indicies], 1/new_errs[indicies]**2)
+        plt.errorbar(xdata[indicies], ydata[indicies], yerr=new_errs[indicies], fmt='.', alpha=alpha, zorder=1, color='darkcyan')
+        indicies = np.argwhere(new_freqs < 1000)
+        wrms_40 = wrms(ydata[indicies], 1/new_errs[indicies]**2)
+        plt.errorbar(xdata[indicies], ydata[indicies], yerr=new_errs[indicies], fmt='.', alpha=alpha, zorder=0, color='crimson')
+        plt.title('PSR ' + psrname)
+
+        yl = plt.ylim()
+        plt.ylim(yl)
+        plt.xlim((1993.8, 2018.7))
+        plt.xticks(ticks=[1994, 1996, 1998, 2000, 2002, 2004, 2006,2008,2010,2012,2014,2016,2018])
+        plt.ylabel(r'Residual ($\mu s$)')
+        plt.tick_params(axis='x', which='both', labelbottom=False)
+        plt.legend([str(round_sig(wrms_10)) + r'$\,\mu\,$s', str(round_sig(wrms_40)) + r'$\,\mu\,$s', str(round_sig(wrms_20)) + r'$\,\mu\,$s'], loc='upper left', framealpha=0.4)
+        plt.grid()
+
+        xdata, ydata, new_errs, new_freqs = average_subbands(yrs, post-tndm-tnchrom, errs, freqs, files)
+        plt.subplot(3, 1, 2)
+        indicies = np.argwhere(new_freqs > 2000)
+        wrms_10 = wrms(ydata[indicies], 1/new_errs[indicies]**2)
+        plt.errorbar(xdata[indicies], ydata[indicies], yerr=new_errs[indicies], fmt='.', alpha=alpha, zorder=2, color='mediumblue')
+        indicies = np.argwhere((new_freqs > 1000)*(new_freqs < 2000))
+        wrms_20 = wrms(ydata[indicies], 1/new_errs[indicies]**2)
+        plt.errorbar(xdata[indicies], ydata[indicies], yerr=new_errs[indicies], fmt='.', alpha=alpha, zorder=1, color='darkcyan')
+        indicies = np.argwhere(new_freqs < 1000)
+        wrms_40 = wrms(ydata[indicies], 1/new_errs[indicies]**2)
+        plt.errorbar(xdata[indicies], ydata[indicies], yerr=new_errs[indicies], fmt='.', alpha=alpha, zorder=0, color='crimson')
+
+        yl = plt.ylim()
+        plt.ylim(yl)
+        plt.xlim((1993.8, 2018.7))
+        plt.xticks(ticks=[1994, 1996, 1998, 2000, 2002, 2004, 2006,2008,2010,2012,2014,2016,2018])
+        plt.ylabel(r'Residual ($\mu s$)')
+        #plt.xlabel('Orbital phase')
+        plt.tick_params(axis='x', which='both', labelbottom=False)
+        plt.legend([str(round_sig(wrms_10)) + r'$\,\mu\,$s', str(round_sig(wrms_40)) + r'$\,\mu\,$s', str(round_sig(wrms_20)) + r'$\,\mu\,$s'], loc='upper left', framealpha=0.4)
+        plt.grid()
+
+
+
+        plt.tight_layout()
+        plt.savefig('/Users/dreardon/Dropbox/Git/ppta_dr2_ephemerides/publish_collection/dr2e/output/' + psrname + '_res.pdf')
+        plt.show()
+
 
 for par in parfiles:
     #print(par)
@@ -595,3 +837,6 @@ for par in parfiles:
         f.write('\n')
 
     print(" ")
+
+
+
