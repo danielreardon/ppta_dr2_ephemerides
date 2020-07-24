@@ -8,6 +8,7 @@ Updating TOA errors using TN parameters.
 [tempo2Util.C:396] [TROP2] Assume standard atmospheric pressure (no data) for site pks at MJD 53041.2
 [tempo2Util.C:396] [TROP1] Assume zero zenith wet delay (no data) for site pks  at MJD 53041.2
 [tempo2Util.C:400] Warning: [DUP1] duplicated warnings have been suppressed.
+<<<<<<< HEAD
 [TKfit.C:344] SVD nparams=887 nconst=840 ndata=14774
 [t2fit_nestlike.C:143] 0 param_red_dm_sin 0 1.29544e-05 2.42679e-05
 [t2fit_nestlike.C:143] 0 param_red_dm_sin 1 3.80244e-05 1.24323e-05
@@ -15436,3 +15437,5 @@ t180421_221101.rf.pcm.dzTf8p	58229.949600086769564	1416.8189700000000357	3.48863
 /pulsar/archive16/ppta_finalFiles//J1909-3744/20cm/m2004-02-08-01:26:06.czFTp	53043.067348928046922	1404.3289999999999509	3.3935672485136783961e-09	3.51293847076437685e-09	0.11600000000000000588	8.0628134833165458358e-08	1.1039016061032067898e-07	9.7117570675244340767e-08	-1.8416435232173065544e-07	1.568730120926099983e-07	0	0
 Finished general2 plugin
 Finishing off: time taken = 454.30 (s)
+=======
+>>>>>>> a6b3495bb993710578a811747cc77f13440d374f
