@@ -41,13 +41,13 @@ def getParamLabels():
   'PMELAT'               : r'Proper motion in ecliptic latitude $XX$ (unit)',
   'PMELONG'              : r'Proper motion in ecliptic longitude $XX$ (unit)', 
   'MASS_FUNC'            : r'\textbf{fix} MASS\_FUNC', 
-  'D_PX(med/16th/84th)'  : r'\textbf{fix} D\_PX(med/16/84)',
-  'D_SHK(med/16th/84th)' : r'\textbf{fix} D\_SHK(med/16th/84th)',
+  'D_PX(med/16th/84th)'  : r'\textbf{fix} D\_PX ($\pm$ central $68\%$ range)',
+  'D_SHK(med/16th/84th)' : r'\textbf{fix} D\_SHK ($\pm$ central $68\%$ range)',
   'INC_LIM(med/std)'     : r'\textbf{fix} INC\_LIM(med/std)',
-  'INC(med/16th/84th)'   : r'\textbf{fix} INC(med/16th/84th)',
-  'M2(med/16th/84th)'    : r'\textbf{fix} M2(med/16th/84th)',
-  'MP(med/16th/84th)'    : r'\textbf{fix} MP(med/16th/84th)  Pulsar mass, $M_{\mathrm{P}}$ ($M_{\odot}$)',
-  'MTOT(med/16th/84th)'  : r'\textbf{fix} MTOT(med/16th/84th)(Fix name)',
+  'INC(med/16th/84th)'   : r'\textbf{fix} INC ($\pm$ central $68\%$ range)',
+  'M2(med/16th/84th)'    : r'Companion mass $M_2$ ($M_{\odot}$) ($\pm$ central $68\%$ range)',
+  'MP(med/16th/84th)'    : r'Pulsar mass, $M_{\mathrm{P}}$ ($M_{\odot}$) ($\pm$ central $68\%$ range)',
+  'MTOT(med/16th/84th)'  : r'Total mass $M_{\rm tot}$ ($M_{\odot}$) ($\pm$ central $68\%$ range)',
   'OMDOT_GR'             : r'\textbf{fix} OMDOT\_GR(Fix name)'
   }
 

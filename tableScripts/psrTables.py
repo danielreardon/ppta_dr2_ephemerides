@@ -385,8 +385,12 @@ for ipar, par in enumerate(params):
     else:
        try: 
          parameter =  psrDerived[ipsr][par]
-         paramList.append(parameter)
-         print(parameter)
+         #print('here ', psrDerived[ipsr][par+'_16th'])
+         high = float(psrDerived[ipsr][par+'_84th']) - float(psrDerived[ipsr][par])
+         low  = float(psrDerived[ipsr][par]) - float(psrDerived[ipsr][par+'_16th'])
+         parameterStr =  '{0:.3}^{{ +{1:.3} }}_{{ -{2:.3} }}'.format(float(psrDerived[ipsr][par]), high, low)
+         paramList.append(parameterStr)
+         print('parSTRING ', parameterStr)
        except: 
          paramList.append('-')
 
