@@ -299,6 +299,7 @@ for psr in psrNames:
 table = open(tableFile,'w')
 table.write("""
 \\begin{table*}
+\\begin{adjustbox}{angle=90}
 \\footnotesize
 \\begin{tabular}{llllllll}
 \\hline\\hline \\\\\
@@ -397,8 +398,12 @@ for ipar, par in enumerate(params):
 table=open(tableFile,'a')
 table.write("""
 \\\\ \\hline\\hline
-\end{tabular}
-\end{table*}
+\\end{tabular}\\hfill\\
+\\end{adjustbox}
+\\caption{\\label{tab:XXXXX}
+Placeholder caption.....
+}
+\\end{table*}
 """)
 table.close()
 
