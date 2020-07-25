@@ -200,8 +200,8 @@ def is_valid(array):
 Start of code
 """
 
-datadir = '/Users/dreardon/Dropbox/Git/ppta_dr2_ephemerides/publish_collection/dr2e/'
-outdir = '/Users/dreardon/Dropbox/Git/ppta_dr2_ephemerides/publish_collection/dr2e/output/'
+datadir = '/Users/dreardon/Dropbox/Git/ppta_dr2_ephemerides/publish_collection/dr2/'
+outdir = '/Users/dreardon/Dropbox/Git/ppta_dr2_ephemerides/publish_collection/dr2/output/'
 parfiles = sorted(glob.glob(datadir + '*.par'))
 
 psrnames = np.array(['J0613-0200' ,'J0711-6830' ,'J1017-7156' ,'J1022+1001' ,'J1024-0719' , \
@@ -216,7 +216,8 @@ fluxes = np.array([2.2, 2.1, 0.9, 3.1, 1.6,\
           12.6, 4.5, 0.8, 5.9, 1.8])
 
 outfile = outdir + 'derived_params.txt'
-#os.remove(outfile)
+if path.exists(outfile):
+    os.remove(outfile)
 
 n_samples = 10000
 # Define other useful constants
@@ -395,6 +396,7 @@ for par in parfiles:
         #print("Shklovskii distance (kpc) = ", round(D, 3), " +/- ", round(D_err,3))
         with open(outfile, 'a+') as f:
             #f.write("D_SHK" + '\t' + str(D) + '\t' + str(D_err) + '\n')
+            f.write("PBDOT_Gal(mean/std)" + '\t' + str(pbdot_gal) + '\t' + str(pbdot_gal_err) + '\n')
             f.write("D_SHK(med/16th/84th)" + '\t' + str(np.median(D_posterior)) + '\t' + str(np.percentile(D_posterior, q=16)) + '\t' + str(np.percentile(D_posterior, q=84)) + '\n')
         if 'PX' in params.keys():
             Davg = np.average([dkpc, D], weights=[1/sigd, 1/D_err])

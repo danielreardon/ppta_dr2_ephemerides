@@ -40,6 +40,8 @@ def getParamLabels():
   'ELONG'                : r'Ecliptic longitude $\lambda$ (deg.)',
   'PMELAT'               : r'Proper motion in ecliptic latitude, $\mu_\beta$ (${\rm mas}\,{\rm yr}^{-1}$)',
   'PMELONG'              : r'Proper motion in ecliptic longitude, $\mu_\lambda$ (${\rm mas}\,{\rm yr}^{-1}$)',
+  'PX_LKB(med/16th/84th)'  : r'$D_\pi$ ($\pm$ central $68\%$ range)',
+  'D_LKB(med/16th/84th)'  : r'$D_\pi$ ($\pm$ central $68\%$ range)',
   'D_PX(med/16th/84th)'  : r'$D_\pi$ ($\pm$ central $68\%$ range)',
   'D_SHK(med/16th/84th)' : r'$D_\rm{shk}$ ($\pm$ central $68\%$ range)',
   'INC_LIM(med/std)'     : r'95\%-confidence upper limit on $i$ (deg.)',

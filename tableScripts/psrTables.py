@@ -185,7 +185,7 @@ def get_parameters_for_table(solitaryOrBinary):
 
     # parameters form derived_parameters.txt
     fromDerivedParams = (['ELAT','ELONG','PMELONG','PMELAT','PMELONG','MASS_FUNC',\
-                          'D_PX(med/16th/84th)', 'D_SHK(med/16th/84th)',\
+                          'PX_LKB(med/16th/84th)','D_LKB(med/16th/84th)', 'D_SHK(med/16th/84th)',\
                           'INC(med/16th/84th)', 'INC_LIM(med/std)',\
                           'M2(med/16th/84th)', 'MP(med/16th/84th)', 'MTOT(med/16th/84th)',\
                           'OMDOT_GR'])
@@ -207,7 +207,7 @@ def get_parameters_for_table(solitaryOrBinary):
                    'F0', 'F1','F2',\
                    'DM',\
                    'PMRA', 'PMDEC', 'PMELAT', 'PMELONG', 'PX',\
-                   'D_PX(med/16th/84th)'])
+                   'PX_LKB(med/16th/84th)','D_LKB(med/16th/84th)'])
 
 
     elif solitaryOrBinary == 'binary':
@@ -224,7 +224,7 @@ def get_parameters_for_table(solitaryOrBinary):
                    'SINI', 'M2', 'M2(med/16th/84th)', 'H3', 'H4', 'STIG',\
                    'KOM', 'KIN',\
                    'INC(med/16th/84th)', 'INC_LIM(med/std)',\
-                   'D_PX(med/16th/84th)', 'D_SHK(med/16th/84th)',\
+                   'PX_LKB(med/16th/84th)','D_LKB(med/16th/84th)', 'D_SHK(med/16th/84th)',\
                    'MP(med/16th/84th)', 'MTOT(med/16th/84th)'])
 
     return fittedOrDerived, params
