@@ -18,6 +18,7 @@ import glob
 import matplotlib.pyplot as plt
 import numpy as np
 import sys, os
+from os import path
 from decimal import Decimal, InvalidOperation
 import libstempo as T
 import GalDynPsr
@@ -203,8 +204,20 @@ datadir = '/Users/dreardon/Dropbox/Git/ppta_dr2_ephemerides/publish_collection/d
 outdir = '/Users/dreardon/Dropbox/Git/ppta_dr2_ephemerides/publish_collection/dr2/output/'
 parfiles = sorted(glob.glob(datadir + '*.par'))
 
+psrnames = np.array(['J0613-0200' ,'J0711-6830' ,'J1017-7156' ,'J1022+1001' ,'J1024-0719' , \
+            'J1045-4509' ,'J1125-6014' ,'J1446-4701' ,'J1545-4550' ,'J1600-3053' , \
+            'J1603-7202' ,'J1643-1224' ,'J1713+0747' ,'J1730-2304' ,'J1732-5049' , \
+            'J1744-1134' ,'J1824-2452A' ,'J1832-0836' ,'J1857+0943' ,'J1909-3744' , \
+            'J1939+2134' ,'J2124-3358' ,'J2129-5721' ,'J2145-0750' ,'J2241-5236' , ])
+fluxes = np.array([2.2, 2.1, 0.9, 3.1, 1.6,\
+          2.7, 0.9, 0.4, 1.0, 2.5,\
+          3.5, 4.7, 7.4, 3.8, 1.8,\
+          2.5, 2.4, 1.1, 4.1, 1.7,\
+          12.6, 4.5, 0.8, 5.9, 1.8])
+
 outfile = outdir + 'derived_params.txt'
-#os.remove(outfile)
+if path.exists(outfile):
+    os.remove(outfile)
 
 n_samples = 10000
 # Define other useful constants
@@ -221,6 +234,8 @@ for par in parfiles:
         continue
     psrname = par.split('/')[-1].split('.')[0]
 
+    flux = fluxes[np.argwhere(psrnames==psrname)]
+
     #print('=========================')
     print(par.split('/')[-1])
     #print('=========================')
@@ -229,6 +244,7 @@ for par in parfiles:
 
     with open(outfile, 'a+') as f:
         f.write(par.split('/')[-1] + '\n')
+        f.write("S_1400" + '\t' + str(flux.squeeze()) + '\n')
 
 
     if 'ecliptic' in datadir:
@@ -303,6 +319,34 @@ for par in parfiles:
             with open(outfile, 'a+') as f:
                 f.write("D_PX(med/16th/84th)" + '\t' + str(np.median(D_array)) + '\t' + str(np.percentile(D_array, q=16)) + '\t' + str(np.percentile(D_array, q=84)) + '\n')
 
+            # Now to L-K bias correction!
+            if path.exists('/Users/dreardon/lkb/LKB_noPgplot'):
+                #stream = os.popen('/Users/dreardon/lkb/LKB_noPgplot -px {0} {1} -psr {2} -msp -S {3}'.format(params["PX"], params["PX_ERR"], psrname, flux.squeeze()))
+                stream = os.popen('/Users/dreardon/lkb/LKB_noPgplot -px {0} {1} -psr {2} -msp'.format(params["PX"], params["PX_ERR"], psrname))
+                #stream = os.popen('/Users/dreardon/lkb/LKB_noPgplot -px {0} {1}'.format(params["PX"], params["PX_ERR"]))
+                output = stream.readlines()
+                parallax = True
+                for line in output:
+                    if 'Result:' in line and parallax:
+                        px_string = line
+                        numbers = line.split(':')[-1]
+                        lk_params = numbers.split(' ')
+                        px_med = float(lk_params[0])
+                        px_16 = px_med - float(lk_params[1][1:])
+                        px_84 = px_med + float(lk_params[2][1:])
+                        parallax = False
+                    elif 'Result:' in line:
+                        D_string = line
+                        numbers = line.split(':')[-1]
+                        lk_params = numbers.split(' ')
+                        D_med = float(lk_params[0])
+                        D_16 = D_med - float(lk_params[1][1:])
+                        D_84 = D_med + float(lk_params[2][1:])
+                with open(outfile, 'a+') as f:
+                    f.write("PX_LKB(med/16th/84th)" + '\t' + str(px_med) + '\t' + str(px_16) + '\t' + str(px_84) + '\n')
+                    f.write("D_LKB(med/16th/84th)" + '\t' + str(D_med) + '\t' + str(D_16) + '\t' + str(D_84) + '\n')
+
+
 
     if 'PBDOT' in params.keys():
         #print(' ')
@@ -310,7 +354,10 @@ for par in parfiles:
         # Pulsar distance from Shklovskii effect
         pbdot_posterior = np.random.normal(loc=params["PBDOT"],
                                            scale=params["PBDOT_ERR"], size=n_samples)  # observed
-        pbdot_grav = 0
+        if psrname == 'J1909-3744':
+            pbdot_grav = -2.763*10**(-15)
+        else:
+            pbdot_grav = 0
         if 'PX' in params.keys():
             D_prior = 1/np.random.normal(loc=params["PX"],
                                            scale=params["PX_ERR"], size=n_samples) # observed
@@ -330,7 +377,7 @@ for par in parfiles:
         else:
             pmra = params['PMRA']
             pmdec = params['PMDEC']
-            pm_tot = np.sqrt(pmelat**2 + pmelong**2)
+            pm_tot = np.sqrt(pmra**2 + pmdec**2)
             pm = pm_tot/(sec_per_year*rad_to_mas)
 
 
@@ -354,6 +401,7 @@ for par in parfiles:
         #print("Shklovskii distance (kpc) = ", round(D, 3), " +/- ", round(D_err,3))
         with open(outfile, 'a+') as f:
             #f.write("D_SHK" + '\t' + str(D) + '\t' + str(D_err) + '\n')
+            f.write("PBDOT_Gal(mean/std)" + '\t' + str(pbdot_gal) + '\t' + str(pbdot_gal_err) + '\n')
             f.write("D_SHK(med/16th/84th)" + '\t' + str(np.median(D_posterior)) + '\t' + str(np.percentile(D_posterior, q=16)) + '\t' + str(np.percentile(D_posterior, q=84)) + '\n')
         if 'PX' in params.keys():
             Davg = np.average([dkpc, D], weights=[1/sigd, 1/D_err])
@@ -424,7 +472,7 @@ for par in parfiles:
         else:
             pmra = np.random.normal(loc=params["PMRA"], scale=params["PMRA_ERR"], size=n_samples)
             pmdec = np.random.normal(loc=params["PMDEC"], scale=params["PMDEC_ERR"], size=n_samples)
-            pm_tot = np.sqrt(pmelat**2 + pmelong**2)
+            pm_tot = np.sqrt(pmra**2 + pmdec**2)
             pm = pm_tot/(sec_per_year*rad_to_mas)
 
 

@@ -2,7 +2,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Will read in a par file to a dictionary. Taken from Daniel Reardon's 
+Will read in a par file to a dictionary. Taken from Daniel Reardon's
 script (parfile_optimiser.py in ppta_dr2_ephemeris git)
 """
 
@@ -91,14 +91,14 @@ def read_par(parfile):
 def get_derived_params(parfilename):
 
     """
-    For a given par file, find the derived parameters in the "derived_params.txt" file. 
-    (searches for the par file) 
+    For a given par file, find the derived parameters in the "derived_params.txt" file.
+    (searches for the par file)
     """
     derivedParamsFile = '../publish_collection/dr2/output/derived_params.txt'
 
     file = open(derivedParamsFile, 'r')
 
-    # this is only true when reading the lines we want 
+    # this is only true when reading the lines we want
     take = False
 
     par={}
@@ -108,7 +108,7 @@ def get_derived_params(parfilename):
         sline = line.split()
 
         if len(sline)>0 and take==False:
-            if sline[0]==parfilename: 
+            if sline[0]==parfilename:
                 take = True
         elif len(sline)==0 and take==True:
             take = False
@@ -130,17 +130,19 @@ def get_derived_params(parfilename):
           if param != "ELAT" and param != "ELONG" and param != "PMELAT" and param != "PMELONG" and param != "MASS_FUNC" and param != "OMDOT_GR" and len(sline)>=3:
             sixteenth = sline[2]
             eighty_fourth = sline[3]
+          if param == "INC_LIM(med/std)":
+            err = sline[2]
         except: pass
 
 
         if take==True and line[0]!="J":
-    
+
             par[param] = val
             if err:
                 par[param+"_ERR"] = float(err)
             if p_type:
                 par[param+"_TYPE"] = p_type
-            if sixteenth: 
+            if sixteenth:
                 par[param+"_16th"] = float(sixteenth)
             if eighty_fourth:
                 par[param+"_84th"] = float(eighty_fourth)

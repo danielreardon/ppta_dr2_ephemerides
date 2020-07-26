@@ -110,6 +110,10 @@ TNEQ -group PDFB_10CM -7.06847
 TNEQ -group PDFB_20CM -7.01736
 TNEQ -group PDFB_40CM -6.38455
 TNEQ -group WBCORR_10CM -5.51262
+TNEF -group 20cm_cpsr2 1
+TNEF -group 20cm_fptm 1.34326
+TNEF -group MULTI_fptm1 0.213519
+TNEF -group 20cm_afb 0.103717
 TNEQ -group 20cm_cpsr2 -1.31789
 TNEQ -group 20cm_fptm -9.77596
 TNEQ -group MULTI_fptm1 -9.09773
