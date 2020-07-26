@@ -22,8 +22,8 @@ import parameterLabels
 
 
 """
-Converts to short format undertainties  from:  
-https://pythonhosted.org/uncertainties/user_guide.html 
+Converts to short format undertainties  from:
+https://pythonhosted.org/uncertainties/user_guide.html
 """
 class ShorthandFormatter(string.Formatter):
 
@@ -36,9 +36,36 @@ class ShorthandFormatter(string.Formatter):
             return super(ShorthandFormatter, self).format_field(
                 value, format_spec)
 
+"""
+Rounds float to number of sig figs
+"""
+from math import log10, floor
+def round_sig(x, sig=1, small_value=1.0e-9):
+    if sig==1 and str(x*10**10)[0] == '1':
+        sig+=1  # First digit, add a sig fig
+    value = round(x, sig - int(floor(log10(max(abs(x), abs(small_value))))) - 1)
+    return value
 
-
-
+"""
+Reads a general2 output file
+"""
+def read_general2(filename, header=False):
+    """
+    Reads a general2 output into a numpy array
+    """
+    with open(filename, "r") as file:
+        data = []
+        files = []
+        for line in file:
+            if not header and not ('Finish' in line):
+                files.append([(line.split('\t')[0])])
+                data.append([float(x) for x in
+                             (line.replace('\n', '').split('\t')[1:])])
+            elif 'Starting general2 plugin' in line:
+                header = False
+            elif 'Finish' in line:
+                return np.array(data), files
+    return np.array(data), files
 
 
 """
@@ -62,11 +89,16 @@ def writeLine(parameters,tableFile,parameterName,fitOrDer,parLabel=None):
 
     for p in parameters:
 
-        try: 
+        try:
             shortFormat = frmtr.format("{0:.1u}",p)
 
             # does the string contain "e" ?
-            if (shortFormat.find("e"))!=-1:
+            if (shortFormat.find("e0"))!=-1:
+                shortFormat = shortFormat.replace("e0", "\\times 10^{")+"}"
+            elif (shortFormat.find("e-0"))!=-1:
+                shortFormat = shortFormat.replace("e-0", "e-")
+                shortFormat = shortFormat.replace("e", "\\times 10^{")+"}"
+            elif (shortFormat.find("e"))!=-1:
                 shortFormat = shortFormat.replace("e", "\\times 10^{")+"}"
             else: pass
 
@@ -99,18 +131,18 @@ def writeMJDRange(psrDeets,tabFile,label):
 
     # if can't get value, write none for now
     for i in range(len(psrDeets)):
-    
-      try: 
+
+      try:
          start = psrDeets[i]['START']
-         table.write('\t & \t ${:.1f}$'.format(start))
+         table.write('\t & \t ${}$'.format(np.floor(start)))
       except:
          table.write('\t & \t none?')
       try:
          finish = psrDeets[i]['FINISH']
-         table.write('--${:.1f}$'.format(finish))
-      except: 
+         table.write(' -- ${}$'.format(np.floor(finish)))
+      except:
          table.write('--none?')
-    
+
 
     table.write('\\\\ \n')
     table.close()
@@ -134,7 +166,7 @@ def writeSkyPos(psrDeets,tabFile,parLabels):
 
     for ipsr in range(len(psrDeets)):
 
-        # get sky position 
+        # get sky position
         pos = SkyCoord(psrDetails[ipsr]['RAJ'] + ' ' +str(psrDetails[ipsr]['DECJ']),unit=(u.hourangle,u.deg))
 
         # get RA as string with error
@@ -158,14 +190,14 @@ def writeSkyPos(psrDeets,tabFile,parLabels):
     for ra in ras:
         table.write('\t & \t {}'.format(ra))
     table.write('\\\\ \n')
-  
+
     # write dec
     table.write(parLabels['DECJ'])
     for dec in decs:
         table.write('\t & \t {}'.format(dec))
     table.write('\\\\ \n')
 
-    return None    
+    return None
 
 
 
@@ -174,23 +206,23 @@ def get_parameters_for_table(solitaryOrBinary):
 
 
     # paratmeters from the par files
-    fromParFiles  = (['F0','F1','DM','PMRA','PMDEC','PX',\
+    fromParFiles  = (['F0','F1','F2','DM','PMRA','PMDEC','PX',\
                       'PB','A1','TASC',\
-                      'PBDOT','A1DOT',\
-                      'TO','OM','OMDOT','ECC','ECCDOT',\
+                      'PBDOT','XDOT',\
+                      'T0','OM','OMDOT','ECC',\
                       'EPS1','EPS2','EPS1DOT','EPS2DOT',\
                       'M2','SINI',\
                       'H3','H4','STIG',\
                       'KOM','KIN'])
- 
-    # parameters form derived_parameters.txt 
+
+    # parameters form derived_parameters.txt
     fromDerivedParams = (['ELAT','ELONG','PMELONG','PMELAT','PMELONG','MASS_FUNC',\
                           'D_PX(med/16th/84th)', 'D_SHK(med/16th/84th)',\
-                          'INC(med/16th/84th)',\
+                          'INC(med/16th/84th)', 'INC_LIM(med/std)',\
                           'M2(med/16th/84th)', 'MP(med/16th/84th)', 'MTOT(med/16th/84th)',\
                           'OMDOT_GR'])
 
-    # keeping track of which params are from where 
+    # keeping track of which params are from where
     fittedOrDerived = {}
     for p in fromParFiles:
         fittedOrDerived[p] = 0
@@ -204,9 +236,9 @@ def get_parameters_for_table(solitaryOrBinary):
     if solitaryOrBinary == 'solitary':
 
         params = (['ELAT','ELONG',\
-                   'F0', 'F1',\
+                   'F0', 'F1','F2',\
                    'DM',\
-                   'PMRA', 'PMDEC', 'PMELAT', 'PMELONG',\
+                   'PMRA', 'PMDEC', 'PMELAT', 'PMELONG', 'PX',\
                    'D_PX(med/16th/84th)'])
 
 
@@ -215,18 +247,17 @@ def get_parameters_for_table(solitaryOrBinary):
         params = (['ELAT','ELONG',\
                    'F0', 'F1',\
                    'DM',\
-                   'PMRA', 'PMDEC', 'PMELAT', 'PMELONG',\
-                   'PB', 'PBDOT', 'A1', 'A1DOT', 'TASC',\
-                   'TO', 'OM', 'OMDOT', 'OMDOT_GR',\
-                   'ECC', 'ECCDOT', \
-                   'EPS1', 'EPS2', 'EPS1DOT', 'EPS2DOT',\
-                   'SINI',\
+                   'PMRA', 'PMDEC', 'PMELAT', 'PMELONG',
+                   'PX',\
+                   'PB', 'A1',\
+                   'T0', 'OM', 'ECC',\
+                   'TASC', 'EPS1', 'EPS2',\
+                   'PBDOT', 'OMDOT', 'XDOT',\
+                   'SINI', 'M2', 'M2(med/16th/84th)', 'H3', 'H4', 'STIG',\
+                   'KOM', 'KIN',\
+                   'INC(med/16th/84th)', 'INC_LIM(med/std)',\
                    'D_PX(med/16th/84th)', 'D_SHK(med/16th/84th)',\
-                   'INC(med/16th/84th)',\
-                   'MASS_FUNC',\
-                   'MP(med/16th/84th)', 'MTOT(med/16th/84th)',\
-                   'H3', 'H4', 'STIG', \
-                   'KOM', 'KIN' ])
+                   'MP(med/16th/84th)', 'MTOT(med/16th/84th)'])
 
     return fittedOrDerived, params
 
@@ -235,172 +266,234 @@ def get_parameters_for_table(solitaryOrBinary):
 # point to list of pulsars to include in the table
 # (split binary psrs into groups as table too wide)
 parser = argparse.ArgumentParser(description='which group of pulsars to make the table for')
-parser.add_argument('--solOrBin', type=str, help='choose solitary or binary')
-parser.add_argument('--groupNo', type=int, help='integer (1,2,3,4) for group of psrs',default=0)
+parser.add_argument('--solOrBin', type=str, help='choose solitary or binary',default='binary')
+parser.add_argument('--groupNo', type=int, help='integer (1,2,3,4) for group of psrs',default=1)
 args = parser.parse_args()
 
 solBin = str(args.solOrBin)
 whichGroup = int(args.groupNo)
 
-if solBin=='solitary':
-    if whichGroup==1 or whichGroup==2:
-        psrNames = np.genfromtxt('psrLists/psrListSolitary-group{}.list'.format(whichGroup),dtype=str)
-        tableFile='localTexTables/solitaryTable-group{}.tex'.format(whichGroup)
-    else: 
-        print('Error: need to choose a group from [1,2] for solitary pulsar table')
-        exit()
+datadir = '/Users/dreardon/Dropbox/Git/'
 
-elif solBin=='binary':
-    if whichGroup==1 or whichGroup==2 or whichGroup==3 or whichGroup==4:
-        psrNames = np.genfromtxt('psrLists/psrListBinary-group{}.list'.format(whichGroup),dtype=str)
-        tableFile='localTexTables/binaryTable-group{}.tex'.format(whichGroup)
-    else: 
-        print('Error: need to choose a group from [1,2,3,4] for binary pulsar table')
-        exit()
+for solBin in ['solitary', 'binary']:
 
-
-
-
-# read in pulsar details from par files
-psrDetails = []
-for psr in psrNames:
-
-    if psr == 'J1713+0747' or psr == 'J1909-3744':
-        parLoc = '/fred/oz002/hmiddleton/ppta_ephemeris/repositories/ppta_dr2_ephemerides/publish_collection/dr2/{}.kop.par'.format(psr)
-    else: 
-        parLoc = '/fred/oz002/hmiddleton/ppta_ephemeris/repositories/ppta_dr2_ephemerides/publish_collection/dr2/{}.par'.format(psr)
-    #parLoc = '/fred/oz002/dreardon/ppta_dr2_ephemerides/partim/dr2_boris/new_params_ver1/{}.par'.format(psr)
-
-    psrPars = readParFile.read_par(parLoc)
-    psrDetails.append(psrPars)
-
-
-
-
-# read in derived pulsar details
-psrDerived = []
-for psr in psrNames:
-
-    if psr == 'J1713+0747' or psr == 'J1909-3744':
-        parName = '{}.kop.par'.format(psr)
-    else: 
-        parname = '{}.par'.format(psr)
-
-    psrDer = readParFile.get_derived_params(parname)
-    psrDerived.append(psrDer)
-
-
-
-
-
-# a place to save the table
-# clearing file and making table top matter
-#tableFile='localTexTables/binaryTable-group{}.tex'.format(whichGroup)
-table = open(tableFile,'w')
-table.write("""
-\\begin{table*}
-\\footnotesize
-\\begin{tabular}{llllllll}
-\\hline\\hline \\\\\
-""")
-
-
-## write pulsar name row
-table.write('Pulsar Name ')
-for p in psrNames:
-  table.write('\t & \t {}'.format(p))
-table.write(' \\\\ \n \\\\ \\hline \\\\ \n')
-table.close()
-
-
-# getting the parameter labels / names for the table headings
-parameterNames = parameterLabels.getParamLabels()
-
-
-## write number of toas row
-names = [ psrDetails[i]['NTOA'] for i in range(len(psrNames)) ]
-writeLine(names,tableFile,parameterNames['NTOA'],1)
-
-## write MJD range row
-writeMJDRange(psrDetails,tableFile,parameterNames['MJDRange'])
-
-## write sky position row (RA & DEC)
-writeSkyPos(psrDetails,tableFile,parameterNames)
-
-
-
-fittedOrDerived, params = get_parameters_for_table(solBin)
-
-# getting the parameter labels / names for the table headings
-parameterNames = parameterLabels.getParamLabels()
-
-
-# write parameters from list 
-for ipar, par in enumerate(params):
-
-  print ('\n ',par,type(par)) 
-
-  paramList = []
-
-  for ipsr, psr in enumerate(psrNames):
-
-    print(fittedOrDerived[par])    
-    if fittedOrDerived[par]==0: 
-      try: 
-        parameter = ufloat(psrDetails[ipsr][par], psrDetails[ipsr][str(par+'_ERR')])
-        paramList.append(parameter)
-      except:
-        """
-        # dealing with different names - not needed I think  
-        if par == 'ECC':
-          try: 
-            parE = 'E'
-            parameter = ufloat(psrDetails[ipsr][parE], psrDetails[ipsr][str(parE+'_ERR')])
-            paramList.append(parameter)
-            print ('got E')
-          except:
-            pass
-        elif par == 'ECCDOT': 
-          try:
-            parEDOT = 'EDOT'
-            parameter = ufloat(psrDetails[ipsr][parEDOT], psrDetails[ipsr][str(parEDOT+'_ERR')])
-            paramList.append(parameter)
-            print ('got EDOT')
-          except:
-            pass
-        elif par == 'A1DOT':
-          try: 
-            parXDOT = 'XDOT'
-            parameter = ufloat(psrDetails[ipsr][parXDOT], psrDetails[ipsr][str(parXDOT+'_ERR')])
-            paramList.append(parameter)
-            print ('got XDOT')
-          except:
-            pass
-        else:
-        """
-        print('no parameter!')
-        paramList.append('-')
-
+    if solBin=='solitary':
+        groups = [1,2]
     else:
-       try: 
-         parameter =  psrDerived[ipsr][par]
-         paramList.append(parameter)
-         print(parameter)
-       except: 
-         paramList.append('-')
+        groups = [1,2,3,4]
 
-  # write parameter line
-  writeLine(paramList,tableFile,parameterNames[par],fittedOrDerived[par],parLabel=par)
+    for whichGroup in groups:
+
+        if solBin=='solitary':
+            if whichGroup==1 or whichGroup==2:
+                psrNames = np.genfromtxt('psrLists/psrListSolitary-group{}.list'.format(whichGroup),dtype=str)
+                tableFile=datadir + '/ppta_dr2_ephemerides/localTexTables/solitaryTable-group{}.tex'.format(whichGroup)
+            else:
+                print('Error: need to choose a group from [1,2] for solitary pulsar table')
+                exit()
+
+        elif solBin=='binary':
+            if whichGroup==1 or whichGroup==2 or whichGroup==3 or whichGroup==4:
+                psrNames = np.genfromtxt('psrLists/psrListBinary-group{}.list'.format(whichGroup),dtype=str)
+                tableFile=datadir + '/ppta_dr2_ephemerides/localTexTables/binaryTable-group{}.tex'.format(whichGroup)
+            else:
+                print('Error: need to choose a group from [1,2,3,4] for binary pulsar table')
+                exit()
 
 
-# end table stuff
-table=open(tableFile,'a')
-table.write("""
-\\\\ \\hline\\hline
-\end{tabular}
-\end{table*}
-""")
-table.close()
+
+
+        # read in pulsar details from par files
+        psrDetails = []
+        for psr in psrNames:
+
+            if psr == 'J1713+0747' or psr == 'J1909-3744':
+                parLoc = datadir + '/ppta_dr2_ephemerides/publish_collection/dr2e/{}.kop.par'.format(psr)
+                outLoc = datadir + '/ppta_dr2_ephemerides/publish_collection/dr2e/output/{}.kop.par.out'.format(psr)
+            else:
+                parLoc = datadir + '/ppta_dr2_ephemerides/publish_collection/dr2e/{}.par'.format(psr)
+                outLoc = datadir + '/ppta_dr2_ephemerides/publish_collection/dr2e/output/{}.par.out'.format(psr)
+            #parLoc = '/fred/oz002/dreardon/ppta_dr2_ephemerides/partim/dr2_boris/new_params_ver1/{}.par'.format(psr)
+
+            try:
+                psrPars = readParFile.read_par(parLoc)
+            except FileNotFoundError:
+                parLoc = parLoc.replace('dr2e','dr2')
+                outLoc = outLoc.replace('dr2e','dr2')
+                psrPars = readParFile.read_par(parLoc)
+            data, files = read_general2(outLoc, header=True)
+            psrPars['START'] = np.min(data[:,0])
+            psrPars['FINISH'] = np.max(data[:,0])
+            psrPars['NEPOCH'] = len(np.unique(files))
+            psrDetails.append(psrPars)
+
+
+
+
+        # read in derived pulsar details
+        psrDerived = []
+        for psr in psrNames:
+
+            if psr == 'J1713+0747' or psr == 'J1909-3744':
+                parname = '{}.kop.par'.format(psr)
+            else:
+                parname = '{}.par'.format(psr)
+
+            psrDer = readParFile.get_derived_params(parname)
+            psrDerived.append(psrDer)
+
+
+
+
+
+        # a place to save the table
+        # clearing file and making table top matter
+        #tableFile='localTexTables/binaryTable-group{}.tex'.format(whichGroup)
+        table = open(tableFile,'w')
+        table.write("""
+        \\begin{table}
+        \\footnotesize
+        \\begin{tabular}{llllllll}
+        \\hline\\hline \\noalign{\\vskip 1.5mm}
+        """)
+
+
+        ## write pulsar name row
+        table.write('Pulsar Name ')
+        for p in psrNames:
+          p = p.replace('-','$-$')
+          table.write('\t & \t {}'.format(p))
+        table.write(' \n \\\\ \\hline \\noalign{\\vskip 1.5mm} \n')
+        table.close()
+
+
+        # getting the parameter labels / names for the table headings
+        parameterNames = parameterLabels.getParamLabels()
+
+
+        ## write number of toas row
+        names = [ psrDetails[i]['NTOA'] for i in range(len(psrNames)) ]
+        writeLine(names,tableFile,parameterNames['NTOA'],1)
+
+        names = [ psrDetails[i]['NEPOCH'] for i in range(len(psrNames)) ]
+        writeLine(names,tableFile,parameterNames['NEPOCH'],1)
+
+        ## write MJD range row
+        writeMJDRange(psrDetails,tableFile,parameterNames['MJDRange'])
+
+        ## write sky position row (RA & DEC)
+        writeSkyPos(psrDetails,tableFile,parameterNames)
+
+
+
+        fittedOrDerived, params = get_parameters_for_table(solBin)
+
+        # getting the parameter labels / names for the table headings
+        parameterNames = parameterLabels.getParamLabels()
+
+
+        # write parameters from list
+        nparam = 5
+        for ipar, par in enumerate(params):
+          if par == 'MASS_FUNC':
+              continue
+
+          print ('\n ',par,type(par))
+
+          paramList = []
+
+          for ipsr, psr in enumerate(psrNames):
+
+            print(fittedOrDerived[par])
+            if fittedOrDerived[par]==0:
+              try:
+                parameter = ufloat(psrDetails[ipsr][par], psrDetails[ipsr][str(par+'_ERR')])
+                paramList.append(parameter)
+              except:
+                """
+                # dealing with different names - not needed I think
+                if par == 'ECC':
+                  try:
+                    parE = 'E'
+                    parameter = ufloat(psrDetails[ipsr][parE], psrDetails[ipsr][str(parE+'_ERR')])
+                    paramList.append(parameter)
+                    print ('got E')
+                  except:
+                    pass
+                elif par == 'ECCDOT':
+                  try:
+                    parEDOT = 'EDOT'
+                    parameter = ufloat(psrDetails[ipsr][parEDOT], psrDetails[ipsr][str(parEDOT+'_ERR')])
+                    paramList.append(parameter)
+                    print ('got EDOT')
+                  except:
+                    pass
+                elif par == 'A1DOT':
+                  try:
+                    parXDOT = 'XDOT'
+                    parameter = ufloat(psrDetails[ipsr][parXDOT], psrDetails[ipsr][str(parXDOT+'_ERR')])
+                    paramList.append(parameter)
+                    print ('got XDOT')
+                  except:
+                    pass
+                else:
+                """
+                print('no parameter!')
+                paramList.append('-')
+
+            else:
+                try:
+                  # check about including errors for these params and how many dp to quote here.
+                  if par=='ELAT' or par=='ELONG' or par=='PMELAT' or par=='PMELONG' or par=='MASS_FUNC' or par=='OMDOT_GR':
+                    parameter = psrDerived[ipsr][par]
+                    paramList.append('{0:.5f}'.format(float(parameter)))
+                  elif par=='INC_LIM(med/std)':
+                    parameter = psrDerived[ipsr][par]
+                    parameter = parameter.replace('<','')
+                    parameter = float(parameter) #+ float(psrDerived[ipsr][par+'_16th'])
+                    paramList.append('<{0}'.format(round(parameter)))
+                  else:
+                    parameter =  psrDerived[ipsr][par]
+                    #print('here ', psrDerived[ipsr][par+'_16th'])
+                    high = float(psrDerived[ipsr][par+'_84th']) - float(psrDerived[ipsr][par])
+                    low  = float(psrDerived[ipsr][par]) - float(psrDerived[ipsr][par+'_16th'])
+                    high = round_sig(high)
+                    low = round_sig(low)
+                    if high%1 == 0:
+                        high = int(high)
+                    if low%1 == 0:
+                        low = int(low)
+                    parameter = float(parameter)
+                    if high>2 and low>2:
+                        parameterStr =  '{0}^{{ +{1} }}_{{ -{2} }}'.format(round(parameter), high, low)
+                    else:
+                        digit = np.max([len(str(high).split('.')[-1]), len(str(low).split('.')[-1])])
+                        parameterStr =  '{0}^{{ +{1} }}_{{ -{2} }}'.format(round(parameter, int(digit)), high, low)
+                    paramList.append(parameterStr)
+                    print('parSTRING ', parameterStr)
+                except:
+                 paramList.append('-')
+
+          # write parameter line
+          if nparam % 5 == 0:
+              table=open(tableFile,'a')
+              table.write('\n \\noalign{\\vskip 1.5mm} \n')
+              table.close()
+          writeLine(paramList,tableFile,parameterNames[par],fittedOrDerived[par],parLabel=par)
+          nparam += 1
+
+        # end table stuff
+        table=open(tableFile,'a')
+        table.write("""
+        \\noalign{\\vskip 1.5mm}
+        \\hline\\hline
+        \\end{tabular}\\hfill\\
+        \\caption{\\label{tab:XXXXX}
+        Placeholder caption.....
+        }
+        \\end{table}
+        """)
+        table.close()
 
 
 
