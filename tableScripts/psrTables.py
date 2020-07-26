@@ -38,7 +38,12 @@ class ShorthandFormatter(string.Formatter):
 
 
 
-
+from math import log10, floor
+def round_sig(x, sig=1, small_value=1.0e-9):
+    if sig==1 and str(x*10**10)[0] == '1':
+        sig+=1  # First digit, add a sig fig
+    value = round(x, sig - int(floor(log10(max(abs(x), abs(small_value))))) - 1)
+    return value
 
 
 """
@@ -220,7 +225,7 @@ def get_parameters_for_table(solitaryOrBinary):
                    'PB', 'A1',\
                    'T0', 'OM', 'ECC',\
                    'TASC', 'EPS1', 'EPS2',\
-                   'PBDOT', 'OMDOT', 'XDOT', 'EPS1DOT','EPS2DOT',\
+                   'PBDOT', 'OMDOT', 'XDOT',\
                    'SINI', 'M2', 'M2(med/16th/84th)', 'H3', 'H4', 'STIG',\
                    'KOM', 'KIN',\
                    'INC(med/16th/84th)', 'INC_LIM(med/std)',\
@@ -292,7 +297,7 @@ for solBin in ['solitary', 'binary']:
         for psr in psrNames:
 
             if psr == 'J1713+0747' or psr == 'J1909-3744':
-                parName = '{}.kop.par'.format(psr)
+                parname = '{}.kop.par'.format(psr)
             else:
                 parname = '{}.par'.format(psr)
 
@@ -311,7 +316,7 @@ for solBin in ['solitary', 'binary']:
         \\begin{table}
         \\footnotesize
         \\begin{tabular}{llllllll}
-        \\hline\\hline \\\\\
+        \\hline\\hline \\noalign{\\vskip 1.5mm}
         """)
 
 
@@ -319,7 +324,7 @@ for solBin in ['solitary', 'binary']:
         table.write('Pulsar Name ')
         for p in psrNames:
           table.write('\t & \t {}'.format(p))
-        table.write(' \\\\ \n \\\\ \\hline \\\\ \n')
+        table.write(' \n \\\\ \\hline \\noalign{\\vskip 1.5mm} \n')
         table.close()
 
 
@@ -346,6 +351,7 @@ for solBin in ['solitary', 'binary']:
 
 
         # write parameters from list
+        nparam = 4
         for ipar, par in enumerate(params):
           if par == 'MASS_FUNC':
               continue
@@ -402,26 +408,43 @@ for solBin in ['solitary', 'binary']:
                   elif par=='INC_LIM(med/std)':
                     parameter = psrDerived[ipsr][par]
                     parameter = parameter.replace('<','')
-                    paramList.append('<{0:.4f}'.format(float(parameter)))
+                    parameter = float(parameter) #+ float(psrDerived[ipsr][par+'_16th'])
+                    paramList.append('<{0}'.format(round(parameter)))
                   else:
                     parameter =  psrDerived[ipsr][par]
                     #print('here ', psrDerived[ipsr][par+'_16th'])
                     high = float(psrDerived[ipsr][par+'_84th']) - float(psrDerived[ipsr][par])
                     low  = float(psrDerived[ipsr][par]) - float(psrDerived[ipsr][par+'_16th'])
-                    parameterStr =  '{0:.3}^{{ +{1:.3} }}_{{ -{2:.3} }}'.format(float(psrDerived[ipsr][par]), high, low)
+                    high = round_sig(high)
+                    low = round_sig(low)
+                    if high%1 == 0:
+                        high = int(high)
+                    if low%1 == 0:
+                        low = int(low)
+                    parameter = float(parameter)
+                    if high>2 and low>2:
+                        parameterStr =  '{0}^{{ +{1} }}_{{ -{2} }}'.format(round(parameter), high, low)
+                    else:
+                        digit = np.max([len(str(high).split('.')[-1]), len(str(low).split('.')[-1])])
+                        parameterStr =  '{0}^{{ +{1} }}_{{ -{2} }}'.format(round(parameter, int(digit)), high, low)
                     paramList.append(parameterStr)
                     print('parSTRING ', parameterStr)
                 except:
                  paramList.append('-')
 
           # write parameter line
+          if nparam % 5 == 0:
+              table=open(tableFile,'a')
+              table.write('\n \\noalign{\\vskip 1.5mm} \n')
+              table.close()
           writeLine(paramList,tableFile,parameterNames[par],fittedOrDerived[par],parLabel=par)
-
+          nparam += 1
 
         # end table stuff
         table=open(tableFile,'a')
         table.write("""
-        \\\\ \\hline\\hline
+        \\noalign{\\vskip 1.5mm}
+        \\hline\\hline
         \\end{tabular}\\hfill\\
         \\caption{\\label{tab:XXXXX}
         Placeholder caption.....

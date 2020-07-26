@@ -200,8 +200,8 @@ def is_valid(array):
 Start of code
 """
 
-datadir = '/Users/dreardon/Dropbox/Git/ppta_dr2_ephemerides/publish_collection/dr2/'
-outdir = '/Users/dreardon/Dropbox/Git/ppta_dr2_ephemerides/publish_collection/dr2/output/'
+datadir = '/Users/dreardon/Dropbox/Git/ppta_dr2_ephemerides/publish_collection/dr2/ecliptic/'
+outdir = '/Users/dreardon/Dropbox/Git/ppta_dr2_ephemerides/publish_collection/dr2/ecliptic/output/'
 parfiles = sorted(glob.glob(datadir + '*.par'))
 
 psrnames = np.array(['J0613-0200' ,'J0711-6830' ,'J1017-7156' ,'J1022+1001' ,'J1024-0719' , \
@@ -244,7 +244,7 @@ for par in parfiles:
 
     with open(outfile, 'a+') as f:
         f.write(par.split('/')[-1] + '\n')
-        f.write("S_1400" + '\t' + str(flux) + '\n')
+        f.write("S_1400" + '\t' + str(flux.squeeze()) + '\n')
 
 
     if 'ecliptic' in datadir:
@@ -321,7 +321,9 @@ for par in parfiles:
 
             # Now to L-K bias correction!
             if path.exists('/Users/dreardon/lkb/LKB_noPgplot'):
-                stream = os.popen('/Users/dreardon/lkb/LKB_noPgplot -px {0} {1} -psr {2} -msp -S {3}'.format(params["PX"], params["PX_ERR"], psrname, flux.squeeze()))
+                #stream = os.popen('/Users/dreardon/lkb/LKB_noPgplot -px {0} {1} -psr {2} -msp -S {3}'.format(params["PX"], params["PX_ERR"], psrname, flux.squeeze()))
+                stream = os.popen('/Users/dreardon/lkb/LKB_noPgplot -px {0} {1} -psr {2} -msp'.format(params["PX"], params["PX_ERR"], psrname))
+                #stream = os.popen('/Users/dreardon/lkb/LKB_noPgplot -px {0} {1}'.format(params["PX"], params["PX_ERR"]))
                 output = stream.readlines()
                 parallax = True
                 for line in output:
