@@ -3,6 +3,9 @@ This is free software, and you are welcome to redistribute it
 under conditions of GPL license.
 
 [clkcorr.C:157] Note, using '/home/dreardon/tempo2/clock' to look for extra clock files
+<<<<<<< HEAD
+ERROR [FILE4]: Unable to open timfile >../J1857+0943_ecliptic.tim<
+=======
 [tempo2Util.C:395] Warning: [TIM1] Please place MODE flags in the parameter file 
 Updating TOA errors using TN parameters.
 [tempo2Util.C:396] [TROP2] Assume standard atmospheric pressure (no data) for site pks at MJD 53042.1
@@ -4029,4 +4032,9 @@ p180424_170424.rf.pcm.dzTf8p	58232.725386020136948	748.88800000000003365	4.16278
 p180424_170424.rf.pcm.dzTf8p	58232.725385957951264	732.64898700000003373	-6.2875271530548693637e-06	-6.2874942761118161487e-06	4.2743972013018272094	-4.7461851086940340482e-06	-8.783908590272283094e-07	2.7702213529173495137e-06	-4.3762888482418916697e-07	8.1625665184660530749e-07	0	0
 p180424_170424.rf.pcm.dzTf8p	58232.725385895941109	710.42797900000005029	-1.5726631088916646215e-06	-1.5726301929341950835e-06	6.4020817663788500695	2.4487551228292604601e-08	-9.3419943562304625729e-07	2.9462274079139174773e-06	-4.3762888497307680679e-07	8.1625665184662923617e-07	0	0
 Finished general2 plugin
+<<<<<<< HEAD
 Finishing off: time taken = 19.41 (s)
+=======
+Finishing off: time taken = 22.22 (s)
+>>>>>>> a6b3495bb993710578a811747cc77f13440d374f
+>>>>>>> 5970d685c348c8758882d68d227920672c791b0f
