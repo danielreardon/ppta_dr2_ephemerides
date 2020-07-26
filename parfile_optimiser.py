@@ -200,8 +200,8 @@ def is_valid(array):
 Start of code
 """
 
-datadir = '/Users/dreardon/Dropbox/Git/ppta_dr2_ephemerides/publish_collection/dr2/ecliptic/'
-outdir = '/Users/dreardon/Dropbox/Git/ppta_dr2_ephemerides/publish_collection/dr2/ecliptic/output/'
+datadir = '/Users/dreardon/Dropbox/Git/ppta_dr2_ephemerides/publish_collection/dr2/'
+outdir = '/Users/dreardon/Dropbox/Git/ppta_dr2_ephemerides/publish_collection/dr2/output/'
 parfiles = sorted(glob.glob(datadir + '*.par'))
 
 psrnames = np.array(['J0613-0200' ,'J0711-6830' ,'J1017-7156' ,'J1022+1001' ,'J1024-0719' , \
@@ -354,7 +354,10 @@ for par in parfiles:
         # Pulsar distance from Shklovskii effect
         pbdot_posterior = np.random.normal(loc=params["PBDOT"],
                                            scale=params["PBDOT_ERR"], size=n_samples)  # observed
-        pbdot_grav = 0
+        if psrname == 'J1909-3744':
+            pbdot_grav = -2.763*10**(-15)
+        else:
+            pbdot_grav = 0
         if 'PX' in params.keys():
             D_prior = 1/np.random.normal(loc=params["PX"],
                                            scale=params["PX_ERR"], size=n_samples) # observed

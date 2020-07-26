@@ -36,14 +36,36 @@ class ShorthandFormatter(string.Formatter):
             return super(ShorthandFormatter, self).format_field(
                 value, format_spec)
 
-
-
+"""
+Rounds float to number of sig figs
+"""
 from math import log10, floor
 def round_sig(x, sig=1, small_value=1.0e-9):
     if sig==1 and str(x*10**10)[0] == '1':
         sig+=1  # First digit, add a sig fig
     value = round(x, sig - int(floor(log10(max(abs(x), abs(small_value))))) - 1)
     return value
+
+"""
+Reads a general2 output file
+"""
+def read_general2(filename, header=False):
+    """
+    Reads a general2 output into a numpy array
+    """
+    with open(filename, "r") as file:
+        data = []
+        files = []
+        for line in file:
+            if not header and not ('Finish' in line):
+                files.append([(line.split('\t')[0])])
+                data.append([float(x) for x in
+                             (line.replace('\n', '').split('\t')[1:])])
+            elif 'Starting general2 plugin' in line:
+                header = False
+            elif 'Finish' in line:
+                return np.array(data), files
+    return np.array(data), files
 
 
 """
@@ -71,7 +93,12 @@ def writeLine(parameters,tableFile,parameterName,fitOrDer,parLabel=None):
             shortFormat = frmtr.format("{0:.1u}",p)
 
             # does the string contain "e" ?
-            if (shortFormat.find("e"))!=-1:
+            if (shortFormat.find("e0"))!=-1:
+                shortFormat = shortFormat.replace("e0", "\\times 10^{")+"}"
+            elif (shortFormat.find("e-0"))!=-1:
+                shortFormat = shortFormat.replace("e-0", "e-")
+                shortFormat = shortFormat.replace("e", "\\times 10^{")+"}"
+            elif (shortFormat.find("e"))!=-1:
                 shortFormat = shortFormat.replace("e", "\\times 10^{")+"}"
             else: pass
 
@@ -107,12 +134,12 @@ def writeMJDRange(psrDeets,tabFile,label):
 
       try:
          start = psrDeets[i]['START']
-         table.write('\t & \t ${:.1f}$'.format(start))
+         table.write('\t & \t ${}$'.format(np.floor(start)))
       except:
          table.write('\t & \t none?')
       try:
          finish = psrDeets[i]['FINISH']
-         table.write('--${:.1f}$'.format(finish))
+         table.write(' -- ${}$'.format(np.floor(finish)))
       except:
          table.write('--none?')
 
@@ -190,7 +217,7 @@ def get_parameters_for_table(solitaryOrBinary):
 
     # parameters form derived_parameters.txt
     fromDerivedParams = (['ELAT','ELONG','PMELONG','PMELAT','PMELONG','MASS_FUNC',\
-                          'PX_LKB(med/16th/84th)','D_LKB(med/16th/84th)', 'D_SHK(med/16th/84th)',\
+                          'D_PX(med/16th/84th)', 'D_SHK(med/16th/84th)',\
                           'INC(med/16th/84th)', 'INC_LIM(med/std)',\
                           'M2(med/16th/84th)', 'MP(med/16th/84th)', 'MTOT(med/16th/84th)',\
                           'OMDOT_GR'])
@@ -212,7 +239,7 @@ def get_parameters_for_table(solitaryOrBinary):
                    'F0', 'F1','F2',\
                    'DM',\
                    'PMRA', 'PMDEC', 'PMELAT', 'PMELONG', 'PX',\
-                   'PX_LKB(med/16th/84th)','D_LKB(med/16th/84th)'])
+                   'D_PX(med/16th/84th)'])
 
 
     elif solitaryOrBinary == 'binary':
@@ -229,7 +256,7 @@ def get_parameters_for_table(solitaryOrBinary):
                    'SINI', 'M2', 'M2(med/16th/84th)', 'H3', 'H4', 'STIG',\
                    'KOM', 'KIN',\
                    'INC(med/16th/84th)', 'INC_LIM(med/std)',\
-                   'PX_LKB(med/16th/84th)','D_LKB(med/16th/84th)', 'D_SHK(med/16th/84th)',\
+                   'D_PX(med/16th/84th)', 'D_SHK(med/16th/84th)',\
                    'MP(med/16th/84th)', 'MTOT(med/16th/84th)'])
 
     return fittedOrDerived, params
@@ -281,12 +308,23 @@ for solBin in ['solitary', 'binary']:
         for psr in psrNames:
 
             if psr == 'J1713+0747' or psr == 'J1909-3744':
-                parLoc = datadir + '/ppta_dr2_ephemerides/publish_collection/dr2/{}.kop.par'.format(psr)
+                parLoc = datadir + '/ppta_dr2_ephemerides/publish_collection/dr2e/{}.kop.par'.format(psr)
+                outLoc = datadir + '/ppta_dr2_ephemerides/publish_collection/dr2e/output/{}.kop.par.out'.format(psr)
             else:
-                parLoc = datadir + '/ppta_dr2_ephemerides/publish_collection/dr2/{}.par'.format(psr)
+                parLoc = datadir + '/ppta_dr2_ephemerides/publish_collection/dr2e/{}.par'.format(psr)
+                outLoc = datadir + '/ppta_dr2_ephemerides/publish_collection/dr2e/output/{}.par.out'.format(psr)
             #parLoc = '/fred/oz002/dreardon/ppta_dr2_ephemerides/partim/dr2_boris/new_params_ver1/{}.par'.format(psr)
 
-            psrPars = readParFile.read_par(parLoc)
+            try:
+                psrPars = readParFile.read_par(parLoc)
+            except FileNotFoundError:
+                parLoc = parLoc.replace('dr2e','dr2')
+                outLoc = outLoc.replace('dr2e','dr2')
+                psrPars = readParFile.read_par(parLoc)
+            data, files = read_general2(outLoc, header=True)
+            psrPars['START'] = np.min(data[:,0])
+            psrPars['FINISH'] = np.max(data[:,0])
+            psrPars['NEPOCH'] = len(np.unique(files))
             psrDetails.append(psrPars)
 
 
@@ -323,6 +361,7 @@ for solBin in ['solitary', 'binary']:
         ## write pulsar name row
         table.write('Pulsar Name ')
         for p in psrNames:
+          p = p.replace('-','$-$')
           table.write('\t & \t {}'.format(p))
         table.write(' \n \\\\ \\hline \\noalign{\\vskip 1.5mm} \n')
         table.close()
@@ -335,6 +374,9 @@ for solBin in ['solitary', 'binary']:
         ## write number of toas row
         names = [ psrDetails[i]['NTOA'] for i in range(len(psrNames)) ]
         writeLine(names,tableFile,parameterNames['NTOA'],1)
+
+        names = [ psrDetails[i]['NEPOCH'] for i in range(len(psrNames)) ]
+        writeLine(names,tableFile,parameterNames['NEPOCH'],1)
 
         ## write MJD range row
         writeMJDRange(psrDetails,tableFile,parameterNames['MJDRange'])
@@ -351,7 +393,7 @@ for solBin in ['solitary', 'binary']:
 
 
         # write parameters from list
-        nparam = 4
+        nparam = 5
         for ipar, par in enumerate(params):
           if par == 'MASS_FUNC':
               continue
