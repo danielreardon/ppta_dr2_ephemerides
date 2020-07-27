@@ -134,12 +134,12 @@ def writeMJDRange(psrDeets,tabFile,label):
 
       try:
          start = psrDeets[i]['START']
-         table.write('\t & \t ${}$'.format(np.floor(start)))
+         table.write('\t & \t ${}$'.format(int(np.floor(start))))
       except:
          table.write('\t & \t none?')
       try:
          finish = psrDeets[i]['FINISH']
-         table.write(' -- ${}$'.format(np.floor(finish)))
+         table.write(' -- ${}$'.format(int(np.floor(finish))))
       except:
          table.write('--none?')
 
