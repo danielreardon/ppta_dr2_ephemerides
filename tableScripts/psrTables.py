@@ -106,7 +106,11 @@ def writeLine(parameters,tableFile,parameterName,fitOrDer,parLabel=None):
             shortFormat = p
 
         if fitOrDer == 0:
-           table.write('\t & \t $\\mathbf{{ {} }}$'.format(shortFormat))
+            # get bolding right for derived M2
+            if par=='M2' and shortFormat.find("+")!=-1:
+               table.write('\t & \t ${}$'.format(shortFormat))
+            else: 
+               table.write('\t & \t $\\mathbf{{ {} }}$'.format(shortFormat))
         elif fitOrDer == 1:
            table.write('\t & \t ${}$'.format(shortFormat))
 
@@ -114,6 +118,29 @@ def writeLine(parameters,tableFile,parameterName,fitOrDer,parLabel=None):
     table.close()
 
     return None
+
+
+"""
+Formating for derived params with ^{+...}_{-...}
+"""
+def formatDerivedParams(psrDerived,ipsr,par):
+
+    parameter =  psrDerived[ipsr][par]
+    high = float(psrDerived[ipsr][par+'_84th']) - float(psrDerived[ipsr][par])
+    low  = float(psrDerived[ipsr][par]) - float(psrDerived[ipsr][par+'_16th'])
+    high = round_sig(high)
+    low = round_sig(low)
+    if high%1 == 0:
+         high = int(high)
+    if low%1 == 0:
+        low = int(low)
+    parameter = float(parameter)
+    if high>2 and low>2:
+        parameterStr =  '{0}^{{ +{1} }}_{{ -{2} }}'.format(round(parameter), high, low)
+    else:
+        digit = np.max([len(str(high).split('.')[-1]), len(str(low).split('.')[-1])])
+        parameterStr =  '{0}^{{ +{1} }}_{{ -{2} }}'.format(round(parameter, int(digit)), high, low)
+    return parameterStr
 
 
 
@@ -253,7 +280,7 @@ def get_parameters_for_table(solitaryOrBinary):
                    'T0', 'OM', 'ECC',\
                    'TASC', 'EPS1', 'EPS2',\
                    'PBDOT', 'OMDOT', 'XDOT',\
-                   'SINI', 'M2', 'M2(med/16th/84th)', 'H3', 'H4', 'STIG',\
+                   'SINI', 'M2', 'H3', 'H4', 'STIG',\
                    'KOM', 'KIN',\
                    'INC(med/16th/84th)', 'INC_LIM(med/std)',\
                    'D_PX(med/16th/84th)', 'D_SHK(med/16th/84th)',\
@@ -274,6 +301,7 @@ solBin = str(args.solOrBin)
 whichGroup = int(args.groupNo)
 
 datadir = '/Users/dreardon/Dropbox/Git/'
+datadir = '/fred/oz002/hmiddleton/ppta_ephemeris/repositories'
 
 for solBin in ['solitary', 'binary']:
 
@@ -410,36 +438,15 @@ for solBin in ['solitary', 'binary']:
                 parameter = ufloat(psrDetails[ipsr][par], psrDetails[ipsr][str(par+'_ERR')])
                 paramList.append(parameter)
               except:
-                """
-                # dealing with different names - not needed I think
-                if par == 'ECC':
+                # is there a derived parameter for M2? 
+                if par=='M2':
                   try:
-                    parE = 'E'
-                    parameter = ufloat(psrDetails[ipsr][parE], psrDetails[ipsr][str(parE+'_ERR')])
-                    paramList.append(parameter)
-                    print ('got E')
+                    #print('M2 check ', psrDerived[ipsr]['M2(med/16th/84th)'])
+                    paraString = formatDerivedParams(psrDerived,ipsr,'M2(med/16th/84th)')
+                    #print('M2 string check ', paraString)
+                    paramList.append(paraString)
                   except:
-                    pass
-                elif par == 'ECCDOT':
-                  try:
-                    parEDOT = 'EDOT'
-                    parameter = ufloat(psrDetails[ipsr][parEDOT], psrDetails[ipsr][str(parEDOT+'_ERR')])
-                    paramList.append(parameter)
-                    print ('got EDOT')
-                  except:
-                    pass
-                elif par == 'A1DOT':
-                  try:
-                    parXDOT = 'XDOT'
-                    parameter = ufloat(psrDetails[ipsr][parXDOT], psrDetails[ipsr][str(parXDOT+'_ERR')])
-                    paramList.append(parameter)
-                    print ('got XDOT')
-                  except:
-                    pass
-                else:
-                """
-                print('no parameter!')
-                paramList.append('-')
+                    paramList.append('-')
 
             else:
                 try:
@@ -453,6 +460,7 @@ for solBin in ['solitary', 'binary']:
                     parameter = float(parameter) #+ float(psrDerived[ipsr][par+'_16th'])
                     paramList.append('<{0}'.format(round(parameter)))
                   else:
+                    ''' -> moved to function formatDerivedParams(...)
                     parameter =  psrDerived[ipsr][par]
                     #print('here ', psrDerived[ipsr][par+'_16th'])
                     high = float(psrDerived[ipsr][par+'_84th']) - float(psrDerived[ipsr][par])
@@ -469,6 +477,8 @@ for solBin in ['solitary', 'binary']:
                     else:
                         digit = np.max([len(str(high).split('.')[-1]), len(str(low).split('.')[-1])])
                         parameterStr =  '{0}^{{ +{1} }}_{{ -{2} }}'.format(round(parameter, int(digit)), high, low)
+                    '''
+                    parameterStr = formatDerivedParams(psrDerived,ipsr,par)
                     paramList.append(parameterStr)
                     print('parSTRING ', parameterStr)
                 except:
