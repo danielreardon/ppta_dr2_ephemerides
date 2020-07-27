@@ -29,6 +29,7 @@ import scipy.stats as stats
 from astropy import units as u
 from scipy.signal import savgol_filter
 from astropy.coordinates import SkyCoord, ICRS, BarycentricTrueEcliptic
+#from parfile_optimiser import read_par
 
 import os
 os.environ["PATH"] += os.pathsep + '/Library/TeX/texbin/'
@@ -206,6 +207,150 @@ def is_valid(array):
 """
 Start of code
 """
+
+
+datadir = '/Users/dreardon/Dropbox/Git/ppta_dr2_ephemerides/publish_collection/dr2/'
+outdir = '/Users/dreardon/Dropbox/Git/ppta_dr2_ephemerides/publish_collection/dr2/output/'
+parfiles = sorted(glob.glob(datadir + '*.par'))
+
+datadir = '/Users/dreardon/Dropbox/Git/ppta_dr2_ephemerides/publish_collection/dr2e/'
+outdir = '/Users/dreardon/Dropbox/Git/ppta_dr2_ephemerides/publish_collection/dr2e/output/'
+parfiles2 = np.array(sorted(glob.glob(datadir + '*.par')))
+
+fig = plt.figure(figsize=(12,9), dpi=100)
+ax = fig.add_subplot(111, projection="mollweide")
+factor = 100000000000000000000
+rad_to_mas = 206264806.24709636
+
+scale=3400000000000
+
+done = []
+
+ra_array = []
+dec_array = []
+ra2_array = []
+dec2_array = []
+for par in parfiles:
+    # print(par)
+    if 'J0437' in par:
+        continue
+    psrname = par.split('/')[-1].split('.')[0]
+    if psrname in ''.join(parfiles2) or psrname in ''.join(done):
+        continue
+    else:
+        done.append(psrname)
+    params = read_par(par)
+
+
+    if 'ecliptic' in datadir:
+        params_position = read_par(par)
+        c = SkyCoord(params['ELONG'], params['ELAT'], frame=BarycentricTrueEcliptic,
+                 unit=(u.deg, u.deg))
+    else:
+        c = SkyCoord(params['RAJ'] + ' ' + params['DECJ'],
+                 unit=(u.hourangle, u.deg))
+        pm = ICRS(ra=c.ra.deg*u.degree, dec=c.dec.deg*u.deg,
+                  pm_ra_cosdec = params['PMRA']*u.mas/u.yr,
+                  pm_dec = params['PMDEC']*u.mas/u.yr)
+    #Convert to Galactic
+
+    ra = round(c.ra.value * np.pi/180, 5)
+    dec = round(c.dec.value * np.pi/180, 5)
+
+    pmdec = factor * pm.pm_dec.value / rad_to_mas
+    pmra = factor * pm.pm_ra_cosdec.value / rad_to_mas
+
+    pmra = round(pmra* np.pi/180, 5)
+    pmdec = round(pmdec * np.pi/180, 5)
+
+    if ra > np.pi:
+        ra = ra - 2*np.pi
+
+    ra_array.append(ra)
+    dec_array.append(dec)
+    ra2_array.append(ra + pmra)
+    dec2_array.append(dec + pmdec)
+
+ax.scatter(ra_array, dec_array, color='crimson', clip_on=False)
+plt.quiver(ra_array, dec_array, ra2_array, dec2_array, color='crimson', alpha=0.8, headwidth=5, headlength=4, headaxislength=4, width=0.002, scale=scale, clip_on=True)
+
+ax.set_xticklabels(['14h','16h','18h','20h','22h','0h','2h','4h','6h','8h','10h'])
+
+#ax.grid(True)
+#plt.show()
+
+datadir = '/Users/dreardon/Dropbox/Git/ppta_dr2_ephemerides/publish_collection/dr2e/'
+outdir = '/Users/dreardon/Dropbox/Git/ppta_dr2_ephemerides/publish_collection/dr2e/output/'
+parfiles = sorted(glob.glob(datadir + '*.par'))
+
+
+#fig = plt.figure(figsize=(8,6))
+#ax = fig.add_subplot(111, projection="mollweide")
+done = []
+ra_array = []
+dec_array = []
+ra2_array = []
+dec2_array = []
+for par in parfiles:
+    # print(par)
+    if 'J0437' in par:
+        continue
+    psrname = par.split('/')[-1].split('.')[0]
+    params = read_par(par)
+
+    if psrname in ''.join(done):
+        continue
+    else:
+        done.append(psrname)
+
+
+    if 'ecliptic' in datadir:
+        params_position = read_par(par)
+        c = SkyCoord(params['ELONG'], params['ELAT'], frame=BarycentricTrueEcliptic,
+                 unit=(u.deg, u.deg))
+    else:
+        c = SkyCoord(params['RAJ'] + ' ' + params['DECJ'],
+                 unit=(u.hourangle, u.deg))
+        pm = ICRS(ra=c.ra.deg*u.degree, dec=c.dec.deg*u.deg,
+                  pm_ra_cosdec = params['PMRA']*u.mas/u.yr,
+                  pm_dec = params['PMDEC']*u.mas/u.yr)
+    #Convert to Galactic
+
+    ra = round(c.ra.value * np.pi/180, 5)
+    dec = round(c.dec.value * np.pi/180, 5)
+
+    pmdec = factor * pm.pm_dec.value / rad_to_mas
+    pmra = factor * pm.pm_ra_cosdec.value / rad_to_mas
+
+    pmra = round(pmra* np.pi/180, 5)
+    pmdec = round(pmdec * np.pi/180, 5)
+
+    if ra > np.pi:
+        ra = ra - 2*np.pi
+
+    ra_array.append(ra)
+    dec_array.append(dec)
+    ra2_array.append(ra + pmra)
+    dec2_array.append(dec + pmdec)
+
+ax.scatter(ra_array, dec_array, color='mediumblue', clip_on=False)
+plt.quiver(ra_array, dec_array, ra2_array, dec2_array, color='mediumblue', alpha = 0.8, headwidth=5, headlength=4, headaxislength=4, width=0.002, scale=scale, clip_on=True)
+
+ax.set_xticklabels(['14h','16h','18h','20h','22h','0h','2h','4h','6h','8h','10h'])
+
+ax.grid(True)
+#plt.xlabel(r'Right Ascension, $\alpha$')
+#plt.ylabel(r'Declination, $\delta$')
+
+ax.scatter([1.2098040598407], [-0.8158972587], color='darkcyan', marker='x')
+
+
+#plt.tight_layout()
+plt.savefig('/Users/dreardon/Dropbox/Git/ppta_dr2_ephemerides/sky_map.pdf')
+plt.show()
+
+sys.exit()
+
 
 datadir = '/Users/dreardon/Dropbox/Git/ppta_dr2_ephemerides/publish_collection/dr2/'
 outdir = '/Users/dreardon/Dropbox/Git/ppta_dr2_ephemerides/publish_collection/dr2/output/'
