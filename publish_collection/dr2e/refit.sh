@@ -4,7 +4,7 @@
 foreach psr (`ls -1 *.tim | cut -d'.' -f1`)
 	echo $psr
 	
-	foreach parfile (`ls -1 ecliptic/$psr*par`)
+	foreach parfile (`ls -1 $psr*par`)
 		setenv parname `echo $parfile`
 
 		echo $parname
