@@ -107,7 +107,7 @@ def writeLine(parameters,tableFile,parameterName,fitOrDer,parLabel=None):
 
         if fitOrDer == 0:
             # get bolding right for derived M2
-            if par=='M2' and shortFormat.find("+")!=-1:
+            if par=='M2' or par=='KIN' and shortFormat.find("+")!=-1:
                table.write('\t & \t ${}$'.format(shortFormat))
             else: 
                table.write('\t & \t $\\mathbf{{ {} }}$'.format(shortFormat))
@@ -136,9 +136,9 @@ def formatDerivedParams(psrDerived,ipsr,par):
         low = int(low)
     parameter = float(parameter)
 
-    if high==low: 
-        parameterToWrite = ufloat(parameter,high)
-    elif high>2 and low>2:
+    #if high==low: 
+    #    parameterToWrite = ufloat(parameter,high)
+    if high>2 and low>2:
         parameterToWrite =  '{0}^{{ +{1} }}_{{ -{2} }}'.format(round(parameter), high, low)
     else:
         digit = np.max([len(str(high).split('.')[-1]), len(str(low).split('.')[-1])])
@@ -285,7 +285,7 @@ def get_parameters_for_table(solitaryOrBinary):
                    'PBDOT', 'OMDOT', 'XDOT',\
                    'SINI', 'M2', 'H3', 'H4', 'STIG',\
                    'KOM', 'KIN',\
-                   'INC(med/16th/84th)', 'INC_LIM(med/std)',\
+                   'INC_LIM(med/std)',\
                    'D_PX(med/16th/84th)', 'D_SHK(med/16th/84th)',\
                    'MP(med/16th/84th)', 'MTOT(med/16th/84th)'])
 
@@ -304,7 +304,7 @@ solBin = str(args.solOrBin)
 whichGroup = int(args.groupNo)
 
 datadir = '/Users/dreardon/Dropbox/Git/'
-datadir = '/fred/oz002/hmiddleton/ppta_ephemeris/repositories'
+#datadir = '/fred/oz002/hmiddleton/ppta_ephemeris/repositories'
 
 for solBin in ['solitary', 'binary']:
 
@@ -444,12 +444,18 @@ for solBin in ['solitary', 'binary']:
                 # is there a derived parameter for M2? 
                 if par=='M2':
                   try:
-                    #print('M2 check ', psrDerived[ipsr]['M2(med/16th/84th)'])
                     paraString = formatDerivedParams(psrDerived,ipsr,'M2(med/16th/84th)')
-                    #print('M2 string check ', paraString)
                     paramList.append(paraString)
                   except:
                     paramList.append('-')
+                elif par=='KIN':
+                  try: 
+                    paraString = formatDerivedParams(psrDerived,ipsr,'INC(med/16th/84th)')
+                    paramList.append(paraString)
+                  except: 
+                    paramList.append('-')
+                else: 
+                  paramList.append('-')
 
             else:
                 try:
@@ -485,7 +491,7 @@ for solBin in ['solitary', 'binary']:
                     paramList.append(parameterStr)
                     print('parSTRING ', parameterStr)
                 except:
-                 paramList.append('-')
+                  paramList.append('-')
 
           # write parameter line
           if nparam % 5 == 0:
