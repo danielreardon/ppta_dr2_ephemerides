@@ -135,12 +135,15 @@ def formatDerivedParams(psrDerived,ipsr,par):
     if low%1 == 0:
         low = int(low)
     parameter = float(parameter)
-    if high>2 and low>2:
-        parameterStr =  '{0}^{{ +{1} }}_{{ -{2} }}'.format(round(parameter), high, low)
+
+    if high==low: 
+        parameterToWrite = ufloat(parameter,high)
+    elif high>2 and low>2:
+        parameterToWrite =  '{0}^{{ +{1} }}_{{ -{2} }}'.format(round(parameter), high, low)
     else:
         digit = np.max([len(str(high).split('.')[-1]), len(str(low).split('.')[-1])])
-        parameterStr =  '{0}^{{ +{1} }}_{{ -{2} }}'.format(round(parameter, int(digit)), high, low)
-    return parameterStr
+        parameterToWrite =  '{0}^{{ +{1} }}_{{ -{2} }}'.format(round(parameter, int(digit)), high, low)
+    return parameterToWrite
 
 
 
