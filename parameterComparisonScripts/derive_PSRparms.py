@@ -19,10 +19,6 @@ rad_to_mas = 180*3600*1000/NP.pi
 parsec_to_m = 3.08567758e+16
 sec_per_year = 86400*365.2425
 
-font = {'family' : 'normal',
-        'weight' : 'normal',
-        'size'   : 18}
-
 matplotlib.rc('font', **font)
 
 def is_valid(array):
