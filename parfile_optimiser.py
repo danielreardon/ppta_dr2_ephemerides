@@ -200,8 +200,8 @@ def is_valid(array):
 Start of code
 """
 
-datadir = '/Users/dreardon/Dropbox/Git/ppta_dr2_ephemerides/publish_collection/dr2/'
-outdir = '/Users/dreardon/Dropbox/Git/ppta_dr2_ephemerides/publish_collection/dr2/output/'
+datadir = '/Users/dreardon/Dropbox/Git/ppta_dr2_ephemerides/publish_collection/dr2/ecliptic/'
+outdir = '/Users/dreardon/Dropbox/Git/ppta_dr2_ephemerides/publish_collection/dr2/ecliptic/output/'
 parfiles = sorted(glob.glob(datadir + '*.par'))
 
 psrnames = np.array(['J0613-0200' ,'J0711-6830' ,'J1017-7156' ,'J1022+1001' ,'J1024-0719' , \
@@ -500,7 +500,7 @@ for par in parfiles:
             mtot2 = (m2 * sini)**3 / mass_func
             mp = np.sqrt(mtot2[is_valid(mtot2)*is_valid(m2)]) - m2[is_valid(mtot2)*is_valid(m2)]
             mp = mp[is_valid(mp)]
-            mtot2 = mtot2[is_valid(mtot2)]
+            mtot = np.sqrt(mtot2[is_valid(mtot2)])
             inc = inc[is_valid(inc)]
 
             with open(outfile, 'a+') as f:
@@ -510,7 +510,7 @@ for par in parfiles:
             with open(outfile, 'a+') as f:
                 f.write("MP(med/16th/84th)" + '\t' + str(np.median(mp)) + '\t' + str(np.percentile(mp, q=16)) + '\t' + str(np.percentile(mp, q=84)) + '\n')
             with open(outfile, 'a+') as f:
-                f.write("MTOT(med/16th/84th)" + '\t' + str(np.median(mtot2)) + '\t' + str(np.percentile(mtot2, q=16)) + '\t' + str(np.percentile(mtot2, q=84)) + '\n')
+                f.write("MTOT(med/16th/84th)" + '\t' + str(np.median(mtot)) + '\t' + str(np.percentile(mtot, q=16)) + '\t' + str(np.percentile(mtot, q=84)) + '\n')
 
             #plt.hist(mp, bins=100)
             #plt.xlabel('Pulsar mass')
@@ -539,7 +539,7 @@ for par in parfiles:
             mtot2 = (m2 * sini)**3 / mass_func
             mp = np.sqrt(mtot2[is_valid(mtot2)*is_valid(m2)]) - m2[is_valid(mtot2)*is_valid(m2)]
             mp = mp[is_valid(mp)]
-            mtot2 = mtot2[is_valid(mtot2)]
+            mtot = np.sqrt(mtot2[is_valid(mtot2)])
             inc = inc[is_valid(inc)]
 
             try:
@@ -550,7 +550,7 @@ for par in parfiles:
                 with open(outfile, 'a+') as f:
                     f.write("MP(med/16th/84th)" + '\t' + str(np.median(mp)) + '\t' + str(np.percentile(mp, q=16)) + '\t' + str(np.percentile(mp, q=84)) + '\n')
                 with open(outfile, 'a+') as f:
-                    f.write("MTOT(med/16th/84th)" + '\t' + str(np.median(mtot2)) + '\t' + str(np.percentile(mtot2, q=16)) + '\t' + str(np.percentile(mtot2, q=84)) + '\n')
+                    f.write("MTOT(med/16th/84th)" + '\t' + str(np.median(mtot)) + '\t' + str(np.percentile(mtot, q=16)) + '\t' + str(np.percentile(mtot, q=84)) + '\n')
             except Exception as e:
                 print(e)
 
@@ -580,7 +580,7 @@ for par in parfiles:
         mtot2 = (m2 * sini)**3 / mass_func
         mp = np.sqrt(mtot2[is_valid(mtot2)*is_valid(m2)]) - m2[is_valid(mtot2)*is_valid(m2)]
         mp = mp[is_valid(mp)]
-        mtot2 = mtot2[is_valid(mtot2)]
+        mtot = np.sqrt(mtot2[is_valid(mtot2)])
         inc = inc[is_valid(inc)]
 
         if not 'KIN' in params.keys():
@@ -589,7 +589,7 @@ for par in parfiles:
         with open(outfile, 'a+') as f:
             f.write("MP(med/16th/84th)" + '\t' + str(np.median(mp)) + '\t' + str(np.percentile(mp, q=16)) + '\t' + str(np.percentile(mp, q=84)) + '\n')
         with open(outfile, 'a+') as f:
-            f.write("MTOT(med/16th/84th)" + '\t' + str(np.median(mtot2)) + '\t' + str(np.percentile(mtot2, q=16)) + '\t' + str(np.percentile(mtot2, q=84)) + '\n')
+            f.write("MTOT(med/16th/84th)" + '\t' + str(np.median(mtot)) + '\t' + str(np.percentile(mtot, q=16)) + '\t' + str(np.percentile(mtot, q=84)) + '\n')
 
         #plt.hist(mp, bins=100)
         #plt.xlabel('Pulsar mass')

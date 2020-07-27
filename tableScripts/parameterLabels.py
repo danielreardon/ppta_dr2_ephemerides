@@ -49,7 +49,7 @@ def getParamLabels():
   'INC(med/16th/84th)'   : r'Inclination angle, $i$ (deg.)\dotfill',
   'M2(med/16th/84th)'    : r'Companion mass, $M_{\mathrm{c}}$ ($M_{\odot}$)\dotfill',
   'MP(med/16th/84th)'    : r'Pulsar mass, $M_{\mathrm{P}}$ ($M_{\odot}$) \dotfill',
-  'MTOT(med/16th/84th)'  : r'Total mass $M_{\rm tot}$ ($M_{\odot}$)\dotfill',
+  'MTOT(med/16th/84th)'  : r'Total system mass $M_{\rm tot}$ ($M_{\odot}$)\dotfill',
   'OMDOT_GR'             : r'$\dot{\omega}_{\rm{GR}}$(Fix name)\dotfill'
   }
 
