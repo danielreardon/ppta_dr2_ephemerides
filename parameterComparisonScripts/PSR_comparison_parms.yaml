@@ -85,6 +85,8 @@ compareParms:
     params      : ['PX', 'PMELAT', 'PMELONG']
                                 # List of parameters for which the
                                 # comparison is to be made
+                                
+    derived_params: ['Dpsr_PX', 'Dpsr_Pbdot', 'psr_mass_parms']
 
     PTA         : ['EPTA_DR1',
                    'NG_11yr',
