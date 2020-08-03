@@ -208,8 +208,8 @@ def is_valid(array):
 Start of code
 """
 
-datadir = '/Users/dreardon/Dropbox/Git/ppta_dr2_ephemerides/publish_collection/dr2/'
-outdir = '/Users/dreardon/Dropbox/Git/ppta_dr2_ephemerides/publish_collection/dr2/output/'
+datadir = '/Users/dreardon/Dropbox/Git/ppta_dr2_ephemerides/publish_collection/dr2/ecliptic/'
+outdir = '/Users/dreardon/Dropbox/Git/ppta_dr2_ephemerides/publish_collection/dr2/output/ecliptic/'
 parfiles = sorted(glob.glob(datadir + '*.par'))
 
 outfile = outdir + 'derived_params.txt'
@@ -261,8 +261,12 @@ for psr in shap_psrs:
         data_orig = datadir + 'shapiro/' +  psr + '.kop.par.out'
         data_noshap = datadir + '/shapiro/' +  psr + '.kop.par.no_shapiro.out'
     else:
-        data_orig = datadir + 'shapiro/' +  psr + '.par.out'
-        data_noshap = datadir + '/shapiro/' +  psr + '.par.no_shapiro.out'
+        if not 'ecliptic' in datadir:
+            data_orig = datadir + 'shapiro/' +  psr + '.par.out'
+            data_noshap = datadir + '/shapiro/' +  psr + '.par.no_shapiro.out'
+        else:
+            data_orig = datadir + 'shapiro/' +  psr + '_ecliptic.par.out'
+            data_noshap = datadir + '/shapiro/' +  psr + '_ecliptic.par.no_shapiro.out'
 
     # No Shapiro data for plotting
     data, files = read_general2(data_noshap, header=True)
@@ -354,6 +358,8 @@ for psr in shap_psrs:
 
     #plt.scatter(data_noshap[:, -1], data_noshap[:, 4]*10**6 - data[:, 4]*10**6)
     #plt.show()
+
+sys.exit()
 
 """
 Make residual plots for each pulsar
@@ -483,6 +489,7 @@ for outfile in output_files:
     plt.show()
 
 
+sys.exit()
 
 """
 Sky plot

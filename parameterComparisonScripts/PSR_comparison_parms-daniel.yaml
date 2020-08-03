@@ -1,0 +1,112 @@
+##### IMPORTANT INFORMATION #####
+##### DO NOT MODIFY THIS FILE #####
+##### MAKE A COPY OF THIS FILE AND CUSTOMIZE #####
+
+########## Directory Structure information #########
+
+dirstruct   :
+                                # Directory information
+
+    projectdir  : '/Users/dreardon/Desktop/PTA_data/'
+                                # Primary project folder for storing
+                                # inputs/outputs
+
+    PTA_data_dir: 'PTA_DataReleases/'
+                                # Folder containing data releases
+                                # from various PTA
+
+    outdir      : 'outputs/'
+                                # Folder for saving figures, and is
+                                # relative to the projectdir
+
+    figdir      : 'figures/'
+                                # Folder for saving figures, and is
+                                # relative to the outdir
+
+    PTA_dirinfo :
+                                # Information on the PTA data sets
+
+        EPTA_DR1    :
+                                # Information about European Pulsar
+                                # Timing Array
+
+            PSRdir      : '/Users/dreardon/Desktop/PTA_data/PTA_DataReleases/eptaDR1/EPTA_v2.2_git/'
+                                # Directory containing information about
+                                # the pulsars
+
+        NG_11yr     :
+                                # Information about NANOGrav 11-yr data
+
+            PSRdir      : '/Users/dreardon/Desktop/PTA_data/PTA_DataReleases/NANOGrav_11y/par/'
+                                # Directory containing information about
+                                # the pulsars
+
+        NG_12.5yr_NB:
+                                # Information about NANOGrav 12.5-yr
+                                # narrowband data
+
+            PSRdir      : '/Users/dreardon/Desktop/PTA_data/PTA_DataReleases/NANOGrav_12yv3/narrowband/par/'
+                                # Directory containing information about
+                                # the pulsars
+
+        NG_12.5yr_WB:
+                                # Information about NANOGrav 12.5-yr
+                                # wideband data
+
+            PSRdir      : '/Users/dreardon/Desktop/PTA_data/PTA_DataReleases/NANOGrav_12yv3/wideband/par/'
+                                # Directory containing information about
+                                # the pulsars
+
+        PPTA_DR1    :
+                                # Information about PPTA 15-yr (DR1) data
+
+            PSRdir      : '/Users/dreardon/Desktop/PTA_data/PTA_DataReleases/ppta15/'
+                                # Directory containing information about
+                                # the pulsars
+
+        PPTA_DR2    :
+                                # Information about PPTA DR2E data
+
+            PSRdir      : '/Users/dreardon/Dropbox/Git/ppta_dr2_ephemerides/publish_collection/dr2/ecliptic/'
+                                # Directory containing information about
+                                # the pulsars
+        PPTA_DR2E   :
+                                # Information about PPTA DR2E data
+
+            PSRdir      : '/Users/dreardon/Dropbox/Git/ppta_dr2_ephemerides/publish_collection/dr2e/ecliptic/'
+                                # Directory containing information about
+                                # the pulsars
+
+############## Comparison parameters ##############
+
+compareParms:
+                                # information relevant for comparison
+
+    params      : ['PX', 'PMELAT', 'PMELONG']
+                                # List of parameters for which the
+                                # comparison is to be made
+
+    derived_params: ['Dpsr_PX', 'Dpsr_Pbdot', 'psr_mass_parms']
+
+    PTA         : ['EPTA_DR1',
+                   'NG_11yr',
+                   'NG_12.5yr_NB',
+                   'NG_12.5yr_WB',
+                   'PPTA_DR1',
+                   'PPTA_DR2',
+                   'PPTA_DR2E'
+                  ]
+                                # The PTA's whose data are to be
+                                # compared
+
+    ref_PTA     : 'PPTA_DR2'
+                                # The reference PTA to which other
+                                # PTA values will be normalized to
+
+    plot_PTAs   : ['EPTA_DR1',
+                   'NG_12.5yr_NB',
+                   'PPTA_DR1',
+                   'PPTA_DR2',
+                  ]
+                                # The PTA's whose data are to be
+                                # plotted

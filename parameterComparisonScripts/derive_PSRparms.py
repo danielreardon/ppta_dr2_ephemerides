@@ -19,7 +19,17 @@ rad_to_mas = 180*3600*1000/NP.pi
 parsec_to_m = 3.08567758e+16
 sec_per_year = 86400*365.2425
 
+font = {'family' : 'serif',
+        'weight' : 'medium',
+        'size'   : 12}
+
 matplotlib.rc('font', **font)
+
+from matplotlib import rc
+import os
+os.environ["PATH"] += os.pathsep + '/Library/TeX/texbin/'
+rc('text', usetex=True)
+rc('font', **{'family': 'serif', 'serif': ['Computer Modern']})
 
 def is_valid(array):
     """
@@ -34,7 +44,7 @@ def distance_from_parallax(psrparms):
             d_array = d_prior[(d_prior > 0)*(d_prior < 100)]
             dkpc = NP.median(d_array)
             sigd = NP.std(d_array)
-    
+
             return {'dpsr': dkpc, 'dpsr_std': sigd, 'dpsr_lolim': NP.percentile(d_array, q=16.0), 'dpsr_uplim': NP.percentile(d_array, q=84.0)}
         else:
             return -1
@@ -70,12 +80,12 @@ def distance_from_pbdot(psrparms):
 
         if ('PMRA' not in psrparms) or ('PMDEC' not in psrparms):
             return -1
-        
+
         pm = ICRS(ra=c.ra.deg*U.degree, dec=c.dec.deg*U.deg, pm_ra_cosdec = psrparms['PMRA']*U.mas/U.yr, pm_dec = psrparms['PMDEC']*U.mas/U.yr)
         pm_ecliptic = pm.transform_to(BarycentricTrueEcliptic)
         pmlat = pm_ecliptic.pm_lat.value
         pmlon = pm_ecliptic.pm_lon_coslat.value
-    
+
     if ('PBDOT' in psrparms) and ('PBDOT_ERR' in psrparms):
         pbdot_posterior = NP.random.normal(loc=psrparms["PBDOT"], scale=psrparms["PBDOT_ERR"], size=n_samples)  # observed
         if 'PSRJ' in psrparms:
@@ -112,7 +122,7 @@ def distance_from_pbdot(psrparms):
             pmdec = psrparms['PMDEC']
             pm_tot = NP.sqrt(pmra**2 + pmdec**2)
             pm = pm_tot/(sec_per_year*rad_to_mas)
-    
+
         # Expected Shklovskii and Galactic terms
 
         Ex_pl =  GalDynPsr.modelLb.Expl(ldeg, sigl, bdeg, sigb, dkpc, sigd) # excess term parallel to the Galactic plane
@@ -144,7 +154,7 @@ def mass_from_psrparms(psrparms):
 
     if (('H3' not in psrparms) or ('H3_ERR' not in psrparms)) and (('M2' not in psrparms) or ('M2_ERR' not in psrparms)):
         return -1
-    
+
     if ('H3' in psrparms) and ('H3_ERR' in psrparms):
         h3 = psrparms["H3"]*10**6
         h3_err = psrparms["H3_ERR"]*10**6
