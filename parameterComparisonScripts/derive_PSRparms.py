@@ -183,9 +183,9 @@ def mass_from_psrparms(psrparms):
             sini = NP.random.normal(loc=psrparms["SINI"], scale=psrparms["SINI_ERR"], size=n_samples)
             inc = NP.arcsin(sini)*180/NP.pi
 
-        cut = NP.argwhere((m2 > mass_func) * (m2 < 10))
-        m2 = m2[cut]
-        sini = sini[cut]
+    cut = NP.argwhere((m2 > mass_func) * (m2 < 10))
+    m2 = m2[cut]
+    sini = sini[cut]
     inc = NP.arcsin(sini)*180/NP.pi
     mtot2 = (m2 * sini)**3 / mass_func
     mp = NP.sqrt(mtot2[is_valid(mtot2)*is_valid(m2)]) - m2[is_valid(mtot2)*is_valid(m2)]
