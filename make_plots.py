@@ -208,8 +208,11 @@ def is_valid(array):
 Start of code
 """
 
-datadir = '/Users/dreardon/Dropbox/Git/ppta_dr2_ephemerides/publish_collection/dr2/ecliptic/'
-outdir = '/Users/dreardon/Dropbox/Git/ppta_dr2_ephemerides/publish_collection/dr2/output/ecliptic/'
+#datadir = '/Users/dreardon/Dropbox/Git/ppta_dr2_ephemerides/publish_collection/dr2/ecliptic/'
+#outdir = '/Users/dreardon/Dropbox/Git/ppta_dr2_ephemerides/publish_collection/dr2/output/ecliptic/'
+datadir = '/Users/dreardon/Dropbox/Git/ppta_dr2_ephemerides/final/tempo2/'
+outdir = '/Users/dreardon/Dropbox/Git/ppta_dr2_ephemerides/final/tempo2/output/'
+
 parfiles = sorted(glob.glob(datadir + '*.par'))
 
 outfile = outdir + 'derived_params.txt'

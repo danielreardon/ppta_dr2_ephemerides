@@ -200,8 +200,11 @@ def is_valid(array):
 Start of code
 """
 
-datadir = '/Users/dreardon/Dropbox/Git/ppta_dr2_ephemerides/publish_collection/dr2e/'
-outdir = '/Users/dreardon/Dropbox/Git/ppta_dr2_ephemerides/publish_collection/dr2e/output/'
+#datadir = '/Users/dreardon/Dropbox/Git/ppta_dr2_ephemerides/publish_collection_refit/dr2/ecliptic/'
+#outdir = '/Users/dreardon/Dropbox/Git/ppta_dr2_ephemerides/publish_collection_refit/dr2/ecliptic/output/'
+datadir = '/Users/dreardon/Dropbox/Git/ppta_dr2_ephemerides/final/tempo2/'
+outdir = '/Users/dreardon/Dropbox/Git/ppta_dr2_ephemerides/final/tempo2/output/'
+
 parfiles = sorted(glob.glob(datadir + '*.par'))
 
 psrnames = np.array(['J0613-0200' ,'J0711-6830' ,'J1017-7156' ,'J1022+1001' ,'J1024-0719' , \
@@ -247,7 +250,7 @@ for par in parfiles:
         f.write("S_1400" + '\t' + str(flux.squeeze()) + '\n')
 
 
-    if 'ecliptic' in datadir:
+    if 'ELAT' in params.keys():
         params_position = read_par(par)
         c = SkyCoord(params['ELONG'], params['ELAT'], frame=BarycentricTrueEcliptic,
                  unit=(u.deg, u.deg))
@@ -261,7 +264,7 @@ for par in parfiles:
     bdeg = c.galactic.b.value
     sigb = 0
 
-    if not 'ecliptic' in datadir:
+    if not 'ELAT' in params.keys():
         #Convert to Ecliptic
         #ecliptic transformation:
         elat = c.barycentrictrueecliptic.lat.value
@@ -369,7 +372,7 @@ for par in parfiles:
             sigd = 0.2*dkpc
         pb = params['PB']
         pb_err = params['PB_ERR']
-        if 'ecliptic' in datadir:
+        if 'ELAT' in params.keys():
             pmelat = params['PMELAT']
             pmelong = params['PMELONG']
             pm_tot = np.sqrt(pmelat**2 + pmelong**2)
@@ -464,7 +467,7 @@ for par in parfiles:
         xdot = np.random.normal(loc=params["XDOT"], scale=params["XDOT_ERR"], size=n_samples)
         a1 = np.random.normal(loc=params["A1"], scale=params["A1_ERR"], size=n_samples)
 
-        if 'ecliptic' in datadir:
+        if 'ELAT' in params.keys():
             pmelat = np.random.normal(loc=params["PMELAT"], scale=params["PMELAT_ERR"], size=n_samples)
             pmelong = np.random.normal(loc=params["PMELONG"], scale=params["PMELONG_ERR"], size=n_samples)
             pm_tot = np.sqrt(pmelat**2 + pmelong**2)
