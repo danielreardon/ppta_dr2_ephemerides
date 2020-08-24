@@ -143,7 +143,8 @@ TNDMC 86
 TNRedAmp -99
 TNRedGam 20
 TNRedC 0
-TNGroupNoise -group CPSR2_20CM -13.5689 1.60462 36
+TNGroupSetSpan 1
+TNGroupNoise -group CPSR2_20CM -13.5689 1.60462 36 2227
 TNBandNoise 1000 10000 -14.4896 4.1833 86
 TNsubtractRed 1
 TNsubtractDM 1
