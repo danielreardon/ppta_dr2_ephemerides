@@ -67,13 +67,13 @@ dirstruct   :
         PPTA_DR2    :
                                 # Information about PPTA DR2E data
 
-            PSRdir      : '/Users/dreardon/Dropbox/Git/ppta_dr2_ephemerides/publish_collection/dr2/ecliptic/'
+            PSRdir      : '/Users/dreardon/Dropbox/Git/ppta_dr2_ephemerides/final/tempo2/'
                                 # Directory containing information about
                                 # the pulsars
         PPTA_DR2E   :
                                 # Information about PPTA DR2E data
 
-            PSRdir      : '/Users/dreardon/Dropbox/Git/ppta_dr2_ephemerides/publish_collection/dr2e/ecliptic/'
+            PSRdir      : '/Users/dreardon/Dropbox/Git/ppta_dr2_ephemerides/publish_collection_refit/dr2e/ecliptic/'
                                 # Directory containing information about
                                 # the pulsars
 
@@ -82,19 +82,16 @@ dirstruct   :
 compareParms:
                                 # information relevant for comparison
 
-    params      : ['PX', 'PMELAT', 'PMELONG']
+    params      : ['PX']
                                 # List of parameters for which the
                                 # comparison is to be made
 
     derived_params: ['Dpsr_PX', 'Dpsr_Pbdot', 'psr_mass_parms']
 
     PTA         : ['EPTA_DR1',
-                   'NG_11yr',
                    'NG_12.5yr_NB',
-                   'NG_12.5yr_WB',
                    'PPTA_DR1',
-                   'PPTA_DR2',
-                   'PPTA_DR2E'
+                   'PPTA_DR2'
                   ]
                                 # The PTA's whose data are to be
                                 # compared

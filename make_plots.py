@@ -362,12 +362,11 @@ for psr in shap_psrs:
     #plt.scatter(data_noshap[:, -1], data_noshap[:, 4]*10**6 - data[:, 4]*10**6)
     #plt.show()
 
-sys.exit()
 
 """
 Make residual plots for each pulsar
 """
-output_files = sorted(glob.glob('/Users/dreardon/Dropbox/Git/ppta_dr2_ephemerides/publish_collection/dr2/output/*.out'))
+output_files = sorted(glob.glob('/Users/dreardon/Dropbox/Git/ppta_dr2_ephemerides/final/tempo2/*.out'))
 
 
 dot_size = []
@@ -488,7 +487,7 @@ for outfile in output_files:
 
 
     plt.tight_layout()
-    plt.savefig('/Users/dreardon/Dropbox/Git/ppta_dr2_ephemerides/publish_collection/dr2/output/' + psrname + '_res.pdf')
+    plt.savefig('/Users/dreardon/Dropbox/Git/ppta_dr2_ephemerides/final/tempo2/output/' + psrname + '_res.pdf')
     plt.show()
 
 
