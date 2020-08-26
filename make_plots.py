@@ -27,6 +27,7 @@ import matplotlib
 from matplotlib import rc
 import scipy.stats as stats
 from astropy import units as u
+from astropy.time import Time
 from scipy.signal import savgol_filter
 from astropy.coordinates import SkyCoord, ICRS, BarycentricTrueEcliptic, Galactic
 #from parfile_optimiser import read_par
@@ -45,6 +46,12 @@ Definitions
 from math import log10, floor
 def round_sig(x, sig=2, small_value=1.0e-9):
     return round(x, sig - int(floor(log10(max(abs(x), abs(small_value))))) - 1)
+
+def mjd_to_year(mjd):
+    from astropy.time import Time
+    t = Time(mjd, format='mjd')
+    yrs = t.byear  # observation year
+    return yrs
 
 def wrms(data, weights):
     """
@@ -71,11 +78,15 @@ def read_general2(filename, header=False):
                 return np.array(data), files
     return np.array(data), files
 
-def average_subbands(times, residuals, errs, freqs, files):
+def average_subbands(times, residuals, errs, freqs, files, parfile=None):
     """
     Given an array of residuals and frequencies, average the subbands together
     """
 
+    if np.mean(times) < 10000:
+        years = True
+
+    rcvr_avg = []
     times_avg = []
     residuals_avg = []
     errs_avg = []
@@ -86,6 +97,8 @@ def average_subbands(times, residuals, errs, freqs, files):
     for file in np.unique(files):
         indicies = np.argwhere(files == file)
 
+        rcvr_avg.append(file[0])
+
         times_avg.append(np.average(times[indicies],
                                     weights=1/(np.array(errs[indicies])**2)))
         residuals_avg.append(np.average(residuals[indicies],
@@ -95,8 +108,77 @@ def average_subbands(times, residuals, errs, freqs, files):
         freqs_avg.append(np.average(freqs[indicies],
                                     weights=1/(np.array(errs[indicies])**2)))
 
-    return np.array(times_avg).squeeze(), np.array(residuals_avg).squeeze(), \
-        np.array(errs_avg).squeeze(), np.array(freqs_avg).squeeze()
+    rcvr_avg = np.array(rcvr_avg).squeeze()
+    times_avg = np.array(times_avg).squeeze()
+    residuals_avg = np.array(residuals_avg).squeeze()
+    errs_avg = np.array(errs_avg).squeeze()
+    freqs_avg = np.array(freqs_avg).squeeze()
+
+    # Now add ECORRs
+    if parfile is not None:
+        pars = read_par(parfile)
+        for key in pars.keys():
+            if "TNECORR" in key and not ("ERR" in key or "TYPE" in key):
+                ECORR = pars[key]  # ECORR value in us
+                group = '_'.join(key.split('_')[2:])
+
+                print('Adding ECORR of {0} us to {1}'.format(ECORR, group))
+
+                if '10CM' in group:
+                    freq_select = (freqs_avg > 2000)
+                elif '20CM' in group or '1433' in group:
+                    freq_select = (freqs_avg < 2000)*(freqs_avg > 1000)
+                elif '40CM' in group or '50CM' in group:
+                    freq_select = (freqs_avg < 1000)
+                else:
+                    print("Group frequency not available from ECORR group name")
+
+                if 'PDFB' in group and not 'PDFB1' in group:
+                    file_select = (rcvr_avg == 'r') + (rcvr_avg == 's') + (rcvr_avg == 't')
+                elif 'CASPSR' in group:
+                    file_select = (rcvr_avg == 'p')
+                elif 'PDFB1' in group:
+                    file_select = (rcvr_avg == 'a')
+                elif 'CPSR2' in group:
+                    file_select = (rcvr_avg == 'm') + (rcvr_avg == 'n')
+                elif 'WBCORR' in group:
+                    file_select = (rcvr_avg == 'w')
+                else:
+                    print("Reciever not available from ECORR group name")
+
+                if '1433' in group:
+                    if years:
+                        time_select = (times_avg < mjd_to_year(53660.8)) * (times_avg > mjd_to_year(53542.0))
+                    else:
+                        time_select = (times_avg < 53660.8) * (times_avg > 53542.0)
+                elif 'early' in group and '20CM' in group:
+                    if years:
+                        time_select = (times_avg < mjd_to_year(53887.0)) * (times_avg > mjd_to_year(53686.9))
+                    else:
+                        time_select = (times_avg < 53887.0) * (times_avg > 53686.9)
+                elif 'early' in group and '10CM' in group:
+                    if years:
+                        time_select = (times_avg < mjd_to_year(53881.0)) * (times_avg > mjd_to_year(53549.2))
+                    else:
+                        time_select = (times_avg < 53881.0) * (times_avg > 53549.2)
+                elif 'PDFB1' in group:  # PDFB1, but not early and not 1433
+                    if years:
+                        time_select = (times_avg > mjd_to_year(53881.0))
+                    else:
+                        time_select = (times_avg > 53881.0)
+                else:
+                    time_select = 1
+
+                selection = np.argwhere(freq_select * file_select * time_select).squeeze()
+                # Now add the ECORR in quadrature to averaged errors
+                errs_avg[selection] = np.sqrt(errs_avg[selection]**2 + ECORR**2)
+
+                if selection.size == 0:
+                    plt.figure(10)
+                    plt.errorbar(times_avg[selection], residuals_avg[selection], yerr=errs_avg[selection], fmt='k.')
+                    plt.show()
+
+    return times_avg, residuals_avg, errs_avg, freqs_avg
 
 
 def read_par(parfile):
@@ -233,9 +315,7 @@ Make a plot of J2241's noise
 """
 data = np.loadtxt('/Users/dreardon/Dropbox/Git/ppta_dr2_ephemerides/publish_collection/dr2/2241/J2241-5236.tasc.txt', skiprows=1)
 
-from astropy.time import Time
-t = Time(data[:, 0], format='mjd')
-yrs = t.byear  # observation year
+yrs = mjd_to_year(data[:, 0])
 
 plt.figure(figsize=(10,6))
 plt.errorbar(yrs, (data[:, 1] - np.mean(data[:, 1]))*86400, yerr=data[:, 2]*86400, fmt='o', alpha=0.8, color='mediumblue')
@@ -367,11 +447,14 @@ for psr in shap_psrs:
 Make residual plots for each pulsar
 """
 output_files = sorted(glob.glob('/Users/dreardon/Dropbox/Git/ppta_dr2_ephemerides/final/tempo2/*.out'))
+par_files = sorted(glob.glob('/Users/dreardon/Dropbox/Git/ppta_dr2_ephemerides/final/tempo2/*.par'))
 
 
 dot_size = []
 dot_names = []
-for outfile in output_files:
+for ii in range(0, len(output_files)):
+    outfile = output_files[ii]
+    parfile = par_files[ii]
     # No Shapiro data for plotting
     print(outfile)
     try:
@@ -404,7 +487,7 @@ for outfile in output_files:
 
     zorder = np.array([0, 1, 2])
 
-    xdata, ydata, new_errs, new_freqs = average_subbands(yrs, posttn, errs, freqs, files)
+    xdata, ydata, new_errs, new_freqs = average_subbands(yrs, posttn, errs, freqs, files, parfile=parfile)
     plt.subplot(3, 1, 3)
     indicies_10 = np.argwhere(new_freqs > 2000)
     wrms_10 = wrms(ydata[indicies_10], 1/new_errs[indicies_10]**2)
@@ -429,7 +512,7 @@ for outfile in output_files:
     plt.xlabel(r'Year')
     plt.grid()
 
-    xdata, ydata, new_errs, new_freqs = average_subbands(yrs, post, errs, freqs, files)
+    xdata, ydata, new_errs, new_freqs = average_subbands(yrs, post, errs, freqs, files, parfile=parfile)
     plt.subplot(3, 1, 1)
     indicies_10 = np.argwhere(new_freqs > 2000)
     wrms_10 = wrms(ydata[indicies_10], 1/new_errs[indicies_10]**2)
@@ -455,7 +538,7 @@ for outfile in output_files:
     plt.legend(leg_string, loc='upper left', framealpha=0.4, prop={'size': 17})
     plt.grid()
 
-    xdata, ydata, new_errs, new_freqs = average_subbands(yrs, post-tndm-tnchrom - np.average(post-tndm-tnchrom, weights=1/errs**2), errs, freqs, files)
+    xdata, ydata, new_errs, new_freqs = average_subbands(yrs, post-tndm-tnchrom - np.average(post-tndm-tnchrom, weights=1/errs**2), errs, freqs, files, parfile=parfile)
     plt.subplot(3, 1, 2)
     indicies_10 = np.argwhere(new_freqs > 2000)
     wrms_10 = wrms(ydata[indicies_10], 1/new_errs[indicies_10]**2)
@@ -483,8 +566,6 @@ for outfile in output_files:
     leg_string = np.array([str(round_sig(wrms_10)) + r'$\,\mu\,$s', str(round_sig(wrms_20)) + r'$\,\mu\,$s',str(round_sig(wrms_40)) + r'$\,\mu\,$s'])
     plt.legend(leg_string, loc='upper left', framealpha=0.4, prop={'size': 17})
     plt.grid()
-
-
 
     plt.tight_layout()
     plt.savefig('/Users/dreardon/Dropbox/Git/ppta_dr2_ephemerides/final/tempo2/output/' + psrname + '_res.pdf')
