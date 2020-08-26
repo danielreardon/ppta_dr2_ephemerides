@@ -109,7 +109,7 @@ def writeLine(parameters,tableFile,parameterName,fitOrDer,parLabel=None):
             # get bolding right for derived M2
             if par=='M2' or par=='KIN' and shortFormat.find("+")!=-1:
                table.write('\t & \t ${}$'.format(shortFormat))
-            else: 
+            else:
                table.write('\t & \t $\\mathbf{{ {} }}$'.format(shortFormat))
         elif fitOrDer == 1:
            table.write('\t & \t ${}$'.format(shortFormat))
@@ -136,7 +136,7 @@ def formatDerivedParams(psrDerived,ipsr,par):
         low = int(low)
     parameter = float(parameter)
 
-    #if high==low: 
+    #if high==low:
     #    parameterToWrite = ufloat(parameter,high)
     if high>2 and low>2:
         parameterToWrite =  '{0}^{{ +{1} }}_{{ -{2} }}'.format(round(parameter), high, low)
@@ -338,12 +338,14 @@ for solBin in ['solitary', 'binary']:
         psrDetails = []
         for psr in psrNames:
 
-            if psr == 'J1713+0747' or psr == 'J1909-3744':
-                parLoc = datadir + '/ppta_dr2_ephemerides/publish_collection/dr2e/{}.kop.par'.format(psr)
-                outLoc = datadir + '/ppta_dr2_ephemerides/publish_collection/dr2e/output/{}.kop.par.out'.format(psr)
-            else:
-                parLoc = datadir + '/ppta_dr2_ephemerides/publish_collection/dr2e/{}.par'.format(psr)
-                outLoc = datadir + '/ppta_dr2_ephemerides/publish_collection/dr2e/output/{}.par.out'.format(psr)
+            #if psr == 'J1713+0747' or psr == 'J1909-3744':
+            #    parLoc = datadir + '/ppta_dr2_ephemerides/publish_collection/dr2e/{}.kop.par'.format(psr)
+            #    outLoc = datadir + '/ppta_dr2_ephemerides/publish_collection/dr2e/output/{}.kop.par.out'.format(psr)
+            #else:
+            #    parLoc = datadir + '/ppta_dr2_ephemerides/publish_collection/dr2e/{}.par'.format(psr)
+            #    outLoc = datadir + '/ppta_dr2_ephemerides/publish_collection/dr2e/output/{}.par.out'.format(psr)
+            parLoc = datadir + '/ppta_dr2_ephemerides/final/tempo2/{}.par'.format(psr)
+            outLoc = datadir + '/ppta_dr2_ephemerides/final/tempo2/{}.out'.format(psr)
             #parLoc = '/fred/oz002/dreardon/ppta_dr2_ephemerides/partim/dr2_boris/new_params_ver1/{}.par'.format(psr)
 
             try:
@@ -412,8 +414,54 @@ for solBin in ['solitary', 'binary']:
         ## write MJD range row
         writeMJDRange(psrDetails,tableFile,parameterNames['MJDRange'])
 
+
+        # read in pulsar details from par files
+        psrDetails = []
+        for psr in psrNames:
+
+            parLoc = datadir + '/ppta_dr2_ephemerides/publish_collection_refit/dr2/{}.par'.format(psr)
+            outLoc = datadir + '/ppta_dr2_ephemerides/final/tempo2/{}.out'.format(psr)
+
+            try:
+                psrPars = readParFile.read_par(parLoc)
+            except FileNotFoundError:
+                parLoc = parLoc.replace('dr2e','dr2')
+                outLoc = outLoc.replace('dr2e','dr2')
+                psrPars = readParFile.read_par(parLoc)
+            data, files = read_general2(outLoc, header=True)
+            psrPars['START'] = np.min(data[:,0])
+            psrPars['FINISH'] = np.max(data[:,0])
+            psrPars['NEPOCH'] = len(np.unique(files))
+            psrDetails.append(psrPars)
+
         ## write sky position row (RA & DEC)
         writeSkyPos(psrDetails,tableFile,parameterNames)
+
+        # read in pulsar details from par files
+        psrDetails = []
+        for psr in psrNames:
+
+            #if psr == 'J1713+0747' or psr == 'J1909-3744':
+            #    parLoc = datadir + '/ppta_dr2_ephemerides/publish_collection/dr2e/{}.kop.par'.format(psr)
+            #    outLoc = datadir + '/ppta_dr2_ephemerides/publish_collection/dr2e/output/{}.kop.par.out'.format(psr)
+            #else:
+            #    parLoc = datadir + '/ppta_dr2_ephemerides/publish_collection/dr2e/{}.par'.format(psr)
+            #    outLoc = datadir + '/ppta_dr2_ephemerides/publish_collection/dr2e/output/{}.par.out'.format(psr)
+            parLoc = datadir + '/ppta_dr2_ephemerides/final/tempo2/{}.par'.format(psr)
+            outLoc = datadir + '/ppta_dr2_ephemerides/final/tempo2/{}.out'.format(psr)
+            #parLoc = '/fred/oz002/dreardon/ppta_dr2_ephemerides/partim/dr2_boris/new_params_ver1/{}.par'.format(psr)
+
+            try:
+                psrPars = readParFile.read_par(parLoc)
+            except FileNotFoundError:
+                parLoc = parLoc.replace('dr2e','dr2')
+                outLoc = outLoc.replace('dr2e','dr2')
+                psrPars = readParFile.read_par(parLoc)
+            data, files = read_general2(outLoc, header=True)
+            psrPars['START'] = np.min(data[:,0])
+            psrPars['FINISH'] = np.max(data[:,0])
+            psrPars['NEPOCH'] = len(np.unique(files))
+            psrDetails.append(psrPars)
 
 
 
@@ -441,7 +489,7 @@ for solBin in ['solitary', 'binary']:
                 parameter = ufloat(psrDetails[ipsr][par], psrDetails[ipsr][str(par+'_ERR')])
                 paramList.append(parameter)
               except:
-                # is there a derived parameter for M2? 
+                # is there a derived parameter for M2?
                 if par=='M2':
                   try:
                     paraString = formatDerivedParams(psrDerived,ipsr,'M2(med/16th/84th)')
@@ -449,12 +497,12 @@ for solBin in ['solitary', 'binary']:
                   except:
                     paramList.append('-')
                 elif par=='KIN':
-                  try: 
+                  try:
                     paraString = formatDerivedParams(psrDerived,ipsr,'INC(med/16th/84th)')
                     paramList.append(paraString)
-                  except: 
+                  except:
                     paramList.append('-')
-                else: 
+                else:
                   paramList.append('-')
 
             else:

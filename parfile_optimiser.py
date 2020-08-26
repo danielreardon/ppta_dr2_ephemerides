@@ -349,6 +349,14 @@ for par in parfiles:
                     f.write("PX_LKB(med/16th/84th)" + '\t' + str(px_med) + '\t' + str(px_16) + '\t' + str(px_84) + '\n')
                     f.write("D_LKB(med/16th/84th)" + '\t' + str(D_med) + '\t' + str(D_16) + '\t' + str(D_84) + '\n')
 
+    if 'PMELAT' in  params.keys():
+        pmelat_posterior = np.random.normal(loc=params["PMELAT"],
+                                           scale=params["PMELAT_ERR"], size=n_samples)  # observed
+        pmelong_posterior = np.random.normal(loc=params["PMELONG"],
+                                           scale=params["PMELONG_ERR"], size=n_samples)  # observed
+        pm_tot = np.sqrt(pmelat_posterior**2 + pmelong_posterior**2)
+        pm = pm_tot/(sec_per_year*rad_to_mas)  # rad/s
+
 
 
     if 'PBDOT' in params.keys():
@@ -411,7 +419,7 @@ for par in parfiles:
             Davg_err = 1
             #print("Combined distance (kpc) = ", round(Davg, 3), " +/- ", round(Davg_err,3))
 
-    D = 1
+    # D = 1
     if 'PBDOT' in params.keys():
         if 'PX' in params.keys():
             D = Davg
