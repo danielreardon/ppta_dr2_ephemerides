@@ -46,9 +46,9 @@ def round_sig(x, sig=1, small_value=1.0e-9):
     value = round(x, sig - int(floor(log10(max(abs(x), abs(small_value))))) - 1)
     return value
 
-"""
-Reads a general2 output file
-"""
+
+
+
 def read_general2(filename, header=False):
     """
     Reads a general2 output into a numpy array
@@ -120,10 +120,11 @@ def writeLine(parameters,tableFile,parameterName,fitOrDer,parLabel=None):
     return None
 
 
-"""
-Formating for derived params with ^{+...}_{-...}
-"""
 def formatDerivedParams(psrDerived,ipsr,par):
+
+    """ 
+    Formatting for derived params with ^{+...}_{-...}
+    """
 
     parameter =  psrDerived[ipsr][par]
     high = float(psrDerived[ipsr][par+'_84th']) - float(psrDerived[ipsr][par])
@@ -136,8 +137,12 @@ def formatDerivedParams(psrDerived,ipsr,par):
         low = int(low)
     parameter = float(parameter)
 
-    #if high==low:
-    #    parameterToWrite = ufloat(parameter,high)
+    # if the high and low uncertainties are equal print as value(error)
+    if high==low:
+        parameterToWrite = ufloat(parameter,high)
+        return parameterToWrite
+    else: pass 
+
     if high>2 and low>2:
         parameterToWrite =  '{0}^{{ +{1} }}_{{ -{2} }}'.format(round(parameter), high, low)
     else:
@@ -181,10 +186,10 @@ def writeMJDRange(psrDeets,tabFile,label):
 
 
 
-"""
-Writing the RA and DEC rows
-"""
 def writeSkyPos(psrDeets,tabFile,parLabels):
+    """
+    Writitng RA and DEC rows
+    """
 
     # row title
     table = open(tabFile,'a')
@@ -330,7 +335,6 @@ for solBin in ['solitary', 'binary']:
             else:
                 print('Error: need to choose a group from [1,2,3,4] for binary pulsar table')
                 exit()
-
 
 
 
