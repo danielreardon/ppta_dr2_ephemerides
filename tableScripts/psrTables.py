@@ -286,6 +286,7 @@ def get_parameters_for_table(solitaryOrBinary):
                           'D_PX(med/16th/84th)', 'D_SHK(med/16th/84th)',\
                           'INC(med/16th/84th)', 'INC_LIM(med/std)',\
                           'M2(med/16th/84th)', 'MP(med/16th/84th)', 'MTOT(med/16th/84th)',\
+                          'MTOT_GR(med/16th/84th)',\
                           'OMDOT_GR', 'VT(med/16th/84th)'])
 
     # keeping track of which params are from where
@@ -324,7 +325,7 @@ def get_parameters_for_table(solitaryOrBinary):
                    'KOM', 'KIN',\
                    'INC_LIM(med/std)',\
                    'D_PX(med/16th/84th)', 'D_SHK(med/16th/84th)',\
-                   'MP(med/16th/84th)', 'MTOT(med/16th/84th)', 'VT(med/16th/84th)'])
+                   'MP(med/16th/84th)', 'MTOT(med/16th/84th)', 'MTOT_GR(med/16th/84th)', 'VT(med/16th/84th)'])
 
     return fittedOrDerived, params
 
