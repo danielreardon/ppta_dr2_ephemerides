@@ -130,7 +130,7 @@ def get_derived_params(parfilename):
           if param != "ELAT" and param != "ELONG" and param != "PMELAT" and param != "PMELONG" and param != "MASS_FUNC" and param != "OMDOT_GR" and len(sline)>=3:
             sixteenth = sline[2]
             eighty_fourth = sline[3]
-          if param == "INC_LIM(med/std)":
+          if param == "INC_LIM(med/std)" or param == "ECC(med/std)" or param == "OM(med/std)" or param == "T0(med/std)":
             err = sline[2]
         except: pass
 

@@ -282,7 +282,7 @@ def get_parameters_for_table(solitaryOrBinary):
 
     # parameters form derived_parameters.txt
     fromDerivedParams = (['ELAT','ELONG','PMELONG','PMELAT','PMELONG','MASS_FUNC',\
-                          'ECC(med/16th/84th)', 'OM(med/16th/84th)', 'T0(med/16th/84th)',\
+                          'ECC(med/std)', 'OM(med/std)', 'T0(med/std)',\
                           'D_PX(med/16th/84th)', 'D_SHK(med/16th/84th)',\
                           'INC(med/16th/84th)', 'INC_LIM(med/std)',\
                           'M2(med/16th/84th)', 'MP(med/16th/84th)', 'MTOT(med/16th/84th)',\
@@ -340,8 +340,8 @@ args = parser.parse_args()
 solBin = str(args.solOrBin)
 whichGroup = int(args.groupNo)
 
-#datadir = '/Users/dreardon/Dropbox/Git/'
-datadir = '/fred/oz002/hmiddleton/ppta_ephemeris/repositories'
+datadir = '/Users/dreardon/Dropbox/Git/'
+#datadir = '/fred/oz002/hmiddleton/ppta_ephemeris/repositories'
 
 for solBin in ['solitary', 'binary']:
 
@@ -585,21 +585,21 @@ for solBin in ['solitary', 'binary']:
                     paramList.append('-')
                 elif par=='ECC':
                   try:
-                    paraString = formatDerivedParams(psrDerived,ipsr,'ECC(med/16th/84th)')
+                    paraString = formatDerivedParams(psrDerived,ipsr,'ECC(med/std)')
                     paramList.append(paraString)
                     keepingTrackFitDerived[ipsr] = 'd'
                   except:
                     paramList.append('-')
                 elif par=='OM':
                   try:
-                    paraString = formatDerivedParams(psrDerived,ipsr,'OM(med/16th/84th)')
+                    paraString = formatDerivedParams(psrDerived,ipsr,'OM(med/std)')
                     paramList.append(paraString)
                     keepingTrackFitDerived[ipsr] = 'd'
                   except:
                     paramList.append('-')
                 elif par=='T0':
                   try:
-                    paraString = formatDerivedParams(psrDerived,ipsr,'T0(med/16th/84th)')
+                    paraString = formatDerivedParams(psrDerived,ipsr,'T0(med/std)')
                     paramList.append(paraString)
                     keepingTrackFitDerived[ipsr] = 'd'
                   except:

@@ -514,9 +514,14 @@ for par in parfiles:
 
 
         i_limit =  np.abs(180/np.pi * np.arctan(a1 * pm / xdot))
+        i_lim_95 = np.percentile(i_limit, q=95)
+        sini_lim_95 = np.sin(i_lim_95*np.pi/180)
+        #sini_lim_95 = 1
         #print("i <= ", int(np.ceil(i_limit)))
         with open(outfile, 'a+') as f:
             f.write("INC_LIM(med/std)" + '\t' + "<" + str(np.median(i_limit))+ '\t'+ str(np.std(i_limit)) +'\n')
+    else:
+        sini_lim_95 = 1
 
     mtot2 = 0
     if 'H3' in params.keys():
@@ -530,7 +535,7 @@ for par in parfiles:
             sini = 2 * h3 * h4 / ( h3**2 + h4**2 )
             m2 = h3**4 / h4**3  # in us
             m2 = m2/(Tsun*10**6)
-            cut = np.argwhere((m2 > mass_func) * (m2 < 10))
+            cut = np.argwhere((m2 > mass_func) * (m2 < 2) * (sini < sini_lim_95))
             m2 = m2[cut]
             sini = sini[cut]
             inc = np.arcsin(sini)*180/np.pi
@@ -545,6 +550,7 @@ for par in parfiles:
             with open(outfile, 'a+') as f:
                 f.write("M2(med/16th/84th)" + '\t' + str(np.median(m2)) + '\t' + str(np.percentile(m2, q=16)) + '\t' + str(np.percentile(m2, q=84)) + '\n')
             with open(outfile, 'a+') as f:
+                f.write("MP(med/16th/84th)" + '\t' + str(np.median(mp)) + '\t' + str(np.percentile(mp, q=16)) + '\t' + str(np.percentile(mp, q=84)) + '\n')
                 f.write("MP(med/16th/84th)" + '\t' + str(np.median(mp)) + '\t' + str(np.percentile(mp, q=16)) + '\t' + str(np.percentile(mp, q=84)) + '\n')
             with open(outfile, 'a+') as f:
                 f.write("MTOT(med/16th/84th)" + '\t' + str(np.median(mtot)) + '\t' + str(np.percentile(mtot, q=16)) + '\t' + str(np.percentile(mtot, q=84)) + '\n')
@@ -569,7 +575,7 @@ for par in parfiles:
             sini = 2 * h3 * h4 / ( h3**2 + h4**2 )
             m2 = h3**4 / h4**3
             m2 = m2/(Tsun*10**6)
-            cut = np.argwhere((m2 > mass_func) * (m2 < 10))
+            cut = np.argwhere((m2 > mass_func) * (m2 < 10) * (sini < sini_lim_95))
             m2 = m2[cut]
             sini = sini[cut]
             inc = np.arcsin(sini)*180/np.pi
@@ -610,7 +616,7 @@ for par in parfiles:
         else:
             sini = np.random.normal(loc=params["SINI"], scale=params["SINI_ERR"], size=n_samples)
             inc = np.arcsin(sini)*180/np.pi
-        cut = np.argwhere((m2 > mass_func) * (m2 < 10))
+        cut = np.argwhere((m2 > mass_func) * (m2 < 10) *  (sini < sini_lim_95))
         m2 = m2[cut]
         sini = sini[cut]
         inc = np.arcsin(sini)*180/np.pi
