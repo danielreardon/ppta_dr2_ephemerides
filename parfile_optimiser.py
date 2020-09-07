@@ -514,8 +514,8 @@ for par in parfiles:
 
 
         i_limit =  np.abs(180/np.pi * np.arctan(a1 * pm / xdot))
-        i_lim_95 = np.percentile(i_limit, q=50)
-        sini_lim_95 = np.sin(i_lim_95*np.pi/180)
+        i_lim_95 = np.percentile(i_limit, q=95)
+        sini_lim_95 = np.sin(np.median(i_limit)*np.pi/180)
         #sini_lim_95 = 1
         #print("i <= ", int(np.ceil(i_limit)))
         with open(outfile, 'a+') as f:
@@ -543,7 +543,8 @@ for par in parfiles:
             mtot2 = (m2 * sini)**3 / mass_func
             mp = np.sqrt(mtot2[is_valid(mtot2)*is_valid(m2)]) - m2[is_valid(mtot2)*is_valid(m2)]
             mp = mp[is_valid(mp)]
-            mtot = np.sqrt(mtot2[is_valid(mtot2)])
+            mtot2 = mtot2[is_valid(mtot2)]
+            mtot = np.sqrt(mtot2[(mtot2 > 0)])
             inc = inc[is_valid(inc)]
 
             with open(outfile, 'a+') as f:
@@ -583,7 +584,8 @@ for par in parfiles:
             mtot2 = (m2 * sini)**3 / mass_func
             mp = np.sqrt(mtot2[is_valid(mtot2)*is_valid(m2)]) - m2[is_valid(mtot2)*is_valid(m2)]
             mp = mp[is_valid(mp)]
-            mtot = np.sqrt(mtot2[is_valid(mtot2)])
+            mtot2 = mtot2[is_valid(mtot2)]
+            mtot = np.sqrt(mtot2[(mtot2 > 0)])
             inc = inc[is_valid(inc)]
 
             try:
@@ -624,7 +626,8 @@ for par in parfiles:
         mtot2 = (m2 * sini)**3 / mass_func
         mp = np.sqrt(mtot2[is_valid(mtot2)*is_valid(m2)]) - m2[is_valid(mtot2)*is_valid(m2)]
         mp = mp[is_valid(mp)]
-        mtot = np.sqrt(mtot2[is_valid(mtot2)])
+        mtot2 = mtot2[is_valid(mtot2)]
+        mtot = np.sqrt(mtot2[(mtot2 > 0)])
         inc = inc[is_valid(inc)]
 
         if not 'KIN' in params.keys():
