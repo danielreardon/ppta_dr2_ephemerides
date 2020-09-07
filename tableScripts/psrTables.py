@@ -87,15 +87,21 @@ def replaceEWithTimes10(value):
 
 
 
-"""
-Write the parameter line in latex table format
-"""
-def writeLine(parameters,tableFile,parameterName,fitOrDer,parLabel=None):
+def writeLine(parameters,tableFile,parameterName,keepTrackFitOrDer,parLabel=None):
+
+    """
+    Write the parameter line in latex table format
+    will put fitted params in bold and params from the derived_param file not-bold
+    """
+
+
     table = open(tableFile,'a')
     table.write(parameterName)
 
     frmtr = ShorthandFormatter()
 
+    """
+    no longer needed (I think...)
     # fix for PMELAT, PMELONG, ELAT, ELONG, PMRA, PMDEC
     if parLabel == 'PMELAT' or parLabel == 'PMELONG' or parLabel == 'ELAT' or parLabel == 'ELONG':
         fitOrDer = 0
@@ -103,37 +109,32 @@ def writeLine(parameters,tableFile,parameterName,fitOrDer,parLabel=None):
     if parLabel == 'PMRA' or parLabel == 'PMDEC':
         fitOrDer = 1
     else: pass
+    """
 
-
-
-    for p in parameters:
+    # loop over the parameter values for each pulsar in this batch 
+    # using "keepTrackFitOrDer" to remember whether the parameters came from the 
+    # par files or the derived params file
+    for i,p in enumerate(parameters):
 
         try:
             shortFormat = frmtr.format("{0:.1u}",p)
-
             # does the string contain "e" ?
             shortFormat = replaceEWithTimes10(shortFormat)
-            """
-            if (shortFormat.find("e0"))!=-1:
-                shortFormat = shortFormat.replace("e0", "\\times 10^{")+"}"
-            elif (shortFormat.find("e-0"))!=-1:
-                shortFormat = shortFormat.replace("e-0", "e-")
-                shortFormat = shortFormat.replace("e", "\\times 10^{")+"}"
-            elif (shortFormat.find("e"))!=-1:
-                shortFormat = shortFormat.replace("e", "\\times 10^{")+"}"
-            else: pass
-            """
         except:
             shortFormat = p
 
-        if fitOrDer == 0:
-            # get bolding right for derived M2
-            if par=='M2' or par=='KIN' or par=='ECC' or par=='OM' or par=='T0' and shortFormat.find("+")!=-1:
-               table.write('\t & \t ${}$'.format(shortFormat))
-            else:
-               table.write('\t & \t $\\mathbf{{ {} }}$'.format(shortFormat))
-        elif fitOrDer == 1:
-           table.write('\t & \t ${}$'.format(shortFormat))
+
+        # fitted in bold
+        if keepTrackFitOrDer[i]=='f':
+            table.write('\t & \t $\\mathbf{{ {} }}$'.format(shortFormat)) 
+
+        # derived not bold
+        elif keepTrackFitOrDer[i]=='d':
+            table.write('\t & \t ${}$'.format(shortFormat))
+
+        # the rest, probably writing '-' for no parameter
+        else:
+            table.write('\t & \t ${}$'.format(shortFormat))
 
     table.write('\\\\ \n')
     table.close()
@@ -145,6 +146,7 @@ def formatDerivedParams(psrDerived,ipsr,par):
 
     """
     Formatting for derived params with ^{+...}_{-...}
+    These are all not bold..
     """
 
     parameter =  psrDerived[ipsr][par]
@@ -174,19 +176,19 @@ def formatDerivedParams(psrDerived,ipsr,par):
 
         parameterToWrite = '{{ {0} }} ^{{ +{1} }}_{{ -{2} }}'.format(value,high,low)
 
-        print(parameterToWrite)
+        #print(parameterToWrite)
         
     return parameterToWrite
 
 
 
 
-"""
-Writes the MJD range to the table
-Maybe some missing from the par files
-To do - check par files for start/finish
-"""
+
 def writeMJDRange(psrDeets,tabFile,label):
+
+    """
+    Writes the MJD range to the table
+    """
 
     # row title
     table = open(tabFile,'a')
@@ -338,8 +340,8 @@ args = parser.parse_args()
 solBin = str(args.solOrBin)
 whichGroup = int(args.groupNo)
 
-datadir = '/Users/dreardon/Dropbox/Git/'
-#datadir = '/fred/oz002/hmiddleton/ppta_ephemeris/repositories'
+#datadir = '/Users/dreardon/Dropbox/Git/'
+datadir = '/fred/oz002/hmiddleton/ppta_ephemeris/repositories'
 
 for solBin in ['solitary', 'binary']:
 
@@ -439,13 +441,19 @@ for solBin in ['solitary', 'binary']:
 
 
         ## write number of toas row
+        print('Number of TOAS')
         names = [ psrDetails[i]['NTOA'] for i in range(len(psrNames)) ]
-        writeLine(names,tableFile,parameterNames['NTOA'],1)
+        noTOABolding = ['n' for i in range(len(psrNames))]
+        writeLine(names,tableFile,parameterNames['NTOA'],noTOABolding)
 
+        ## write number of observations row 
+        print('Number of observations')
         names = [ psrDetails[i]['NEPOCH'] for i in range(len(psrNames)) ]
-        writeLine(names,tableFile,parameterNames['NEPOCH'],1)
+        noObservationsBolding = ['n' for i in range(len(psrNames))]
+        writeLine(names,tableFile,parameterNames['NEPOCH'],noObservationsBolding)
 
         ## write MJD range row
+        print('MJD range')
         writeMJDRange(psrDetails,tableFile,parameterNames['MJDRange'])
 
 
@@ -470,6 +478,7 @@ for solBin in ['solitary', 'binary']:
             psrDetails.append(psrPars)
 
         ## write sky position row (RA & DEC)
+        print('sky position (RA,DEC)')
         writeSkyPos(psrDetails,tableFile,parameterNames)
 
         # Now go back to ecliptic
@@ -529,7 +538,7 @@ for solBin in ['solitary', 'binary']:
 
 
         fittedOrDerived, params = get_parameters_for_table(solBin)
-
+       
         # getting the parameter labels / names for the table headings
         parameterNames = parameterLabels.getParamLabels()
 
@@ -544,6 +553,12 @@ for solBin in ['solitary', 'binary']:
 
           paramList = []
 
+
+          # keep track of where parameters came from with values:
+          # n: 'neither', f:fitted, d:derived
+          keepingTrackFitDerived = ['n' for i in range(len(psrNames))]
+
+
           for ipsr, psr in enumerate(psrNames):
 
             #print(fittedOrDerived[par])
@@ -551,36 +566,42 @@ for solBin in ['solitary', 'binary']:
               try:
                 parameter = ufloat(psrDetails[ipsr][par], psrDetails[ipsr][str(par+'_ERR')])
                 paramList.append(parameter)
+                keepingTrackFitDerived[ipsr] = 'f'
               except:
                 # is there a derived parameter for M2?
                 if par=='M2':
                   try:
                     paraString = formatDerivedParams(psrDerived,ipsr,'M2(med/16th/84th)')
                     paramList.append(paraString)
+                    keepingTrackFitDerived[ipsr] = 'd'
                   except:
                     paramList.append('-')
                 elif par=='KIN':
                   try:
                     paraString = formatDerivedParams(psrDerived,ipsr,'INC(med/16th/84th)')
                     paramList.append(paraString)
+                    keepingTrackFitDerived[ipsr] = 'd'
                   except:
                     paramList.append('-')
                 elif par=='ECC':
                   try:
                     paraString = formatDerivedParams(psrDerived,ipsr,'ECC(med/16th/84th)')
                     paramList.append(paraString)
+                    keepingTrackFitDerived[ipsr] = 'd'
                   except:
                     paramList.append('-')
                 elif par=='OM':
                   try:
                     paraString = formatDerivedParams(psrDerived,ipsr,'OM(med/16th/84th)')
                     paramList.append(paraString)
+                    keepingTrackFitDerived[ipsr] = 'd'
                   except:
                     paramList.append('-')
                 elif par=='T0':
                   try:
                     paraString = formatDerivedParams(psrDerived,ipsr,'T0(med/16th/84th)')
                     paramList.append(paraString)
+                    keepingTrackFitDerived[ipsr] = 'd'
                   except:
                     paramList.append('-')
                 else:
@@ -592,42 +613,30 @@ for solBin in ['solitary', 'binary']:
                   if par=='ELAT' or par=='ELONG' or par=='PMELAT' or par=='PMELONG' or par=='MASS_FUNC' or par=='OMDOT_GR':
                     parameter = psrDerived[ipsr][par]
                     paramList.append('{0:.5f}'.format(float(parameter)))
+                    keepingTrackFitDerived[ipsr] = 'd'
                   elif par=='INC_LIM(med/std)':
                     parameter = psrDerived[ipsr][par]
                     parameter = parameter.replace('<','')
                     parameter = float(parameter) #+ float(psrDerived[ipsr][par+'_16th'])
                     paramList.append('<{0}'.format(round(parameter)))
+                    keepingTrackFitDerived[ipsr] = 'd'
                   else:
-                    ''' -> moved to function formatDerivedParams(...)
-                    parameter =  psrDerived[ipsr][par]
-                    #print('here ', psrDerived[ipsr][par+'_16th'])
-                    high = float(psrDerived[ipsr][par+'_84th']) - float(psrDerived[ipsr][par])
-                    low  = float(psrDerived[ipsr][par]) - float(psrDerived[ipsr][par+'_16th'])
-                    high = round_sig(high)
-                    low = round_sig(low)
-                    if high%1 == 0:
-                        high = int(high)
-                    if low%1 == 0:
-                        low = int(low)
-                    parameter = float(parameter)
-                    if high>2 and low>2:
-                        parameterStr =  '{0}^{{ +{1} }}_{{ -{2} }}'.format(round(parameter), high, low)
-                    else:
-                        digit = np.max([len(str(high).split('.')[-1]), len(str(low).split('.')[-1])])
-                        parameterStr =  '{0}^{{ +{1} }}_{{ -{2} }}'.format(round(parameter, int(digit)), high, low)
-                    '''
                     parameterStr = formatDerivedParams(psrDerived,ipsr,par)
                     paramList.append(parameterStr)
                     #print('parSTRING ', parameterStr)
+                    keepingTrackFitDerived[ipsr] = 'd'
                 except:
                   paramList.append('-')
+
+          #print(keepingTrackFitDerived)
 
           # write parameter line
           if nparam % 5 == 0:
               table=open(tableFile,'a')
               table.write('\n \\noalign{\\vskip 1.5mm} \n')
               table.close()
-          writeLine(paramList,tableFile,parameterNames[par],fittedOrDerived[par],parLabel=par)
+          #writeLine(paramList,tableFile,parameterNames[par],fittedOrDerived[par],parLabel=par)
+          writeLine(paramList,tableFile,parameterNames[par],keepingTrackFitDerived,parLabel=par)
           nparam += 1
 
         # end table stuff
