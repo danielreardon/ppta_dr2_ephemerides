@@ -122,7 +122,7 @@ def writeLine(parameters,tableFile,parameterName,fitOrDer,parLabel=None):
 
 def formatDerivedParams(psrDerived,ipsr,par):
 
-    """ 
+    """
     Formatting for derived params with ^{+...}_{-...}
     """
 
@@ -141,7 +141,7 @@ def formatDerivedParams(psrDerived,ipsr,par):
     if high==low:
         parameterToWrite = ufloat(parameter,high)
         return parameterToWrite
-    else: pass 
+    else: pass
 
     if high>2 and low>2:
         parameterToWrite =  '{0}^{{ +{1} }}_{{ -{2} }}'.format(round(parameter), high, low)
@@ -252,10 +252,11 @@ def get_parameters_for_table(solitaryOrBinary):
 
     # parameters form derived_parameters.txt
     fromDerivedParams = (['ELAT','ELONG','PMELONG','PMELAT','PMELONG','MASS_FUNC',\
+                          'ECC(med/16th/84th)', 'OM(med/16th/84th)', 'T0(med/16th/84th)',\
                           'D_PX(med/16th/84th)', 'D_SHK(med/16th/84th)',\
                           'INC(med/16th/84th)', 'INC_LIM(med/std)',\
                           'M2(med/16th/84th)', 'MP(med/16th/84th)', 'MTOT(med/16th/84th)',\
-                          'OMDOT_GR'])
+                          'OMDOT_GR', 'VT(med/16th/84th)'])
 
     # keeping track of which params are from where
     fittedOrDerived = {}
@@ -274,7 +275,7 @@ def get_parameters_for_table(solitaryOrBinary):
                    'F0', 'F1','F2',\
                    'DM',\
                    'PMRA', 'PMDEC', 'PMELAT', 'PMELONG', 'PX',\
-                   'D_PX(med/16th/84th)'])
+                   'D_PX(med/16th/84th)', 'VT(med/16th/84th)'])
 
 
     elif solitaryOrBinary == 'binary':
@@ -286,13 +287,14 @@ def get_parameters_for_table(solitaryOrBinary):
                    'PX',\
                    'PB', 'A1',\
                    'T0', 'OM', 'ECC',\
+                   'T0(med/16th/84th)', 'OM(med/16th/84th)', 'ECC(med/16th/84th)',\
                    'TASC', 'EPS1', 'EPS2',\
                    'PBDOT', 'OMDOT', 'XDOT',\
                    'SINI', 'M2', 'H3', 'H4', 'STIG',\
                    'KOM', 'KIN',\
                    'INC_LIM(med/std)',\
                    'D_PX(med/16th/84th)', 'D_SHK(med/16th/84th)',\
-                   'MP(med/16th/84th)', 'MTOT(med/16th/84th)'])
+                   'MP(med/16th/84th)', 'MTOT(med/16th/84th)', 'VT(med/16th/84th)'])
 
     return fittedOrDerived, params
 

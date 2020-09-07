@@ -303,6 +303,26 @@ for par in parfiles:
            0.01*params['TRES']*10**-6/np.sqrt(params['NTOA']):
             print('WARNING! Pulsar should NOT have ELL1 model')
 
+        # Now output ECC, OM, and T0
+        pb = np.random.normal(loc=params["PB"],
+                                scale=params["PB_ERR"], size=n_samples)
+        eps1 = np.random.normal(loc=params["EPS1"],
+                                scale=params["EPS1_ERR"], size=n_samples)
+        eps2 = np.random.normal(loc=params["EPS2"],
+                                scale=params["EPS2_ERR"], size=n_samples)
+        tasc = np.random.normal(loc=params["TASC"],
+                                scale=params["TASC_ERR"], size=n_samples)
+
+        nb = 2*np.pi/pb
+        ecc_array = np.sqrt(eps1**2 + eps2**2)
+        om_array = np.arctan2(eps1, eps2) * 180/np.pi
+        t0_array = tasc + (om_array/nb)
+        with open(outfile, 'a+') as f:
+            f.write("ECC(med/16th/84th)" + '\t' + str(np.median(ecc_array)) + '\t' + str(np.percentile(ecc_array, q=16)) + '\t' + str(np.percentile(ecc_array, q=84)) + '\n')
+            f.write("OM(med/16th/84th)" + '\t' + str(np.median(om_array)) + '\t' + str(np.percentile(om_array, q=16)) + '\t' + str(np.percentile(om_array, q=84)) + '\n')
+            f.write("T0(med/16th/84th)" + '\t' + str(np.median(t0_array)) + '\t' + str(np.percentile(t0_array, q=16)) + '\t' + str(np.percentile(t0_array, q=84)) + '\n')
+
+
     # Check if pulsar requires Kopeikin terms
 #    if 'XDOT' in params.keys() and 'OMDOT' in params.keys():
         #print('Check for Kopeikin terms')
@@ -349,13 +369,20 @@ for par in parfiles:
                     f.write("PX_LKB(med/16th/84th)" + '\t' + str(px_med) + '\t' + str(px_16) + '\t' + str(px_84) + '\n')
                     f.write("D_LKB(med/16th/84th)" + '\t' + str(D_med) + '\t' + str(D_16) + '\t' + str(D_84) + '\n')
 
-    if 'PMELAT' in  params.keys():
-        pmelat_posterior = np.random.normal(loc=params["PMELAT"],
-                                           scale=params["PMELAT_ERR"], size=n_samples)  # observed
-        pmelong_posterior = np.random.normal(loc=params["PMELONG"],
-                                           scale=params["PMELONG_ERR"], size=n_samples)  # observed
-        pm_tot = np.sqrt(pmelat_posterior**2 + pmelong_posterior**2)
-        pm = pm_tot/(sec_per_year*rad_to_mas)  # rad/s
+    if 'PMELAT' in  params.keys() and 'PX' in params.keys():
+        # 2-sigma parallax distance
+        if np.std(D_array) <= np.median(D_array):
+            pmelat_posterior = np.random.normal(loc=params["PMELAT"],
+                                                scale=params["PMELAT_ERR"], size=n_samples)  # observed
+            pmelong_posterior = np.random.normal(loc=params["PMELONG"],
+                                                 scale=params["PMELONG_ERR"], size=n_samples)  # observed
+            pm_tot = np.sqrt(pmelat_posterior**2 + pmelong_posterior**2)
+            pm = pm_tot/(sec_per_year*rad_to_mas)  # rad/s
+            D_array *= 3.08567758e+16 * 1000 # m
+            vt = D_array * pm[(D_prior > 0)*(D_prior < 100)]  # m/s
+            vt /= 1000  # km/s
+            with open(outfile, 'a+') as f:
+                f.write("VT(med/16th/84th)" + '\t' + str(np.median(vt)) + '\t' + str(np.percentile(vt, q=16)) + '\t' + str(np.percentile(vt, q=84)) + '\n')
 
 
 
