@@ -11,7 +11,7 @@ from astropy import units as U
 from scipy.signal import savgol_filter
 from astropy.coordinates import SkyCoord, ICRS, BarycentricTrueEcliptic
 
-n_samples = 10000
+n_samples = 1000000
 # Define other useful constants
 M_sun = 1.98847542e+30  # kg
 Tsun = 4.926790353700459e-06  #s
