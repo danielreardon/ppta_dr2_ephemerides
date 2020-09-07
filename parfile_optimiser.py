@@ -371,18 +371,17 @@ for par in parfiles:
 
     if 'PMELAT' in  params.keys() and 'PX' in params.keys():
         # 2-sigma parallax distance
-        if np.std(D_array) <= np.median(D_array):
-            pmelat_posterior = np.random.normal(loc=params["PMELAT"],
-                                                scale=params["PMELAT_ERR"], size=n_samples)  # observed
-            pmelong_posterior = np.random.normal(loc=params["PMELONG"],
-                                                 scale=params["PMELONG_ERR"], size=n_samples)  # observed
-            pm_tot = np.sqrt(pmelat_posterior**2 + pmelong_posterior**2)
-            pm = pm_tot/(sec_per_year*rad_to_mas)  # rad/s
-            D_array *= 3.08567758e+16 * 1000 # m
-            vt = D_array * pm[(D_prior > 0)*(D_prior < 100)]  # m/s
-            vt /= 1000  # km/s
-            with open(outfile, 'a+') as f:
-                f.write("VT(med/16th/84th)" + '\t' + str(np.median(vt)) + '\t' + str(np.percentile(vt, q=16)) + '\t' + str(np.percentile(vt, q=84)) + '\n')
+        pmelat_posterior = np.random.normal(loc=params["PMELAT"],
+                                            scale=params["PMELAT_ERR"], size=n_samples)  # observed
+        pmelong_posterior = np.random.normal(loc=params["PMELONG"],
+                                             scale=params["PMELONG_ERR"], size=n_samples)  # observed
+        pm_tot = np.sqrt(pmelat_posterior**2 + pmelong_posterior**2)
+        pm = pm_tot/(sec_per_year*rad_to_mas)  # rad/s
+        D_array *= 3.08567758e+16 * 1000 # m
+        vt = D_array * pm[(D_prior > 0)*(D_prior < 100)]  # m/s
+        vt /= 1000  # km/s
+        with open(outfile, 'a+') as f:
+            f.write("VT(med/16th/84th)" + '\t' + str(np.median(vt)) + '\t' + str(np.percentile(vt, q=16)) + '\t' + str(np.percentile(vt, q=84)) + '\n')
 
 
 

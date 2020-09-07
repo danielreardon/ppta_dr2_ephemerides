@@ -107,7 +107,7 @@ def writeLine(parameters,tableFile,parameterName,fitOrDer,parLabel=None):
 
         if fitOrDer == 0:
             # get bolding right for derived M2
-            if par=='M2' or par=='KIN' and shortFormat.find("+")!=-1:
+            if par=='M2' or par=='KIN' or par=='ECC' or par=='OM' or par=='T0' and shortFormat.find("+")!=-1:
                table.write('\t & \t ${}$'.format(shortFormat))
             else:
                table.write('\t & \t $\\mathbf{{ {} }}$'.format(shortFormat))
@@ -241,7 +241,7 @@ def get_parameters_for_table(solitaryOrBinary):
 
 
     # paratmeters from the par files
-    fromParFiles  = (['F0','F1','F2','DM','PMRA','PMDEC','PX',\
+    fromParFiles  = (['F0','F1','F2','DM','ELAT','ELONG','PMRA','PMDEC','PMELAT','PMELONG','PX',\
                       'PB','A1','TASC',\
                       'PBDOT','XDOT',\
                       'T0','OM','OMDOT','ECC',\
@@ -271,23 +271,23 @@ def get_parameters_for_table(solitaryOrBinary):
 
     if solitaryOrBinary == 'solitary':
 
-        params = (['ELAT','ELONG',\
-                   'F0', 'F1','F2',\
+        params = (['F0', 'F1',\
                    'DM',\
+                   'ELAT','ELONG',\
                    'PMRA', 'PMDEC', 'PMELAT', 'PMELONG', 'PX',\
                    'D_PX(med/16th/84th)', 'VT(med/16th/84th)'])
 
 
     elif solitaryOrBinary == 'binary':
 
-        params = (['ELAT','ELONG',\
-                   'F0', 'F1',\
+        params = (['F0', 'F1',\
                    'DM',\
+                   'ELAT','ELONG',\
                    'PMRA', 'PMDEC', 'PMELAT', 'PMELONG',
                    'PX',\
                    'PB', 'A1',\
                    'T0', 'OM', 'ECC',\
-                   'T0(med/16th/84th)', 'OM(med/16th/84th)', 'ECC(med/16th/84th)',\
+#                   'T0(med/16th/84th)', 'OM(med/16th/84th)', 'ECC(med/16th/84th)',\
                    'TASC', 'EPS1', 'EPS2',\
                    'PBDOT', 'OMDOT', 'XDOT',\
                    'SINI', 'M2', 'H3', 'H4', 'STIG',\
@@ -425,6 +425,7 @@ for solBin in ['solitary', 'binary']:
         psrDetails = []
         for psr in psrNames:
 
+            # Use non-ecliptic for sky positions
             parLoc = datadir + '/ppta_dr2_ephemerides/publish_collection_refit/dr2/{}.par'.format(psr)
             outLoc = datadir + '/ppta_dr2_ephemerides/final/tempo2/{}.out'.format(psr)
 
@@ -442,6 +443,34 @@ for solBin in ['solitary', 'binary']:
 
         ## write sky position row (RA & DEC)
         writeSkyPos(psrDetails,tableFile,parameterNames)
+
+        # Now go back to ecliptic
+        # read in pulsar details from par files
+        psrDetails = []
+        for psr in psrNames:
+
+            #if psr == 'J1713+0747' or psr == 'J1909-3744':
+            #    parLoc = datadir + '/ppta_dr2_ephemerides/publish_collection/dr2e/{}.kop.par'.format(psr)
+            #    outLoc = datadir + '/ppta_dr2_ephemerides/publish_collection/dr2e/output/{}.kop.par.out'.format(psr)
+            #else:
+            #    parLoc = datadir + '/ppta_dr2_ephemerides/publish_collection/dr2e/{}.par'.format(psr)
+            #    outLoc = datadir + '/ppta_dr2_ephemerides/publish_collection/dr2e/output/{}.par.out'.format(psr)
+            parLoc = datadir + '/ppta_dr2_ephemerides/final/tempo2/{}.par'.format(psr)
+            outLoc = datadir + '/ppta_dr2_ephemerides/final/tempo2/{}.out'.format(psr)
+            #parLoc = '/fred/oz002/dreardon/ppta_dr2_ephemerides/partim/dr2_boris/new_params_ver1/{}.par'.format(psr)
+
+            try:
+                psrPars = readParFile.read_par(parLoc)
+            except FileNotFoundError:
+                parLoc = parLoc.replace('dr2e','dr2')
+                outLoc = outLoc.replace('dr2e','dr2')
+                psrPars = readParFile.read_par(parLoc)
+            data, files = read_general2(outLoc, header=True)
+            psrPars['START'] = np.min(data[:,0])
+            psrPars['FINISH'] = np.max(data[:,0])
+            psrPars['NEPOCH'] = len(np.unique(files))
+            psrDetails.append(psrPars)
+
 
         # read in pulsar details from par files
         psrDetails = []
@@ -505,6 +534,24 @@ for solBin in ['solitary', 'binary']:
                 elif par=='KIN':
                   try:
                     paraString = formatDerivedParams(psrDerived,ipsr,'INC(med/16th/84th)')
+                    paramList.append(paraString)
+                  except:
+                    paramList.append('-')
+                elif par=='ECC':
+                  try:
+                    paraString = formatDerivedParams(psrDerived,ipsr,'ECC(med/16th/84th)')
+                    paramList.append(paraString)
+                  except:
+                    paramList.append('-')
+                elif par=='OM':
+                  try:
+                    paraString = formatDerivedParams(psrDerived,ipsr,'OM(med/16th/84th)')
+                    paramList.append(paraString)
+                  except:
+                    paramList.append('-')
+                elif par=='T0':
+                  try:
+                    paraString = formatDerivedParams(psrDerived,ipsr,'T0(med/16th/84th)')
                     paramList.append(paraString)
                   except:
                     paramList.append('-')
