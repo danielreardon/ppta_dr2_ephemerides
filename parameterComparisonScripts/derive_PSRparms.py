@@ -196,7 +196,7 @@ def mass_from_psrparms(psrparms):
         pm_tot = NP.sqrt(pm1**2 + pm2**2)
         pm = pm_tot/(sec_per_year*rad_to_mas)
         i_limit =  np.abs(np.arctan(a1 * pm / xdot))
-        sini_lim = np.sin(np.median(i_limit))
+        sini_lim = np.sin(np.percentile(i_limit, q=84.0))
 
     cut = NP.argwhere((m2 > mass_func) * (m2 < 1.4) * (sini < sini_lim))
     m2 = m2[cut]

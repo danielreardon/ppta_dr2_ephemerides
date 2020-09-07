@@ -516,12 +516,12 @@ for par in parfiles:
 
         i_limit =  np.abs(180/np.pi * np.arctan(a1 * pm / xdot))
         i_lim_95 = np.percentile(i_limit, q=95)
-        sini_lim_95 = np.sin(np.median(i_limit)*np.pi/180)
+        sini_lim_95 = np.sin(np.percentile(i_limit, q=84)*np.pi/180)
         #sini_lim_95 = 1
         #print("i <= ", int(np.ceil(i_limit)))
         with open(outfile, 'a+') as f:
             f.write("INC_LIM(med/std)" + '\t' + "<" + str(np.median(i_limit))+ '\t'+ str(np.std(i_limit)) +'\n')
-            #f.write("INC_LIM_95" + '\t' + "<" + str(i_lim_95)+ '\n')
+            f.write("INC_LIM_95" + '\t' + "<" + str(i_lim_95)+ '\n')
     else:
         sini_lim_95 = 1
 
