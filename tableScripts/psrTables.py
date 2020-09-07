@@ -68,6 +68,25 @@ def read_general2(filename, header=False):
     return np.array(data), files
 
 
+
+def replaceEWithTimes10(value):
+
+    # does the string contain "e" ?
+    if (value.find("e0"))!=-1:
+        value = value.replace("e0", "\\times 10^{")+"}"
+    elif (value.find("e-0"))!=-1:
+        value = value.replace("e-0", "e-")
+        value = value.replace("e", "\\times 10^{")+"}"
+    elif (value.find("e"))!=-1:
+        value = value.replace("e", "\\times 10^{")+"}"
+    else: pass
+
+    return value
+
+
+
+
+
 """
 Write the parameter line in latex table format
 """
@@ -93,6 +112,8 @@ def writeLine(parameters,tableFile,parameterName,fitOrDer,parLabel=None):
             shortFormat = frmtr.format("{0:.1u}",p)
 
             # does the string contain "e" ?
+            shortFormat = replaceEWithTimes10(shortFormat)
+            """
             if (shortFormat.find("e0"))!=-1:
                 shortFormat = shortFormat.replace("e0", "\\times 10^{")+"}"
             elif (shortFormat.find("e-0"))!=-1:
@@ -101,7 +122,7 @@ def writeLine(parameters,tableFile,parameterName,fitOrDer,parLabel=None):
             elif (shortFormat.find("e"))!=-1:
                 shortFormat = shortFormat.replace("e", "\\times 10^{")+"}"
             else: pass
-
+            """
         except:
             shortFormat = p
 
@@ -147,7 +168,14 @@ def formatDerivedParams(psrDerived,ipsr,par):
         parameterToWrite =  '{0}^{{ +{1} }}_{{ -{2} }}'.format(round(parameter), high, low)
     else:
         digit = np.max([len(str(high).split('.')[-1]), len(str(low).split('.')[-1])])
-        parameterToWrite =  '{0}^{{ +{1} }}_{{ -{2} }}'.format(round(parameter, int(digit)), high, low)
+        value = replaceEWithTimes10(str(round(parameter,int(digit))))
+        low   = replaceEWithTimes10(str(low))
+        high  = replaceEWithTimes10(str(high))
+
+        parameterToWrite = '{{ {0} }} ^{{ +{1} }}_{{ -{2} }}'.format(value,high,low)
+
+        print(parameterToWrite)
+        
     return parameterToWrite
 
 
@@ -518,7 +546,7 @@ for solBin in ['solitary', 'binary']:
 
           for ipsr, psr in enumerate(psrNames):
 
-            print(fittedOrDerived[par])
+            #print(fittedOrDerived[par])
             if fittedOrDerived[par]==0:
               try:
                 parameter = ufloat(psrDetails[ipsr][par], psrDetails[ipsr][str(par+'_ERR')])
@@ -590,7 +618,7 @@ for solBin in ['solitary', 'binary']:
                     '''
                     parameterStr = formatDerivedParams(psrDerived,ipsr,par)
                     paramList.append(parameterStr)
-                    print('parSTRING ', parameterStr)
+                    #print('parSTRING ', parameterStr)
                 except:
                   paramList.append('-')
 
