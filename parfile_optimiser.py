@@ -31,8 +31,6 @@ from scipy.signal import savgol_filter
 from astropy.coordinates import SkyCoord, ICRS, BarycentricTrueEcliptic
 import sys
 sys.path.insert(0, '/Users/dreardon/Dropbox/Git/ppta_dr2_ephemerides/parameterComparisonScripts/')
-from derive_PSRparms import mass_from_psrparms
-
 
 
 """
@@ -523,7 +521,7 @@ for par in parfiles:
         #print("i <= ", int(np.ceil(i_limit)))
         with open(outfile, 'a+') as f:
             f.write("INC_LIM(med/std)" + '\t' + "<" + str(np.median(i_limit))+ '\t'+ str(np.std(i_limit)) +'\n')
-            f.write("INC_LIM_95" + '\t' + "<" + str(i_lim_95)+ '\n')
+            #f.write("INC_LIM_95" + '\t' + "<" + str(i_lim_95)+ '\n')
     else:
         sini_lim_95 = 1
 
@@ -710,9 +708,3 @@ for par in parfiles:
         f.write('\n')
 
     print(" ")
-
-
-    if '1909' in par:
-        mass_params = mass_from_psrparms(params)
-
-

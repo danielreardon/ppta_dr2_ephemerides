@@ -318,7 +318,6 @@ def get_parameters_for_table(solitaryOrBinary):
                    'PX',\
                    'PB', 'A1',\
                    'T0', 'OM', 'ECC',\
-#                   'T0(med/16th/84th)', 'OM(med/16th/84th)', 'ECC(med/16th/84th)',\
                    'TASC', 'EPS1', 'EPS2',\
                    'PBDOT', 'OMDOT', 'XDOT',\
                    'SINI', 'M2', 'H3', 'H4', 'STIG',\
