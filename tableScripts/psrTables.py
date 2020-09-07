@@ -111,8 +111,8 @@ def writeLine(parameters,tableFile,parameterName,keepTrackFitOrDer,parLabel=None
     else: pass
     """
 
-    # loop over the parameter values for each pulsar in this batch 
-    # using "keepTrackFitOrDer" to remember whether the parameters came from the 
+    # loop over the parameter values for each pulsar in this batch
+    # using "keepTrackFitOrDer" to remember whether the parameters came from the
     # par files or the derived params file
     for i,p in enumerate(parameters):
 
@@ -126,7 +126,7 @@ def writeLine(parameters,tableFile,parameterName,keepTrackFitOrDer,parLabel=None
 
         # fitted in bold
         if keepTrackFitOrDer[i]=='f':
-            table.write('\t & \t $\\mathbf{{ {} }}$'.format(shortFormat)) 
+            table.write('\t & \t $\\mathbf{{ {} }}$'.format(shortFormat))
 
         # derived not bold
         elif keepTrackFitOrDer[i]=='d':
@@ -177,7 +177,7 @@ def formatDerivedParams(psrDerived,ipsr,par):
         parameterToWrite = '{{ {0} }} ^{{ +{1} }}_{{ -{2} }}'.format(value,high,low)
 
         #print(parameterToWrite)
-        
+
     return parameterToWrite
 
 
@@ -446,7 +446,7 @@ for solBin in ['solitary', 'binary']:
         noTOABolding = ['n' for i in range(len(psrNames))]
         writeLine(names,tableFile,parameterNames['NTOA'],noTOABolding)
 
-        ## write number of observations row 
+        ## write number of observations row
         print('Number of observations')
         names = [ psrDetails[i]['NEPOCH'] for i in range(len(psrNames)) ]
         noObservationsBolding = ['n' for i in range(len(psrNames))]
@@ -538,7 +538,7 @@ for solBin in ['solitary', 'binary']:
 
 
         fittedOrDerived, params = get_parameters_for_table(solBin)
-       
+
         # getting the parameter labels / names for the table headings
         parameterNames = parameterLabels.getParamLabels()
 

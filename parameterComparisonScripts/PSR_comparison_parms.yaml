@@ -107,7 +107,7 @@ compareParms:
                        'PPTA_DR1',
                        'PPTA_DR2O',
                        'PPTA_DR2E',
-        	       'PPTA_DR2'
+        	           'PPTA_DR2'
                       ]
                                 # The PTA's whose data are to be 
                                 # compared

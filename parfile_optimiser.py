@@ -318,9 +318,9 @@ for par in parfiles:
         om_array = np.arctan2(eps1, eps2) * 180/np.pi
         t0_array = tasc + (om_array/nb)
         with open(outfile, 'a+') as f:
-            f.write("ECC(med/16th/84th)" + '\t' + str(np.median(ecc_array)) + '\t' + str(np.percentile(ecc_array, q=16)) + '\t' + str(np.percentile(ecc_array, q=84)) + '\n')
-            f.write("OM(med/16th/84th)" + '\t' + str(np.median(om_array)) + '\t' + str(np.percentile(om_array, q=16)) + '\t' + str(np.percentile(om_array, q=84)) + '\n')
-            f.write("T0(med/16th/84th)" + '\t' + str(np.median(t0_array)) + '\t' + str(np.percentile(t0_array, q=16)) + '\t' + str(np.percentile(t0_array, q=84)) + '\n')
+            f.write("ECC(med/std)" + '\t' + str(np.median(ecc_array)) + '\t' + str(np.std(ecc_array)) + '\n')
+            f.write("OM(med/std)" + '\t' + str(np.median(om_array)) + '\t' + str(np.std(om_array)) + '\n')
+            f.write("T0(med/std)" + '\t' + str(np.median(t0_array)) + '\t' + str(np.std(t0_array)) + '\n')
 
 
     # Check if pulsar requires Kopeikin terms
