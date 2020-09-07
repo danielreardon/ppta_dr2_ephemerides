@@ -94,7 +94,7 @@ def get_derived_params(parfilename):
     For a given par file, find the derived parameters in the "derived_params.txt" file.
     (searches for the par file)
     """
-    derivedParamsFile = '../publish_collection/dr2/output/derived_params.txt'
+    derivedParamsFile = '../final/tempo2/output/derived_params.txt'
 
     file = open(derivedParamsFile, 'r')
 
