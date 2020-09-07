@@ -11,6 +11,6 @@ export TEMPO2=/fred/oz002/rshannon/tempo2
 export TEMPO2_CLOCK_DIR=/home/dreardon/tempo2/clock
 
 cd /fred/oz002/dreardon/ppta_dr2_ephemerides/J0437
-/fred/oz002/rshannon/bin/tempo2 -f J0437-4715.par J0437-4715.tim -nobs 35000 -newpar
-mv new.par J0437-4715.par
-/fred/oz002/rshannon/bin/tempo2 -output general2 -f J0437-4715.par J0437-4715.tim -nobs 35000 -s "{file}\t{bat}\t{freq}\t{pre}\t{post}\t{err}\t{posttn}\t{tndm}\t{tndmerr}\t{tnrn}\t{tnrnerr}\t{tnchrom}\t{tnchromerr}\t{binphase}\n" > J0437-4715.output
+/fred/oz002/rshannon/bin/tempo2 -f new.dr2.par J0437-4715.tim -nobs 35000 -newpar
+mv new.par new.dr2.par
+#/fred/oz002/rshannon/bin/tempo2 -output general2 -f J0437-4715.dr2e.par J0437-4715.dr2e.tim -nobs 35000 -s "{file}\t{bat}\t{freq}\t{pre}\t{post}\t{err}\t{posttn}\t{tndm}\t{tndmerr}\t{tnrn}\t{tnrnerr}\t{tnchrom}\t{tnchromerr}\t{binphase}\n" > J0437-4715.dr2e.output
