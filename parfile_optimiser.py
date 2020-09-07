@@ -222,7 +222,7 @@ outfile = outdir + 'derived_params.txt'
 if path.exists(outfile):
     os.remove(outfile)
 
-n_samples = 10000
+n_samples = 1000000
 # Define other useful constants
 M_sun = 1.98847542e+30  # kg
 Tsun = 4.926790353700459e-06  #s
@@ -514,12 +514,13 @@ for par in parfiles:
 
 
         i_limit =  np.abs(180/np.pi * np.arctan(a1 * pm / xdot))
-        i_lim_95 = np.percentile(i_limit, q=95)
+        i_lim_95 = np.percentile(i_limit, q=50)
         sini_lim_95 = np.sin(i_lim_95*np.pi/180)
         #sini_lim_95 = 1
         #print("i <= ", int(np.ceil(i_limit)))
         with open(outfile, 'a+') as f:
             f.write("INC_LIM(med/std)" + '\t' + "<" + str(np.median(i_limit))+ '\t'+ str(np.std(i_limit)) +'\n')
+            f.write("INC_LIM_95" + '\t' + "<" + str(i_lim_95)+ '\n')
     else:
         sini_lim_95 = 1
 
@@ -535,7 +536,7 @@ for par in parfiles:
             sini = 2 * h3 * h4 / ( h3**2 + h4**2 )
             m2 = h3**4 / h4**3  # in us
             m2 = m2/(Tsun*10**6)
-            cut = np.argwhere((m2 > mass_func) * (m2 < 2) * (sini < sini_lim_95))
+            cut = np.argwhere((m2 > mass_func) * (m2 < 1.4) * (sini < sini_lim_95))
             m2 = m2[cut]
             sini = sini[cut]
             inc = np.arcsin(sini)*180/np.pi
@@ -575,7 +576,7 @@ for par in parfiles:
             sini = 2 * h3 * h4 / ( h3**2 + h4**2 )
             m2 = h3**4 / h4**3
             m2 = m2/(Tsun*10**6)
-            cut = np.argwhere((m2 > mass_func) * (m2 < 10) * (sini < sini_lim_95))
+            cut = np.argwhere((m2 > mass_func) * (m2 < 1.4) * (sini < sini_lim_95))
             m2 = m2[cut]
             sini = sini[cut]
             inc = np.arcsin(sini)*180/np.pi
@@ -616,7 +617,7 @@ for par in parfiles:
         else:
             sini = np.random.normal(loc=params["SINI"], scale=params["SINI_ERR"], size=n_samples)
             inc = np.arcsin(sini)*180/np.pi
-        cut = np.argwhere((m2 > mass_func) * (m2 < 10) *  (sini < sini_lim_95))
+        cut = np.argwhere((m2 > mass_func) * (m2 < 1.4) *  (sini < sini_lim_95))
         m2 = m2[cut]
         sini = sini[cut]
         inc = np.arcsin(sini)*180/np.pi
@@ -652,6 +653,11 @@ for par in parfiles:
         if 'ECC' in params.keys():
             ecc = params['ECC']
             ecc_err = params['ECC_ERR']
+            ecc_posterior = np.random.normal(loc=params["ECC"], scale=params["ECC_ERR"], size=n_samples)
+            omdot_posterior = np.random.normal(loc=params["OMDOT"], scale=params["OMDOT_ERR"], size=n_samples)
+            cut = np.argwhere(omdot_posterior > 0)
+            omdot_posterior = omdot_posterior[cut]
+            ecc_posterior = ecc_posterior[cut]
         elif 'EPS1' in params.keys():
             eps1_posterior = np.random.normal(loc=params["EPS1"],
                                            scale=params["EPS1_ERR"], size=n_samples)  # observed
@@ -667,11 +673,15 @@ for par in parfiles:
                                            scale=params["EPS2DOT_ERR"], size=n_samples)  # observed
 
             omdot_posterior = (86400*365.2425*180/np.pi)*np.sqrt(eps1dot_posterior**2 + eps2dot_posterior**2)/ecc
+            cut = np.argwhere(omdot_posterior > 0)
+            omdot_posterior = omdot_posterior[cut]
+            ecc_posterior = ecc_posterior[cut]
             omdot = np.mean(omdot_posterior)
             omdot_err = np.std(omdot_posterior)
             #print("Observed OMDOT = ", omdot, " +/- ", omdot_err)
             with open(outfile, 'a+') as f:
                 f.write("OMDOT" + '\t' + str(omdot) + '\t' + str(omdot_err) + '\n')
+
 
         Msun = 1.989*10**30  # kg
         Tsun = sc.G * Msun / (sc.c**3)
@@ -683,6 +693,12 @@ for par in parfiles:
         #print("OMDOT_gr = {0}, for Mtot = {1}".format(omdot_gr, Mtot))
         with open(outfile, 'a+') as f:
             f.write("OMDOT_GR" + '\t' + str(omdot_gr) + ' for M_TOT = ' + str(Mtot) + '\n')
+
+        # Now derive Mtot
+        omdot_posterior = omdot_posterior / 86400 / 365.2425 * np.pi/180
+        Mtot = (omdot_posterior*(1 - ecc_posterior**2) / (3 * n**(5/3)))**(3/2)/Tsun
+        with open(outfile, 'a+') as f:
+            f.write("MTOT_GR(med/16th/84th)" + '\t' + str(np.median(Mtot)) + '\t' + str(np.percentile(Mtot, q=16)) + '\t' + str(np.percentile(Mtot, q=84)) + '\n')
 
     with open(outfile, 'a+') as f:
         f.write('\n')
