@@ -193,12 +193,10 @@ def is_valid(array):
 Start of code
 """
 
-def derive_combined_mass(params):
+def derive_combined_mass(params, plot=False, n_samples=10000000):
 
     psrname = params['PSRJ']
-    plot = False
 
-    n_samples = 10000000
     # Define other useful constants
     M_sun = 1.98847542e+30  # kg
     Tsun = 4.926790353700459e-06  #s
@@ -335,35 +333,12 @@ def derive_combined_mass(params):
     n, b, p = plt.hist(i_prior, bins=bins, alpha=0.5, range=(0, 90))
     n2, b2, p = plt.hist(i, bins=bins, alpha=0.5, range=(0, 90))
     n3, b3, p = plt.hist(inc, bins=bins, alpha=0.5, range=(0, 90))
-    plt.xlim((0, 90))
-    plt.legend(['cos(i) prior', 'Kopeikin', 'Shapiro delay'])
-    plt.xlabel('Inclination angle')
-    if plot:
-        plt.show()
-    else:
-        plt.close()
+    plt.close()
 
-    plt.figure()
     combined = n*n2*n3
     mx = np.max(combined)
-    plt.plot(np.linspace(0,90,bins), combined/mx)
-    #plt.plot(np.linspace(0,90,bins), n/mx*np.max(n))
-    #plt.plot(np.linspace(0,90,bins), n2/mx*np.max(n2))
-    #plt.plot(np.linspace(0,90,bins), n3/mx*np.max(n3))
-    plt.xlim((0, 90))
-    if plot:
-        plt.show()
-    else:
-        plt.close()
-
 
     i_posterior = np.random.choice(np.linspace(0,90,bins), size=(1, n_samples), p=(combined/np.sum(combined))).squeeze()
-    plt.figure()
-    plt.hist(i_posterior.squeeze(), bins=100)
-    if plot:
-        plt.show()
-    else:
-        plt.close()
 
     sini = np.sin(i_posterior*np.pi/180).squeeze()
     m2 = m2.squeeze()
@@ -373,21 +348,58 @@ def derive_combined_mass(params):
     mtot = mtot[is_valid(mtot)]
 
     plt.figure()
-    n, b, p = plt.hist(Mtot, bins=bins, alpha=0.5, range=(0, 5))
-    n2, b2, p = plt.hist(mtot, bins=bins, alpha=0.5, range=(0, 5))
-    plt.xlim((0, 5))
-    plt.xlabel('Total system mass')
-    plt.legend(['Periastron advance', 'Shapiro + Kopeikin'])
-    if plot:
-        plt.show()
-    else:
-        plt.close()
+    n4, b, p = plt.hist(Mtot, bins=bins, alpha=0.5, range=(0, 5))
+    n5, b2, p = plt.hist(mtot, bins=bins, alpha=0.5, range=(0, 5))
+    plt.close()
 
-    plt.figure()
-    combined = n*n2
+
+
+
+    plt.figure(figsize=(18, 6))
+    plt.subplot(1, 2, 1)
+    plt.plot(np.linspace(0,90,bins), savgol_filter(n/np.sum(n), 51, 3), color='k', linestyle='--', linewidth=2)
+    #plt.fill_between(np.linspace(0,90,bins), savgol_filter(n/np.sum(n), 51, 3), color='mediumblue', alpha=0.3)
+    plt.plot(np.linspace(0,90,bins), savgol_filter(n2/np.sum(n2), 51, 3), color='crimson', linewidth=2)
+    #plt.fill_between(np.linspace(0,90,bins), savgol_filter(n2/np.sum(n2), 51, 3), color='crimson', alpha=0.3)
+    plt.plot(np.linspace(0,90,bins), savgol_filter(n3/np.sum(n3), 51, 3), color='midnightblue', linewidth=2)
+    #plt.fill_between(np.linspace(0,90,bins), savgol_filter(n3/np.sum(n3), 51, 3), color='darkorange', alpha=0.3)
+
+
+    #plt.plot(np.linspace(0,90,bins), savgol_filter(combined/np.sum(combined), 51, 3), color='k', linewidth=2)
+    plt.fill_between(np.linspace(0,90,bins), savgol_filter(combined/np.sum(combined), 51, 3), color='k', alpha=0.15)
+    #plt.plot(np.linspace(0,90,bins), n/mx*np.max(n))
+    #plt.plot(np.linspace(0,90,bins), n2/mx*np.max(n2))
+    #plt.plot(np.linspace(0,90,bins), n3/mx*np.max(n3))
+    if 'XDOT' in params.keys():
+        plt.legend([r'Uniform $\cos(i)$ prior', r'Kopeikin, $\dot{x}$', r'Shapiro delay, $h_3$ and $\zeta$', r'Total'], loc='upper left')
+    else:
+        plt.legend([r'Uniform $\cos(i)$ prior', r'Kopeikin, $i$', r'Shapiro delay', r'Total'], loc='upper left')
+    plt.xlim((0, 90))
+    yl = plt.ylim()
+    plt.ylim((0, yl[1]))
+    plt.xlabel(r'Inclination, $i$ ($^\circ$)')
+    plt.ylabel(r'Probability')
+    locs, labels = plt.yticks()            # Get locations and labels
+    labels[labels == '0.000'] = '0'
+    plt.yticks(locs, labels)  # Set locations and labels
+
+    plt.subplot(1, 2, 2)
+    combined = n4*n5
     mx = np.max(combined)
-    plt.plot(np.linspace(0,5, bins), combined/mx)
+    plt.plot(np.linspace(0,5, bins), savgol_filter(n4/np.sum(n4), 51, 3), color='crimson', linewidth=2)
+    #plt.fill_between(np.linspace(0,5, bins), savgol_filter(n4/np.sum(n4), 51, 3), color='crimson', alpha=0.3)
+    plt.plot(np.linspace(0,5, bins), savgol_filter(n5/np.sum(n5), 51, 3), color='midnightblue', linewidth=2)
+    #plt.fill_between(np.linspace(0,5, bins), savgol_filter(n5/np.sum(n5), 51, 3), color='darkorange', alpha=0.3)
+    #plt.plot(np.linspace(0,5, bins), savgol_filter(combined/np.sum(combined), 51, 3), color='k', linewidth=2)
+    plt.fill_between(np.linspace(0,5, bins), savgol_filter(combined/np.sum(combined), 51, 3), color='k', alpha=0.15)
     plt.xlim((0, 5))
+    #yl = plt.ylim()
+    plt.ylim((0, yl[1]))
+    plt.xlabel(r'Total system mass, $M_{\rm tot}$ ($M_\odot$)')
+    locs, labels = plt.yticks()            # Get locations and labels
+    plt.yticks(locs, [])  # Set locations and labels
+    plt.legend(['Periastron advance $\dot{\omega}$', 'Shapiro and Kopeikin', 'Total'], loc='upper left')
+    plt.tight_layout()
     if plot:
         plt.show()
     else:
