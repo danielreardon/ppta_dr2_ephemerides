@@ -578,7 +578,12 @@ for par in parfiles:
             sini = 2 * h3 * h4 / ( h3**2 + h4**2 )
             m2 = h3**4 / h4**3
             m2 = m2/(Tsun*10**6)
-            cut = np.argwhere((m2 > mass_func) * (m2 < 1.4) * (sini < sini_lim_95))
+            if '1017' in psrname:
+                sini_lim_95 = np.sin(46.2 * np.pi/180)
+                sini_min = np.sin(29.3 * np.pi/180)
+                cut = np.argwhere((m2 > mass_func) * (m2 < 1.4) * (sini < sini_lim_95) * (sini > sini_min))
+            else:
+                cut = np.argwhere((m2 > mass_func) * (m2 < 1.4) * (sini < sini_lim_95))
             m2 = m2[cut]
             sini = sini[cut]
             inc = np.arcsin(sini)*180/np.pi
