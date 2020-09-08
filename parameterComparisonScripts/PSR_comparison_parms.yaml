@@ -26,7 +26,7 @@ dirstruct   :
     PTA_dirinfo :
                                 # Information on the PTA data sets
 
-        EPTA_DR1    :
+        EPTA-DR1    :
                                 # Information about European Pulsar
                                 # Timing Array
 
@@ -34,14 +34,14 @@ dirstruct   :
                                 # Directory containing information about
                                 # the pulsars
 
-        NG_11yr     :
+        NG-11yr     :
                                 # Information about NANOGrav 11-yr data
 
             PSRdir      : '/fred/oz002/nthyagar/projects/dr2_ephemerides/PTA_DataReleases/NANOGrav_11y/par/'
                                 # Directory containing information about
                                 # the pulsars
 
-        NG_12.5yr_NB:
+        NG-12.5yr-NB:
                                 # Information about NANOGrav 12.5-yr
                                 # narrowband data
 
@@ -49,7 +49,7 @@ dirstruct   :
                                 # Directory containing information about
                                 # the pulsars
 
-        NG_12.5yr_WB:
+        NG-12.5yr-WB:
                                 # Information about NANOGrav 12.5-yr
                                 # wideband data
 
@@ -57,27 +57,27 @@ dirstruct   :
                                 # Directory containing information about
                                 # the pulsars
 
-        PPTA_DR1    :
+        PPTA-DR1    :
                                 # Information about PPTA 15-yr (DR1) data
 
             PSRdir      : '/fred/oz002/nthyagar/projects/dr2_ephemerides/PTA_DataReleases/ppta15/'
                                 # Directory containing information about
                                 # the pulsars
 
-        PPTA_DR2O   :
+        PPTA-DR2O   :
                                 # Information about PPTA DR2 original data refitted
 
             PSRdir      : '/fred/oz002/dreardon/ppta_dr2_ephemerides/publish_collection_refit/dr2/ecliptic/'
                                 # Directory containing information about
                                 # the pulsars
-        PPTA_DR2E   :
+        PPTA-DR2E   :
                                 # Information about PPTA DR2E data refitted
 
             PSRdir      : '/fred/oz002/dreardon/ppta_dr2_ephemerides/publish_collection_refit/dr2e/ecliptic/'
                                 # Directory containing information about
                                 # the pulsars
 
-        PPTA_DR2    : 
+        PPTA-DR2    : 
                                 # Information about PPTA DR2 data best results from DR2O and DR2E
 
             PSRdir      : '../final/tempo2/'
@@ -94,182 +94,88 @@ compareParms:
                                 # comparison is to be made
                                 
     derived_params: ['Dpsr_PX', 'Dpsr_Pbdot', 'psr_mass_parms']
-                    		# List of derived parameters to plot
+                                # List of derived parameters to plot
 
-    'PX'        :
-				# Parameters relevant for 'PX'
-				# comparison and plots
-
-        PTA         : ['EPTA_DR1',
-                       'NG_11yr',
-                       'NG_12.5yr_NB',
-                       'NG_12.5yr_WB',
-                       'PPTA_DR1',
-                       'PPTA_DR2O',
-                       'PPTA_DR2E',
-        	           'PPTA_DR2'
-                      ]
+    PTA         : ['EPTA-DR1',
+                   'NG-11yr',
+                   'NG-12.5yr-NB',
+                   'NG-12.5yr-WB',
+                   'PPTA-DR1',
+                   'PPTA-DR2O',
+                   'PPTA-DR2E',
+                   'PPTA-DR2'
+                  ]
                                 # The PTA's whose data are to be 
                                 # compared
                                 
-        ref_PTA     : 'PPTA_DR2'
+    ref_PTA     : 'PPTA-DR2'
                                 # The reference PTA to which other
                                 # PTA values will be normalized to
 
-        plot_PTAs   : ['EPTA_DR1',
-                       'NG_12.5yr_NB',
-                       'PPTA_DR1',
-                       'PPTA_DR2O',
-                       'PPTA_DR2E',
-        	       'PPTA_DR2'
+    'PX'        :
+                                # Parameters relevant for 'PX'
+                                # comparison and plots
+
+        plot_PTAs   : ['EPTA-DR1',
+                       'NG-12.5yr-NB',
+                       'PPTA-DR1',
+                       'PPTA-DR2O',
+                       'PPTA-DR2E',
+                       'PPTA-DR2'
                       ]
                                 # The PTA's whose data are to be 
                                 # plotted
 
     'PMELAT'    :
-				# Parameters relevant for 'PMELAT'
-				# comparison and plots
+                                # Parameters relevant for 'PMELAT'
+                                # comparison and plots
 
-        PTA         : ['EPTA_DR1',
-                       'NG_11yr',
-                       'NG_12.5yr_NB',
-                       'NG_12.5yr_WB',
-                       'PPTA_DR1',
-                       'PPTA_DR2O',
-                       'PPTA_DR2E',
-        	       'PPTA_DR2'
-                      ]
-                                # The PTA's whose data are to be 
-                                # compared
-                                
-        ref_PTA     : 'PPTA_DR2'
-                                # The reference PTA to which other
-                                # PTA values will be normalized to
-
-        plot_PTAs   : ['EPTA_DR1',
-                       'NG_12.5yr_NB',
-                       'PPTA_DR1',
-                       'PPTA_DR2O',
-                       'PPTA_DR2E',
-        	       'PPTA_DR2'
+        plot_PTAs   : ['EPTA-DR1',
+                       'NG-12.5yr-NB',
+                       'PPTA-DR1',
+                       'PPTA-DR2O',
+                       'PPTA-DR2E',
+                       'PPTA-DR2'
                       ]
                                 # The PTA's whose data are to be 
                                 # plotted
 
     'PMELONG'   :
-				# Parameters relevant for 'PMELONG'
-				# comparison and plots
+                                # Parameters relevant for 'PMELONG'
+                                # comparison and plots
 
-        PTA         : ['EPTA_DR1',
-                       'NG_11yr',
-                       'NG_12.5yr_NB',
-                       'NG_12.5yr_WB',
-                       'PPTA_DR1',
-                       'PPTA_DR2O',
-                       'PPTA_DR2E',
-        	       'PPTA_DR2'
-                      ]
-                                # The PTA's whose data are to be 
-                                # compared
-                                
-        ref_PTA     : 'PPTA_DR2'
-                                # The reference PTA to which other
-                                # PTA values will be normalized to
-
-        plot_PTAs   : ['EPTA_DR1',
-                       'NG_12.5yr_NB',
-                       'PPTA_DR1',
-                       'PPTA_DR2O',
-                       'PPTA_DR2E',
-        	       'PPTA_DR2'
+        plot_PTAs   : ['EPTA-DR1',
+                       'NG-12.5yr-NB',
+                       'PPTA-DR1',
+                       'PPTA-DR2O',
+                       'PPTA-DR2E',
+                       'PPTA-DR2'
                       ]
                                 # The PTA's whose data are to be 
                                 # plotted
 
-    'Dpsr_PX'   :
-				# Parameters relevant for 'Dpsr_PX'
-				# comparison and plots
+    'Dpsr'      :
+                                # Parameters relevant for 'Dpsr_PX'
+                                # comparison and plots
 
-        PTA         : ['EPTA_DR1',
-                       'NG_11yr',
-                       'NG_12.5yr_NB',
-                       'NG_12.5yr_WB',
-                       'PPTA_DR1',
-                       'PPTA_DR2O',
-                       'PPTA_DR2E',
-        	       'PPTA_DR2'
-                      ]
-                                # The PTA's whose data are to be 
-                                # compared
-                                
-        ref_PTA     : 'PPTA_DR2'
-                                # The reference PTA to which other
-                                # PTA values will be normalized to
-
-        plot_PTAs   : ['EPTA_DR1',
-                       'NG_12.5yr_NB',
-                       'PPTA_DR1',
-                       'PPTA_DR2O',
-                       'PPTA_DR2E',
-        	       'PPTA_DR2'
-                      ]
-                                # The PTA's whose data are to be 
-                                # plotted
-
-    'Dpsr_Pbdot':
-				# Parameters relevant for 'Dpsr_Pbdot'
-				# comparison and plots
-
-        PTA         : ['EPTA_DR1',
-                       'NG_11yr',
-                       'NG_12.5yr_NB',
-                       'NG_12.5yr_WB',
-                       'PPTA_DR1',
-                       'PPTA_DR2O',
-                       'PPTA_DR2E',
-        	       'PPTA_DR2'
-                      ]
-                                # The PTA's whose data are to be 
-                                # compared
-                                
-        ref_PTA     : 'PPTA_DR2'
-                                # The reference PTA to which other
-                                # PTA values will be normalized to
-
-        plot_PTAs   : ['EPTA_DR1',
-                       'NG_12.5yr_NB',
-                       'PPTA_DR1',
-                       'PPTA_DR2O',
-                       'PPTA_DR2E',
-        	       'PPTA_DR2'
+        plot_PTAs   : ['EPTA-DR1',
+                       'NG-12.5yr-NB',
+                       'PPTA-DR1',
+                       'PPTA-DR2O',
+                       'PPTA-DR2E',
+                       'PPTA-DR2'
                       ]
                                 # The PTA's whose data are to be 
                                 # plotted
 
     'psr_mass_parms':
-				# Parameters relevant for 'Dpsr_Pbdot'
-				# comparison and plots
+                                # Parameters relevant for 'Dpsr_Pbdot'
+                                # comparison and plots
 
-        PTA         : ['EPTA_DR1',
-                       'NG_11yr',
-                       'NG_12.5yr_NB',
-                       'NG_12.5yr_WB',
-                       'PPTA_DR1',
-                       'PPTA_DR2O',
-                       'PPTA_DR2E',
-                       'PPTA_DR2'
-                      ]
-                                # The PTA's whose data are to be 
-                                # compared
-                                
-        ref_PTA     : 'PPTA_DR2'
-                                # The reference PTA to which other
-                                # PTA values will be normalized to
-
-        plot_PTAs   : ['EPTA_DR1',
-                       'NG_12.5yr_NB',
-                       'PPTA_DR1',
-        	       'PPTA_DR2'
+        plot_PTAs   : ['EPTA-DR1',
+                       'NG-12.5yr-NB',
+                       'PPTA-DR1',
+                       'PPTA-DR2'
                       ]
                                 # The PTA's whose data are to be 
                                 # plotted
