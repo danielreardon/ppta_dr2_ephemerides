@@ -55,6 +55,7 @@ def getParamLabels():
   'T0(med/16th/84th)'    : r'Epoch of periastron, $T_0$ (MJD)\dotfill',
   'OM(med/16th/84th)'    : r'Longitude of periastron, $\omega$ (deg)\dotfill',
   'ECC(med/16th/84th)'   : r'Eccentricity of orbit, $e$\dotfill',
+  'ECC(med/std)'         : r'Eccentricity of orbit, $e$\dotfill',
   }
 
 

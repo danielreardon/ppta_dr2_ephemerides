@@ -77,6 +77,9 @@ def replaceEWithTimes10(value):
     elif (value.find("e-0"))!=-1:
         value = value.replace("e-0", "e-")
         value = value.replace("e", "\\times 10^{")+"}"
+    elif (value.find("e+0"))!=-1:
+        value = value.replace("e+0","e+")
+        value = value.replace("e", "\\times 10^{")+"}"
     elif (value.find("e"))!=-1:
         value = value.replace("e", "\\times 10^{")+"}"
     else: pass
@@ -146,10 +149,16 @@ def formatDerivedParams(psrDerived,ipsr,par):
 
     """
     Formatting for derived params with ^{+...}_{-...}
+    EXCEPT for ECC(med/std) which is written as value(error)
     These are all not bold..
     """
 
     parameter =  psrDerived[ipsr][par]
+
+    if par=='ECC(med/std)':
+        print(psrDerived[ipsr][par],psrDerived[ipsr][par+'_ERR'])
+
+
     high = float(psrDerived[ipsr][par+'_84th']) - float(psrDerived[ipsr][par])
     low  = float(psrDerived[ipsr][par]) - float(psrDerived[ipsr][par+'_16th'])
     high = round_sig(high)
@@ -282,7 +291,7 @@ def get_parameters_for_table(solitaryOrBinary):
 
     # parameters form derived_parameters.txt
     fromDerivedParams = (['ELAT','ELONG','PMELONG','PMELAT','PMELONG','MASS_FUNC',\
-                          'ECC(med/16th/84th)', 'OM(med/16th/84th)', 'T0(med/16th/84th)',\
+                          'ECC(med/std)', 'OM(med/std)', 'T0(med/std)',\
                           'D_PX(med/16th/84th)', 'D_SHK(med/16th/84th)',\
                           'INC(med/16th/84th)', 'INC_LIM(med/std)',\
                           'M2(med/16th/84th)', 'MP(med/16th/84th)', 'MTOT(med/16th/84th)',\
@@ -405,6 +414,7 @@ for solBin in ['solitary', 'binary']:
 
             if psr == 'J1713+0747' or psr == 'J1909-3744':
                 parname = '{}.kop.par'.format(psr)
+                parname = '{}.par'.format(psr)
             else:
                 parname = '{}.par'.format(psr)
 
@@ -585,21 +595,23 @@ for solBin in ['solitary', 'binary']:
                     paramList.append('-')
                 elif par=='ECC':
                   try:
-                    paraString = formatDerivedParams(psrDerived,ipsr,'ECC(med/16th/84th)')
-                    paramList.append(paraString)
+                    paramString = ufloat(psrDerived[ipsr]['ECC(med/std)'],psrDerived[ipsr]['ECC(med/std)_ERR'])
+                    paramList.append(paramString)
                     keepingTrackFitDerived[ipsr] = 'd'
                   except:
                     paramList.append('-')
                 elif par=='OM':
                   try:
-                    paraString = formatDerivedParams(psrDerived,ipsr,'OM(med/16th/84th)')
+                    #paraString = formatDerivedParams(psrDerived,ipsr,'OM(med/16th/84th)')
+                    paraString = ufloat(psrDerived[ipsr]['OM(med/std)'],psrDerived[ipsr]['OM(med/std)_ERR'])
                     paramList.append(paraString)
                     keepingTrackFitDerived[ipsr] = 'd'
                   except:
                     paramList.append('-')
                 elif par=='T0':
                   try:
-                    paraString = formatDerivedParams(psrDerived,ipsr,'T0(med/16th/84th)')
+                    #paraString = formatDerivedParams(psrDerived,ipsr,'T0(med/16th/84th)')
+                    paraString = ufloat(psrDerived[ipsr]['T0(med/std)'],psrDerived[ipsr]['T0(med/std)_ERR'])
                     paramList.append(paraString)
                     keepingTrackFitDerived[ipsr] = 'd'
                   except:
