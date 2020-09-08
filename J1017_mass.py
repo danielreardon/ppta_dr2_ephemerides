@@ -199,9 +199,9 @@ Start of code
 datadir = '/Users/dreardon/Dropbox/Git/ppta_dr2_ephemerides/final/tempo2/'
 outdir = '/Users/dreardon/Dropbox/Git/ppta_dr2_ephemerides/final/tempo2/output/'
 
-parfiles = sorted(glob.glob(datadir + 'J1017*.par'))
+parfiles = sorted(glob.glob(datadir + 'J1600*.par'))
 
-psrnames = np.array(['J1017-7156'])
+psrnames = np.array(['J1600-3053'])
 params = read_par(parfiles[0])
 
 
@@ -217,11 +217,15 @@ rad_to_mas = 180*3600*1000/np.pi
 parsec_to_m = 3.08567758e+16
 sec_per_year = 86400*365.2425
 
+mass_func = (4*np.pi**2/sc.G) * (params['A1']*sc.c)**3/(params['PB']*86400)**2
+mass_func = mass_func/M_sun
 
 Omega = np.random.rand(n_samples)*2*np.pi
 cosi = np.random.rand(n_samples)
 i_prior = np.arccos(cosi)*180/np.pi
-i[i<0] = -i[i<0]
+i_prior[i_prior<0] = -i_prior[i_prior<0]
+
+#i_prior = np.random.rand(n_samples)*90
 
 # XDOT
 xdot = np.random.normal(loc=params["XDOT"], scale=params["XDOT_ERR"], size=n_samples)
@@ -236,6 +240,9 @@ sini_lim_95 = np.sin(np.percentile(i_limit, q=84)*np.pi/180)
 
 A = (-pmelong/(sec_per_year*rad_to_mas))*np.sin(Omega) + (-pmelat/(sec_per_year*rad_to_mas))*np.cos(Omega)
 i = np.arctan2(a1 * A, xdot)*180/np.pi
+i[i>90] = i[i>90] - 180
+i[i<0] = -i[i<0]
+i[i>90] = i[i>90] - 180
 i[i<0] = -i[i<0]
 #plt.figure()
 plt.hist(i_prior, bins=1000, alpha=0.5)
@@ -245,33 +252,56 @@ plt.hist(i_prior, bins=1000, alpha=0.5)
 plt.hist(i, bins=1000, alpha=0.5)
 #plt.show()
 
-# H3 STIG
-mtot2 = 0
-h3 = params["H3"]*10**6
-h3_err = params["H3_ERR"]*10**6
-stig = params["STIG"]
-stig_err = params["STIG_ERR"]
-h3 = np.random.normal(loc=h3, scale=h3_err, size=n_samples)
-stig = np.random.normal(loc=stig, scale=stig_err, size=n_samples)
-h4 = stig * h3
-sini = 2 * h3 * h4 / ( h3**2 + h4**2 )
-m2 = h3**4 / h4**3
-m2 = m2/(Tsun*10**6)
-cut = np.argwhere((m2 > mass_func) * (m2 < 1.4))
-m2 = m2[cut]
-sini = sini[cut]
-i = i[cut]
-i_prior = i_prior[cut]
-inc = np.arcsin(sini)*180/np.pi
-mtot2 = (m2 * sini)**3 / mass_func
-mp = np.sqrt(mtot2[is_valid(mtot2)*is_valid(m2)]) - m2[is_valid(mtot2)*is_valid(m2)]
-mp = mp[is_valid(mp)]
-mtot2 = mtot2[is_valid(mtot2)]
-mtot = np.sqrt(mtot2[(mtot2 > 0)])
-cut = is_valid(inc).squeeze()
-inc = inc[cut]
-i = i[cut]
-i_prior = i_prior[cut]
+if 'H3' in params.keys():
+    # H3 STIG
+    mtot2 = 0
+    h3 = params["H3"]*10**6
+    h3_err = params["H3_ERR"]*10**6
+    stig = params["STIG"]
+    stig_err = params["STIG_ERR"]
+    h3 = np.random.normal(loc=h3, scale=h3_err, size=n_samples)
+    stig = np.random.normal(loc=stig, scale=stig_err, size=n_samples)
+    h4 = stig * h3
+    sini = 2 * h3 * h4 / ( h3**2 + h4**2 )
+    m2 = h3**4 / h4**3
+    m2 = m2/(Tsun*10**6)
+    if '1017' in psrnames[0]:
+        cut = np.argwhere((m2 > mass_func) * (m2 < 1.4) * (sini < 0.7880737788017274))
+    elif '1022' in psrnames[0]:
+        cut = np.argwhere((m2 > mass_func) * (m2 < 1.4) * (sini < 0.96928029962))
+    m2 = m2[cut]
+    sini = sini[cut]
+    i = i[cut]
+    i_prior = i_prior[cut]
+    inc = np.arcsin(sini)*180/np.pi
+    mtot2 = (m2 * sini)**3 / mass_func
+    mp = np.sqrt(mtot2[is_valid(mtot2)*is_valid(m2)]) - m2[is_valid(mtot2)*is_valid(m2)]
+    mp = mp[is_valid(mp)]
+    mtot2 = mtot2[is_valid(mtot2)]
+    mtot = np.sqrt(mtot2[(mtot2 > 0)])
+    cut = is_valid(inc).squeeze()
+    inc = inc[cut]
+    i = i[cut]
+    i_prior = i_prior[cut]
+else:
+    m2 = np.random.normal(loc=params['M2'], scale=params['M2_ERR'], size=n_samples)
+    sini = np.random.normal(loc=params['SINI'], scale=params['SINI_ERR'], size=n_samples)
+    cut = np.argwhere((m2 > mass_func) * (m2 < 1.4) * (sini < 1))
+    m2 = m2[cut]
+    sini = sini[cut]
+    i = i[cut]
+    i_prior = i_prior[cut]
+    inc = np.arcsin(sini)*180/np.pi
+    mtot2 = (m2 * sini)**3 / mass_func
+    mp = np.sqrt(mtot2[is_valid(mtot2)*is_valid(m2)]) - m2[is_valid(mtot2)*is_valid(m2)]
+    mp = mp[is_valid(mp)]
+    mtot2 = mtot2[is_valid(mtot2)]
+    mtot = np.sqrt(mtot2[(mtot2 > 0)])
+    cut = is_valid(inc).squeeze()
+    inc = inc[cut]
+    i = i[cut]
+    i_prior = i_prior[cut]
+
 
 #plt.figure()
 plt.hist(inc, bins=1000, alpha=0.5)
@@ -308,12 +338,51 @@ n3, b3, p = plt.hist(inc, bins=bins, alpha=0.5, range=(0, 90))
 plt.show()
 
 plt.figure()
-plt.plot(np.linspace(0,90,bins), n/n_samples)
-plt.plot(np.linspace(0,90,bins), n2/n_samples)
-plt.plot(np.linspace(0,90,bins), n3/n_samples)
 combined = n*n2*n3
-plt.plot(np.linspace(0,90,bins), combined/n_samples)
+mx = np.max(combined)
+plt.plot(np.linspace(0,90,bins), combined/mx)
+#plt.plot(np.linspace(0,90,bins), n/mx*np.max(n))
+#plt.plot(np.linspace(0,90,bins), n2/mx*np.max(n2))
+#plt.plot(np.linspace(0,90,bins), n3/mx*np.max(n3))
 plt.xlim((0, 90))
 plt.show()
+
+
+i_posterior = np.random.choice(np.linspace(0,90,bins), size=(1, n_samples), p=(combined/np.sum(combined))).squeeze()
+plt.figure()
+plt.hist(i_posterior.squeeze(), bins=100)
+plt.show()
+
+sini = np.sin(i_posterior*np.pi/180).squeeze()
+m2 = m2.squeeze()
+mtot2 = np.power(np.multiply(m2.squeeze(), sini[0:np.size(m2)]), 3) / mass_func
+mtot2 = mtot2.squeeze()
+mtot = np.sqrt(mtot2)
+mtot = mtot[is_valid(mtot)]
+
+plt.figure()
+n, b, p = plt.hist(Mtot, bins=bins, alpha=0.5, range=(0, 5))
+n2, b2, p = plt.hist(mtot, bins=bins, alpha=0.5, range=(0, 5))
+plt.xlim((0, 5))
+plt.show()
+
+plt.figure()
+combined = n*n2
+mx = np.max(combined)
+plt.plot(np.linspace(0,5, bins), combined/mx)
+plt.xlim((0, 5))
+plt.show()
+
+mtot_posterior = np.random.choice(np.linspace(0,5,bins), size=(1, n_samples), p=(combined/np.sum(combined))).squeeze()
+
+mp_new = mtot_posterior[0:np.size(m2)] - m2
+mp_new = mp_new[is_valid(mp_new)]
+
+
+plt.figure()
+plt.hist(mp_new, bins=100)
+plt.xlim((0, 4))
+plt.show()
+
 
 
