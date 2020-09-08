@@ -11,7 +11,7 @@ from astropy import units as U
 from scipy.signal import savgol_filter
 from astropy.coordinates import SkyCoord, ICRS, BarycentricTrueEcliptic
 
-n_samples = 10000
+n_samples = 1000000
 # Define other useful constants
 M_sun = 1.98847542e+30  # kg
 Tsun = 4.926790353700459e-06  #s
@@ -27,7 +27,7 @@ matplotlib.rc('font', **font)
 
 from matplotlib import rc
 import os
-os.environ["PATH"] += os.pathsep + '/Library/TeX/texbin/'
+os.environ["PATH"] += os.pathsep + '/usr/bin/'
 rc('text', usetex=True)
 rc('font', **{'family': 'serif', 'serif': ['Computer Modern']})
 
@@ -183,14 +183,30 @@ def mass_from_psrparms(psrparms):
             sini = NP.random.normal(loc=psrparms["SINI"], scale=psrparms["SINI_ERR"], size=n_samples)
             inc = NP.arcsin(sini)*180/NP.pi
 
-    cut = NP.argwhere((m2 > mass_func) * (m2 < 10))
+    if ('XDOT' in psrparms):
+        xdot = NP.random.normal(loc=params["XDOT"], scale=params["XDOT_ERR"], size=n_samples)
+        a1 = NP.random.normal(loc=params["A1"], scale=params["A1_ERR"], size=n_samples)
+        # get proper motion
+        if 'ELAT' in params.keys():
+            pm1 = NP.random.normal(loc=params["PMELAT"], scale=params["PMELAT_ERR"], size=n_samples)
+            pm2 = NP.random.normal(loc=params["PMELONG"], scale=params["PMELONG_ERR"], size=n_samples)
+        else:
+            pm1 = NP.random.normal(loc=params["PMRA"], scale=params["PMRA_ERR"], size=n_samples)
+            pm2 = NP.random.normal(loc=params["PMDEC"], scale=params["PMDEC_ERR"], size=n_samples)
+        pm_tot = NP.sqrt(pm1**2 + pm2**2)
+        pm = pm_tot/(sec_per_year*rad_to_mas)
+        i_limit =  np.abs(np.arctan(a1 * pm / xdot))
+        sini_lim = np.sin(np.percentile(i_limit, q=84.0))
+
+    cut = NP.argwhere((m2 > mass_func) * (m2 < 1.4) * (sini < sini_lim))
     m2 = m2[cut]
     sini = sini[cut]
     inc = NP.arcsin(sini)*180/NP.pi
     mtot2 = (m2 * sini)**3 / mass_func
     mp = NP.sqrt(mtot2[is_valid(mtot2)*is_valid(m2)]) - m2[is_valid(mtot2)*is_valid(m2)]
     mp = mp[is_valid(mp)]
-    mtot = NP.sqrt(mtot2[is_valid(mtot2)])
+    mtot2 = mtot2[is_valid(mtot2)]
+    mtot = NP.sqrt(mtot2[(mtot2 > 0)])
     inc = inc[is_valid(inc)]
 
     return {'M2': NP.median(m2), 'M2_std': NP.std(m2), 'M2_lolim': NP.percentile(m2, q=16.0), 'M2_uplim': NP.percentile(m2, q=84.0), 'Mpsr': NP.median(mp), 'Mpsr_std': NP.std(mp), 'Mpsr_lolim': NP.percentile(mp, q=16.0), 'Mpsr_uplim': NP.percentile(mp, q=84.0), 'Mtot': NP.median(mtot), 'Mtot_std': NP.std(mtot), 'Mtot_lolim': NP.percentile(mtot, q=16.0), 'Mtot_uplim': NP.percentile(mtot, q=84.0), 'inc': NP.median(inc), 'inc_std': NP.std(inc), 'inc_lolim': NP.percentile(inc, q=16.0), 'inc_uplim': NP.percentile(inc, q=84.0)}

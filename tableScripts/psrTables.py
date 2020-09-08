@@ -295,6 +295,7 @@ def get_parameters_for_table(solitaryOrBinary):
                           'D_PX(med/16th/84th)', 'D_SHK(med/16th/84th)',\
                           'INC(med/16th/84th)', 'INC_LIM(med/std)',\
                           'M2(med/16th/84th)', 'MP(med/16th/84th)', 'MTOT(med/16th/84th)',\
+                          'MTOT_GR(med/16th/84th)',\
                           'OMDOT_GR', 'VT(med/16th/84th)'])
 
     # keeping track of which params are from where
@@ -326,14 +327,13 @@ def get_parameters_for_table(solitaryOrBinary):
                    'PX',\
                    'PB', 'A1',\
                    'T0', 'OM', 'ECC',\
-#                   'T0(med/16th/84th)', 'OM(med/16th/84th)', 'ECC(med/16th/84th)',\
                    'TASC', 'EPS1', 'EPS2',\
                    'PBDOT', 'OMDOT', 'XDOT',\
                    'SINI', 'M2', 'H3', 'H4', 'STIG',\
                    'KOM', 'KIN',\
                    'INC_LIM(med/std)',\
                    'D_PX(med/16th/84th)', 'D_SHK(med/16th/84th)',\
-                   'MP(med/16th/84th)', 'MTOT(med/16th/84th)', 'VT(med/16th/84th)'])
+                   'MP(med/16th/84th)', 'MTOT(med/16th/84th)', 'MTOT_GR(med/16th/84th)', 'VT(med/16th/84th)'])
 
     return fittedOrDerived, params
 
@@ -595,8 +595,8 @@ for solBin in ['solitary', 'binary']:
                     paramList.append('-')
                 elif par=='ECC':
                   try:
-                    paramString = ufloat(psrDerived[ipsr]['ECC(med/std)'],psrDerived[ipsr]['ECC(med/std)_ERR'])
-                    paramList.append(paramString)
+                    paraString = ufloat(psrDerived[ipsr]['ECC(med/std)'],psrDerived[ipsr]['ECC(med/std)_ERR'])
+                    paramList.append(paraString)
                     keepingTrackFitDerived[ipsr] = 'd'
                   except:
                     paramList.append('-')

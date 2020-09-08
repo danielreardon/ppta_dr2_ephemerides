@@ -50,11 +50,11 @@ def getParamLabels():
   'M2(med/16th/84th)'    : r'Companion mass, $M_{\mathrm{c}}$ ($M_{\odot}$)\dotfill',
   'MP(med/16th/84th)'    : r'Pulsar mass, $M_{\mathrm{P}}$ ($M_{\odot}$) \dotfill',
   'MTOT(med/16th/84th)'  : r'Total system mass $M_{\rm tot}$ ($M_{\odot}$)\dotfill',
+  'MTOT_GR(med/16th/84th)': r'$M_{\rm tot}$ derived from periastron advance ${\dot \omega}$ ($M_{\odot}$)\dotfill',
   'OMDOT_GR'             : r'$\dot{\omega}_{\rm{GR}}$(Fix name)\dotfill',
   'VT(med/16th/84th)'    : r'Transverse velocity, $v_t$ (km\,s$^{-1}$)\dotfill',
-  'T0(med/16th/84th)'    : r'Epoch of periastron, $T_0$ (MJD)\dotfill',
-  'OM(med/16th/84th)'    : r'Longitude of periastron, $\omega$ (deg)\dotfill',
-  'ECC(med/16th/84th)'   : r'Eccentricity of orbit, $e$\dotfill',
+  'T0(med/std)'          : r'Epoch of periastron, $T_0$ (MJD)\dotfill',
+  'OM(med/std)'          : r'Longitude of periastron, $\omega$ (deg)\dotfill',
   'ECC(med/std)'         : r'Eccentricity of orbit, $e$\dotfill',
   }
 
