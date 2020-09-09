@@ -509,6 +509,8 @@ for solBin in ['solitary', 'binary']:
         print('sky position (RA,DEC)')
         writeSkyPos(psrDetails,tableFile,parameterNames)
 
+
+
         # Now go back to ecliptic
         # read in pulsar details from par files
         psrDetails = []
@@ -536,7 +538,7 @@ for solBin in ['solitary', 'binary']:
             psrPars['NEPOCH'] = len(np.unique(files))
             psrDetails.append(psrPars)
 
-
+        """   ###### I think this just repeats the lines above #####
         # read in pulsar details from par files
         psrDetails = []
         for psr in psrNames:
@@ -562,7 +564,7 @@ for solBin in ['solitary', 'binary']:
             psrPars['FINISH'] = np.max(data[:,0])
             psrPars['NEPOCH'] = len(np.unique(files))
             psrDetails.append(psrPars)
-
+        """
 
         # this is used for J1713  for the ecliptic parameters only
         parLocJ1713Ecliptic = datadir + '/ppta_dr2_ephemerides/publish_collection_refit/dr2e/ecliptic/J1713+0747.kop_ecliptic.par'
