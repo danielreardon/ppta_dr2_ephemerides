@@ -225,7 +225,7 @@ def writeMJDRange(psrDeets,tabFile,label):
 
 
 
-def writeSkyPos(psrDeets,tabFile,parLabels):
+def writeSkyPos(psrDets,tabFile,parLabels):
     """
     Writitng RA and DEC rows
     """
@@ -237,26 +237,30 @@ def writeSkyPos(psrDeets,tabFile,parLabels):
 
     ras  = []
     decs = []
+    pmras  = []
+    pmdecs = []
 
-    for ipsr in range(len(psrDeets)):
+    for ipsr in range(len(psrDets)):
 
         # get sky position
-        pos = SkyCoord(psrDetails[ipsr]['RAJ'] + ' ' +str(psrDetails[ipsr]['DECJ']),unit=(u.hourangle,u.deg))
+        pos = SkyCoord(psrDets[ipsr]['RAJ'] + ' ' +str(psrDets[ipsr]['DECJ']),unit=(u.hourangle,u.deg))
 
         # get RA as string with error
-        raSecondsAndErr = ufloat(pos.ra.hms.s,psrDeets[ipsr]['RAJ_ERR'])
+        raSecondsAndErr = ufloat(pos.ra.hms.s,psrDets[ipsr]['RAJ_ERR'])
         frmtr = ShorthandFormatter()
         shortFormat = frmtr.format("{0:.1u}",raSecondsAndErr)
         ras.append('$'+str(int(pos.ra.hms.h))+'$:$'+str(int(pos.ra.hms.m))+'$:$'+str(shortFormat)+'$')
 
         # get DEC as string with error
-        decSecondsAndErr = ufloat(abs(pos.dec.dms.s),psrDeets[ipsr]['DECJ_ERR'])
+        decSecondsAndErr = ufloat(abs(pos.dec.dms.s),psrDets[ipsr]['DECJ_ERR'])
         frmtr = ShorthandFormatter()
         shortFormat = frmtr.format("{0:.1u}",decSecondsAndErr)
         decs.append('$'+str(int(pos.dec.dms.d))+'$:$'+str(int(abs(pos.dec.dms.m)))+'$:$'+str(shortFormat)+'$')
 
-        # move on to next pulsar
-        #ipsr+=1
+        # PMRA and PMDEC
+        #print('PMRA,PMDEC: ',psrDetails[ipsr]['PMRA'], psrDetails[ipsr]['PMDEC'])
+        pmras.append( frmtr.format("{0:.1u}",ufloat(psrDets[ipsr]['PMRA'], psrDets[ipsr]['PMRA_ERR'])))
+        pmdecs.append(frmtr.format("{0:.1u}",ufloat(psrDets[ipsr]['PMDEC'],psrDets[ipsr]['PMDEC_ERR'])))
 
 
     # write ra
@@ -270,6 +274,19 @@ def writeSkyPos(psrDeets,tabFile,parLabels):
     for dec in decs:
         table.write('\t & \t {}'.format(dec))
     table.write('\\\\ \n')
+
+    # write pmra
+    table.write(parLabels['PMRA'])
+    for pmra in pmras: 
+        table.write('\t & \t {}'.format(pmra))
+    table.write('\\\\ \n')
+
+    # write pmdec
+    table.write(parLabels['PMDEC'])
+    for pmdec in pmdecs:
+        table.write('\t & \t {}'.format(pmdec))
+    table.write('\\\\ \n')
+
 
     return None
 
@@ -290,7 +307,8 @@ def get_parameters_for_table(solitaryOrBinary):
                       'KOM','KIN'])
 
     # parameters form derived_parameters.txt
-    fromDerivedParams = (['ELAT','ELONG','PMELONG','PMELAT','PMELONG','MASS_FUNC',\
+    #fromDerivedParams = (['ELAT','ELONG','PMELONG','PMELAT','PMELONG','MASS_FUNC',\
+    fromDerivedParams = (['MASS_FUNC',\
                           'ECC(med/std)', 'OM(med/std)', 'T0(med/std)',\
                           'D_PX(med/16th/84th)', 'D_SHK(med/16th/84th)',\
                           'INC(med/16th/84th)', 'INC_LIM(med/std)',\
@@ -314,7 +332,7 @@ def get_parameters_for_table(solitaryOrBinary):
         params = (['F0', 'F1',\
                    'DM',\
                    'ELAT','ELONG',\
-                   'PMRA', 'PMDEC', 'PMELAT', 'PMELONG', 'PX',\
+                   'PMELAT', 'PMELONG', 'PX',\
                    'D_PX(med/16th/84th)', 'VT(med/16th/84th)'])
 
 
@@ -323,7 +341,7 @@ def get_parameters_for_table(solitaryOrBinary):
         params = (['F0', 'F1',\
                    'DM',\
                    'ELAT','ELONG',\
-                   'PMRA', 'PMDEC', 'PMELAT', 'PMELONG',
+                   'PMELAT', 'PMELONG',
                    'PX',\
                    'PB', 'A1',\
                    'T0', 'OM', 'ECC',\
@@ -560,7 +578,7 @@ for solBin in ['solitary', 'binary']:
               continue
 
           print ('\n ',par,type(par))
-
+          print('\t\t ', fittedOrDerived[par])
           paramList = []
 
 
@@ -623,6 +641,7 @@ for solBin in ['solitary', 'binary']:
                 try:
                   # check about including errors for these params and how many dp to quote here.
                   if par=='ELAT' or par=='ELONG' or par=='PMELAT' or par=='PMELONG' or par=='MASS_FUNC' or par=='OMDOT_GR':
+                    print('test ', ipsr,psr,par,psrDerived[ipsr][par])
                     parameter = psrDerived[ipsr][par]
                     paramList.append('{0:.5f}'.format(float(parameter)))
                     keepingTrackFitDerived[ipsr] = 'd'
