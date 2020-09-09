@@ -431,7 +431,7 @@ for solBin in ['solitary', 'binary']:
         for psr in psrNames:
 
             if psr == 'J1713+0747' or psr == 'J1909-3744':
-                parname = '{}.kop.par'.format(psr)
+                #parname = '{}.kop.par'.format(psr)
                 parname = '{}.par'.format(psr)
             else:
                 parname = '{}.par'.format(psr)
@@ -564,6 +564,11 @@ for solBin in ['solitary', 'binary']:
             psrDetails.append(psrPars)
 
 
+        # this is used for J1713  for the ecliptic parameters only
+        parLocJ1713Ecliptic = datadir + '/ppta_dr2_ephemerides/publish_collection_refit/dr2e/ecliptic/J1713+0747.kop_ecliptic.par'
+        J1713EclipticParameters=readParFile.read_par(parLocJ1713Ecliptic)
+
+
 
         fittedOrDerived, params = get_parameters_for_table(solBin)
 
@@ -578,7 +583,7 @@ for solBin in ['solitary', 'binary']:
               continue
 
           print ('\n ',par,type(par))
-          print('\t\t ', fittedOrDerived[par])
+          #print('\t\t ', fittedOrDerived[par])
           paramList = []
 
 
@@ -596,7 +601,7 @@ for solBin in ['solitary', 'binary']:
                 paramList.append(parameter)
                 keepingTrackFitDerived[ipsr] = 'f'
               except:
-                # is there a derived parameter for M2?
+                # is there a derived parameter for some parameters and gets ecliptic values for J1713 only
                 if par=='M2':
                   try:
                     paraString = formatDerivedParams(psrDerived,ipsr,'M2(med/16th/84th)')
@@ -620,7 +625,6 @@ for solBin in ['solitary', 'binary']:
                     paramList.append('-')
                 elif par=='OM':
                   try:
-                    #paraString = formatDerivedParams(psrDerived,ipsr,'OM(med/16th/84th)')
                     paraString = ufloat(psrDerived[ipsr]['OM(med/std)'],psrDerived[ipsr]['OM(med/std)_ERR'])
                     paramList.append(paraString)
                     keepingTrackFitDerived[ipsr] = 'd'
@@ -628,10 +632,19 @@ for solBin in ['solitary', 'binary']:
                     paramList.append('-')
                 elif par=='T0':
                   try:
-                    #paraString = formatDerivedParams(psrDerived,ipsr,'T0(med/16th/84th)')
                     paraString = ufloat(psrDerived[ipsr]['T0(med/std)'],psrDerived[ipsr]['T0(med/std)_ERR'])
                     paramList.append(paraString)
                     keepingTrackFitDerived[ipsr] = 'd'
+                  except:
+                    paramList.append('-')
+                elif    par=='ELAT'    and psr=='J1713+0747' \
+                     or par=='ELONG'   and psr=='J1713+0747' \
+                     or par=='PMELAT'  and psr=='J1713+0747' \
+                     or par=='PMELONG' and psr=='J1713+0747':
+                  try:
+                    paraString = ufloat(J1713EclipticParameters[par],J1713EclipticParameters[par+'_ERR']) 
+                    paramList.append(paraString)
+                    keepingTrackFitDerived[ipsr] = 'f'
                   except:
                     paramList.append('-')
                 else:
@@ -640,6 +653,7 @@ for solBin in ['solitary', 'binary']:
             else:
                 try:
                   # check about including errors for these params and how many dp to quote here.
+                  # is this first if used? 
                   if par=='ELAT' or par=='ELONG' or par=='PMELAT' or par=='PMELONG' or par=='MASS_FUNC' or par=='OMDOT_GR':
                     print('test ', ipsr,psr,par,psrDerived[ipsr][par])
                     parameter = psrDerived[ipsr][par]
