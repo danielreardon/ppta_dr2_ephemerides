@@ -179,3 +179,12 @@ compareParms:
                       ]
                                 # The PTA's whose data are to be 
                                 # plotted
+
+        spcl_psrs   : ['J1017-7156',
+                       'J1022+1001',
+                       'J1600-3053',
+                       'J1713+0747'
+                      ]
+                                # Special pulsar cases whose masses
+                                # are to be estimated using Xdot
+                                # and Omdot parameters

@@ -195,7 +195,10 @@ Start of code
 
 def derive_combined_mass(params, plot=False, n_samples=10000000):
 
-    psrname = params['PSRJ']
+    if 'PSRJ' in params:
+        psrname = params['PSRJ']
+    elif 'PSR' in params:
+        psrname = params['PSR']
 
     # Define other useful constants
     M_sun = 1.98847542e+30  # kg
@@ -217,6 +220,8 @@ def derive_combined_mass(params, plot=False, n_samples=10000000):
     # XDOT
     if 'XDOT' in params.keys():
         xdot = np.random.normal(loc=params["XDOT"], scale=params["XDOT_ERR"], size=n_samples)
+        if np.abs(params['XDOT']) > 1e-10:
+            xdot *= 1e-12        
         a1 = np.random.normal(loc=params["A1"], scale=params["A1_ERR"], size=n_samples)
         pmelat = np.random.normal(loc=params["PMELAT"], scale=params["PMELAT_ERR"], size=n_samples)
         pmelong = np.random.normal(loc=params["PMELONG"], scale=params["PMELONG_ERR"], size=n_samples)
@@ -322,7 +327,9 @@ def derive_combined_mass(params, plot=False, n_samples=10000000):
         n = 2*np.pi/(params['PB']*86400)  # s
         omdot_posterior = omdot_posterior / 86400 / 365.2425 * np.pi/180
         Mtot = (omdot_posterior*(1 - ecc_posterior**2) / (3 * n**(5/3)))**(3/2)/Tsun
-
+    else:
+        Mtot = 5*np.random.rand(n_samples)  # uniform
+        
     i = np.sort(i)
     i_prior = np.sort(i_prior)
     inc = np.sort(inc)
