@@ -77,6 +77,9 @@ def replaceEWithTimes10(value):
     elif (value.find("e-0"))!=-1:
         value = value.replace("e-0", "e-")
         value = value.replace("e", "\\times 10^{")+"}"
+    elif (value.find("e+0"))!=-1:
+        value = value.replace("e+0","e+")
+        value = value.replace("e", "\\times 10^{")+"}"
     elif (value.find("e"))!=-1:
         value = value.replace("e", "\\times 10^{")+"}"
     else: pass
@@ -87,15 +90,21 @@ def replaceEWithTimes10(value):
 
 
 
-"""
-Write the parameter line in latex table format
-"""
-def writeLine(parameters,tableFile,parameterName,fitOrDer,parLabel=None):
+def writeLine(parameters,tableFile,parameterName,keepTrackFitOrDer,parLabel=None):
+
+    """
+    Write the parameter line in latex table format
+    will put fitted params in bold and params from the derived_param file not-bold
+    """
+
+
     table = open(tableFile,'a')
     table.write(parameterName)
 
     frmtr = ShorthandFormatter()
 
+    """
+    no longer needed (I think...)
     # fix for PMELAT, PMELONG, ELAT, ELONG, PMRA, PMDEC
     if parLabel == 'PMELAT' or parLabel == 'PMELONG' or parLabel == 'ELAT' or parLabel == 'ELONG':
         fitOrDer = 0
@@ -103,37 +112,37 @@ def writeLine(parameters,tableFile,parameterName,fitOrDer,parLabel=None):
     if parLabel == 'PMRA' or parLabel == 'PMDEC':
         fitOrDer = 1
     else: pass
+    """
 
-
-
-    for p in parameters:
+    # loop over the parameter values for each pulsar in this batch
+    # using "keepTrackFitOrDer" to remember whether the parameters came from the
+    # par files or the derived params file
+    for i,p in enumerate(parameters):
 
         try:
-            shortFormat = frmtr.format("{0:.1u}",p)
-
+            #does the error start with a 1? 
+            if str(p.std_dev*10**10)[0]=='1':
+                shortFormat = frmtr.format("{0:.2u}",p)
+            else: 
+                shortFormat = frmtr.format("{0:.1u}",p)
+            #(p.std_dev,shortFormat,str(p.std_dev*10**10)[0])        
             # does the string contain "e" ?
             shortFormat = replaceEWithTimes10(shortFormat)
-            """
-            if (shortFormat.find("e0"))!=-1:
-                shortFormat = shortFormat.replace("e0", "\\times 10^{")+"}"
-            elif (shortFormat.find("e-0"))!=-1:
-                shortFormat = shortFormat.replace("e-0", "e-")
-                shortFormat = shortFormat.replace("e", "\\times 10^{")+"}"
-            elif (shortFormat.find("e"))!=-1:
-                shortFormat = shortFormat.replace("e", "\\times 10^{")+"}"
-            else: pass
-            """
         except:
             shortFormat = p
 
-        if fitOrDer == 0:
-            # get bolding right for derived M2
-            if par=='M2' or par=='KIN' or par=='ECC' or par=='OM' or par=='T0' and shortFormat.find("+")!=-1:
-               table.write('\t & \t ${}$'.format(shortFormat))
-            else:
-               table.write('\t & \t $\\mathbf{{ {} }}$'.format(shortFormat))
-        elif fitOrDer == 1:
-           table.write('\t & \t ${}$'.format(shortFormat))
+
+        # fitted in bold
+        if keepTrackFitOrDer[i]=='f':
+            table.write('\t & \t $\\mathbf{{ {} }}$'.format(shortFormat))
+
+        # derived not bold
+        elif keepTrackFitOrDer[i]=='d':
+            table.write('\t & \t ${}$'.format(shortFormat))
+
+        # the rest, probably writing '-' for no parameter
+        else:
+            table.write('\t & \t ${}$'.format(shortFormat))
 
     table.write('\\\\ \n')
     table.close()
@@ -145,9 +154,16 @@ def formatDerivedParams(psrDerived,ipsr,par):
 
     """
     Formatting for derived params with ^{+...}_{-...}
+    EXCEPT for ECC(med/std) which is written as value(error)
+    These are all not bold..
     """
 
     parameter =  psrDerived[ipsr][par]
+
+    if par=='ECC(med/std)':
+        print(psrDerived[ipsr][par],psrDerived[ipsr][par+'_ERR'])
+
+
     high = float(psrDerived[ipsr][par+'_84th']) - float(psrDerived[ipsr][par])
     low  = float(psrDerived[ipsr][par]) - float(psrDerived[ipsr][par+'_16th'])
     high = round_sig(high)
@@ -174,19 +190,19 @@ def formatDerivedParams(psrDerived,ipsr,par):
 
         parameterToWrite = '{{ {0} }} ^{{ +{1} }}_{{ -{2} }}'.format(value,high,low)
 
-        print(parameterToWrite)
-        
+        #print(parameterToWrite)
+
     return parameterToWrite
 
 
 
 
-"""
-Writes the MJD range to the table
-Maybe some missing from the par files
-To do - check par files for start/finish
-"""
+
 def writeMJDRange(psrDeets,tabFile,label):
+
+    """
+    Writes the MJD range to the table
+    """
 
     # row title
     table = open(tabFile,'a')
@@ -214,7 +230,7 @@ def writeMJDRange(psrDeets,tabFile,label):
 
 
 
-def writeSkyPos(psrDeets,tabFile,parLabels):
+def writeSkyPos(psrDets,tabFile,parLabels):
     """
     Writitng RA and DEC rows
     """
@@ -226,26 +242,30 @@ def writeSkyPos(psrDeets,tabFile,parLabels):
 
     ras  = []
     decs = []
+    pmras  = []
+    pmdecs = []
 
-    for ipsr in range(len(psrDeets)):
+    for ipsr in range(len(psrDets)):
 
         # get sky position
-        pos = SkyCoord(psrDetails[ipsr]['RAJ'] + ' ' +str(psrDetails[ipsr]['DECJ']),unit=(u.hourangle,u.deg))
+        pos = SkyCoord(psrDets[ipsr]['RAJ'] + ' ' +str(psrDets[ipsr]['DECJ']),unit=(u.hourangle,u.deg))
 
         # get RA as string with error
-        raSecondsAndErr = ufloat(pos.ra.hms.s,psrDeets[ipsr]['RAJ_ERR'])
+        raSecondsAndErr = ufloat(pos.ra.hms.s,psrDets[ipsr]['RAJ_ERR'])
         frmtr = ShorthandFormatter()
         shortFormat = frmtr.format("{0:.1u}",raSecondsAndErr)
         ras.append('$'+str(int(pos.ra.hms.h))+'$:$'+str(int(pos.ra.hms.m))+'$:$'+str(shortFormat)+'$')
 
         # get DEC as string with error
-        decSecondsAndErr = ufloat(abs(pos.dec.dms.s),psrDeets[ipsr]['DECJ_ERR'])
+        decSecondsAndErr = ufloat(abs(pos.dec.dms.s),psrDets[ipsr]['DECJ_ERR'])
         frmtr = ShorthandFormatter()
         shortFormat = frmtr.format("{0:.1u}",decSecondsAndErr)
         decs.append('$'+str(int(pos.dec.dms.d))+'$:$'+str(int(abs(pos.dec.dms.m)))+'$:$'+str(shortFormat)+'$')
 
-        # move on to next pulsar
-        #ipsr+=1
+        # PMRA and PMDEC
+        #print('PMRA,PMDEC: ',psrDetails[ipsr]['PMRA'], psrDetails[ipsr]['PMDEC'])
+        pmras.append( frmtr.format("{0:.1u}",ufloat(psrDets[ipsr]['PMRA'], psrDets[ipsr]['PMRA_ERR'])))
+        pmdecs.append(frmtr.format("{0:.1u}",ufloat(psrDets[ipsr]['PMDEC'],psrDets[ipsr]['PMDEC_ERR'])))
 
 
     # write ra
@@ -259,6 +279,19 @@ def writeSkyPos(psrDeets,tabFile,parLabels):
     for dec in decs:
         table.write('\t & \t {}'.format(dec))
     table.write('\\\\ \n')
+
+    # write pmra
+    table.write(parLabels['PMRA'])
+    for pmra in pmras: 
+        table.write('\t & \t {}'.format(pmra))
+    table.write('\\\\ \n')
+
+    # write pmdec
+    table.write(parLabels['PMDEC'])
+    for pmdec in pmdecs:
+        table.write('\t & \t {}'.format(pmdec))
+    table.write('\\\\ \n')
+
 
     return None
 
@@ -279,11 +312,13 @@ def get_parameters_for_table(solitaryOrBinary):
                       'KOM','KIN'])
 
     # parameters form derived_parameters.txt
-    fromDerivedParams = (['ELAT','ELONG','PMELONG','PMELAT','PMELONG','MASS_FUNC',\
-                          'ECC(med/16th/84th)', 'OM(med/16th/84th)', 'T0(med/16th/84th)',\
+    #fromDerivedParams = (['ELAT','ELONG','PMELONG','PMELAT','PMELONG','MASS_FUNC',\
+    fromDerivedParams = (['MASS_FUNC',\
+                          'ECC(med/std)', 'OM(med/std)', 'T0(med/std)',\
                           'D_PX(med/16th/84th)', 'D_SHK(med/16th/84th)',\
                           'INC(med/16th/84th)', 'INC_LIM(med/std)',\
                           'M2(med/16th/84th)', 'MP(med/16th/84th)', 'MTOT(med/16th/84th)',\
+                          'MTOT_GR(med/16th/84th)',\
                           'OMDOT_GR', 'VT(med/16th/84th)'])
 
     # keeping track of which params are from where
@@ -302,7 +337,7 @@ def get_parameters_for_table(solitaryOrBinary):
         params = (['F0', 'F1',\
                    'DM',\
                    'ELAT','ELONG',\
-                   'PMRA', 'PMDEC', 'PMELAT', 'PMELONG', 'PX',\
+                   'PMELAT', 'PMELONG', 'PX',\
                    'D_PX(med/16th/84th)', 'VT(med/16th/84th)'])
 
 
@@ -311,18 +346,17 @@ def get_parameters_for_table(solitaryOrBinary):
         params = (['F0', 'F1',\
                    'DM',\
                    'ELAT','ELONG',\
-                   'PMRA', 'PMDEC', 'PMELAT', 'PMELONG',
+                   'PMELAT', 'PMELONG',
                    'PX',\
                    'PB', 'A1',\
                    'T0', 'OM', 'ECC',\
-#                   'T0(med/16th/84th)', 'OM(med/16th/84th)', 'ECC(med/16th/84th)',\
                    'TASC', 'EPS1', 'EPS2',\
                    'PBDOT', 'OMDOT', 'XDOT',\
                    'SINI', 'M2', 'H3', 'H4', 'STIG',\
                    'KOM', 'KIN',\
                    'INC_LIM(med/std)',\
                    'D_PX(med/16th/84th)', 'D_SHK(med/16th/84th)',\
-                   'MP(med/16th/84th)', 'MTOT(med/16th/84th)', 'VT(med/16th/84th)'])
+                   'MP(med/16th/84th)', 'MTOT(med/16th/84th)', 'MTOT_GR(med/16th/84th)', 'VT(med/16th/84th)'])
 
     return fittedOrDerived, params
 
@@ -338,8 +372,8 @@ args = parser.parse_args()
 solBin = str(args.solOrBin)
 whichGroup = int(args.groupNo)
 
-datadir = '/Users/dreardon/Dropbox/Git/'
-#datadir = '/fred/oz002/hmiddleton/ppta_ephemeris/repositories'
+#datadir = '/Users/dreardon/Dropbox/Git/'
+datadir = '/fred/oz002/hmiddleton/ppta_ephemeris/repositories'
 
 for solBin in ['solitary', 'binary']:
 
@@ -402,7 +436,8 @@ for solBin in ['solitary', 'binary']:
         for psr in psrNames:
 
             if psr == 'J1713+0747' or psr == 'J1909-3744':
-                parname = '{}.kop.par'.format(psr)
+                #parname = '{}.kop.par'.format(psr)
+                parname = '{}.par'.format(psr)
             else:
                 parname = '{}.par'.format(psr)
 
@@ -439,13 +474,19 @@ for solBin in ['solitary', 'binary']:
 
 
         ## write number of toas row
+        print('Number of TOAS')
         names = [ psrDetails[i]['NTOA'] for i in range(len(psrNames)) ]
-        writeLine(names,tableFile,parameterNames['NTOA'],1)
+        noTOABolding = ['n' for i in range(len(psrNames))]
+        writeLine(names,tableFile,parameterNames['NTOA'],noTOABolding)
 
+        ## write number of observations row
+        print('Number of observations')
         names = [ psrDetails[i]['NEPOCH'] for i in range(len(psrNames)) ]
-        writeLine(names,tableFile,parameterNames['NEPOCH'],1)
+        noObservationsBolding = ['n' for i in range(len(psrNames))]
+        writeLine(names,tableFile,parameterNames['NEPOCH'],noObservationsBolding)
 
         ## write MJD range row
+        print('MJD range')
         writeMJDRange(psrDetails,tableFile,parameterNames['MJDRange'])
 
 
@@ -470,7 +511,10 @@ for solBin in ['solitary', 'binary']:
             psrDetails.append(psrPars)
 
         ## write sky position row (RA & DEC)
+        print('sky position (RA,DEC)')
         writeSkyPos(psrDetails,tableFile,parameterNames)
+
+
 
         # Now go back to ecliptic
         # read in pulsar details from par files
@@ -499,7 +543,7 @@ for solBin in ['solitary', 'binary']:
             psrPars['NEPOCH'] = len(np.unique(files))
             psrDetails.append(psrPars)
 
-
+        """   ###### I think this just repeats the lines above #####
         # read in pulsar details from par files
         psrDetails = []
         for psr in psrNames:
@@ -525,6 +569,11 @@ for solBin in ['solitary', 'binary']:
             psrPars['FINISH'] = np.max(data[:,0])
             psrPars['NEPOCH'] = len(np.unique(files))
             psrDetails.append(psrPars)
+        """
+
+        # this is used for J1713  for the ecliptic parameters only
+        parLocJ1713Ecliptic = datadir + '/ppta_dr2_ephemerides/publish_collection_refit/dr2e/ecliptic/J1713+0747.kop_ecliptic.par'
+        J1713EclipticParameters=readParFile.read_par(parLocJ1713Ecliptic)
 
 
 
@@ -541,8 +590,14 @@ for solBin in ['solitary', 'binary']:
               continue
 
           print ('\n ',par,type(par))
-
+          #print('\t\t ', fittedOrDerived[par])
           paramList = []
+
+
+          # keep track of where parameters came from with values:
+          # n: 'neither', f:fitted, d:derived
+          keepingTrackFitDerived = ['n' for i in range(len(psrNames))]
+
 
           for ipsr, psr in enumerate(psrNames):
 
@@ -551,36 +606,52 @@ for solBin in ['solitary', 'binary']:
               try:
                 parameter = ufloat(psrDetails[ipsr][par], psrDetails[ipsr][str(par+'_ERR')])
                 paramList.append(parameter)
+                keepingTrackFitDerived[ipsr] = 'f'
               except:
-                # is there a derived parameter for M2?
+                # is there a derived parameter for some parameters and gets ecliptic values for J1713 only
                 if par=='M2':
                   try:
                     paraString = formatDerivedParams(psrDerived,ipsr,'M2(med/16th/84th)')
                     paramList.append(paraString)
+                    keepingTrackFitDerived[ipsr] = 'd'
                   except:
                     paramList.append('-')
                 elif par=='KIN':
                   try:
                     paraString = formatDerivedParams(psrDerived,ipsr,'INC(med/16th/84th)')
                     paramList.append(paraString)
+                    keepingTrackFitDerived[ipsr] = 'd'
                   except:
                     paramList.append('-')
                 elif par=='ECC':
                   try:
-                    paraString = formatDerivedParams(psrDerived,ipsr,'ECC(med/16th/84th)')
+                    paraString = ufloat(psrDerived[ipsr]['ECC(med/std)'],psrDerived[ipsr]['ECC(med/std)_ERR'])
                     paramList.append(paraString)
+                    keepingTrackFitDerived[ipsr] = 'd'
                   except:
                     paramList.append('-')
                 elif par=='OM':
                   try:
-                    paraString = formatDerivedParams(psrDerived,ipsr,'OM(med/16th/84th)')
+                    paraString = ufloat(psrDerived[ipsr]['OM(med/std)'],psrDerived[ipsr]['OM(med/std)_ERR'])
                     paramList.append(paraString)
+                    keepingTrackFitDerived[ipsr] = 'd'
                   except:
                     paramList.append('-')
                 elif par=='T0':
                   try:
-                    paraString = formatDerivedParams(psrDerived,ipsr,'T0(med/16th/84th)')
+                    paraString = ufloat(psrDerived[ipsr]['T0(med/std)'],psrDerived[ipsr]['T0(med/std)_ERR'])
                     paramList.append(paraString)
+                    keepingTrackFitDerived[ipsr] = 'd'
+                  except:
+                    paramList.append('-')
+                elif    par=='ELAT'    and psr=='J1713+0747' \
+                     or par=='ELONG'   and psr=='J1713+0747' \
+                     or par=='PMELAT'  and psr=='J1713+0747' \
+                     or par=='PMELONG' and psr=='J1713+0747':
+                  try:
+                    paraString = ufloat(J1713EclipticParameters[par],J1713EclipticParameters[par+'_ERR']) 
+                    paramList.append(paraString)
+                    keepingTrackFitDerived[ipsr] = 'f'
                   except:
                     paramList.append('-')
                 else:
@@ -589,45 +660,35 @@ for solBin in ['solitary', 'binary']:
             else:
                 try:
                   # check about including errors for these params and how many dp to quote here.
+                  # is this first if used? 
                   if par=='ELAT' or par=='ELONG' or par=='PMELAT' or par=='PMELONG' or par=='MASS_FUNC' or par=='OMDOT_GR':
+                    print('test ', ipsr,psr,par,psrDerived[ipsr][par])
                     parameter = psrDerived[ipsr][par]
                     paramList.append('{0:.5f}'.format(float(parameter)))
+                    keepingTrackFitDerived[ipsr] = 'd'
                   elif par=='INC_LIM(med/std)':
                     parameter = psrDerived[ipsr][par]
                     parameter = parameter.replace('<','')
                     parameter = float(parameter) #+ float(psrDerived[ipsr][par+'_16th'])
                     paramList.append('<{0}'.format(round(parameter)))
+                    keepingTrackFitDerived[ipsr] = 'd'
                   else:
-                    ''' -> moved to function formatDerivedParams(...)
-                    parameter =  psrDerived[ipsr][par]
-                    #print('here ', psrDerived[ipsr][par+'_16th'])
-                    high = float(psrDerived[ipsr][par+'_84th']) - float(psrDerived[ipsr][par])
-                    low  = float(psrDerived[ipsr][par]) - float(psrDerived[ipsr][par+'_16th'])
-                    high = round_sig(high)
-                    low = round_sig(low)
-                    if high%1 == 0:
-                        high = int(high)
-                    if low%1 == 0:
-                        low = int(low)
-                    parameter = float(parameter)
-                    if high>2 and low>2:
-                        parameterStr =  '{0}^{{ +{1} }}_{{ -{2} }}'.format(round(parameter), high, low)
-                    else:
-                        digit = np.max([len(str(high).split('.')[-1]), len(str(low).split('.')[-1])])
-                        parameterStr =  '{0}^{{ +{1} }}_{{ -{2} }}'.format(round(parameter, int(digit)), high, low)
-                    '''
                     parameterStr = formatDerivedParams(psrDerived,ipsr,par)
                     paramList.append(parameterStr)
                     #print('parSTRING ', parameterStr)
+                    keepingTrackFitDerived[ipsr] = 'd'
                 except:
                   paramList.append('-')
+
+          #print(keepingTrackFitDerived)
 
           # write parameter line
           if nparam % 5 == 0:
               table=open(tableFile,'a')
               table.write('\n \\noalign{\\vskip 1.5mm} \n')
               table.close()
-          writeLine(paramList,tableFile,parameterNames[par],fittedOrDerived[par],parLabel=par)
+          #writeLine(paramList,tableFile,parameterNames[par],fittedOrDerived[par],parLabel=par)
+          writeLine(paramList,tableFile,parameterNames[par],keepingTrackFitDerived,parLabel=par)
           nparam += 1
 
         # end table stuff

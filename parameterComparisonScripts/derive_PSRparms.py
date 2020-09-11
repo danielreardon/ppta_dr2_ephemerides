@@ -11,7 +11,6 @@ from astropy import units as U
 from scipy.signal import savgol_filter
 from astropy.coordinates import SkyCoord, ICRS, BarycentricTrueEcliptic
 
-n_samples = 10000
 # Define other useful constants
 M_sun = 1.98847542e+30  # kg
 Tsun = 4.926790353700459e-06  #s
@@ -27,7 +26,7 @@ matplotlib.rc('font', **font)
 
 from matplotlib import rc
 import os
-os.environ["PATH"] += os.pathsep + '/Library/TeX/texbin/'
+os.environ["PATH"] += os.pathsep + '/usr/bin/'
 rc('text', usetex=True)
 rc('font', **{'family': 'serif', 'serif': ['Computer Modern']})
 
@@ -37,7 +36,7 @@ def is_valid(array):
     """
     return NP.isfinite(array)*(~NP.isnan(array))
 
-def distance_from_parallax(psrparms):
+def distance_from_parallax(psrparms, n_samples=10000000):
     if 'PX' in psrparms:
         if 'PX_ERR' in psrparms:
             d_prior = 1/NP.random.normal(loc=psrparms["PX"], scale=psrparms["PX_ERR"], size=n_samples) # observed
@@ -50,7 +49,7 @@ def distance_from_parallax(psrparms):
             return -1
     return -1
 
-def distance_from_pbdot(psrparms):
+def distance_from_pbdot(psrparms, n_samples=10000000):
 
     if ('ELAT' in psrparms) and ('ELONG' in psrparms):
         c = SkyCoord(psrparms['ELONG'], psrparms['ELAT'], frame=BarycentricTrueEcliptic, unit=(U.deg, U.deg))
@@ -144,7 +143,7 @@ def distance_from_pbdot(psrparms):
         return -1
     return -1
 
-def mass_from_psrparms(psrparms):
+def mass_from_psrparms(psrparms, n_samples=10000000):
     mtot2 = 0
     if 'BINARY' in psrparms:
         if ('A1' not in psrparms) or ('PB' not in psrparms):
@@ -183,14 +182,54 @@ def mass_from_psrparms(psrparms):
             sini = NP.random.normal(loc=psrparms["SINI"], scale=psrparms["SINI_ERR"], size=n_samples)
             inc = NP.arcsin(sini)*180/NP.pi
 
-    cut = NP.argwhere((m2 > mass_func) * (m2 < 10))
+    if ('XDOT' in psrparms) and ('XDOT_ERR' in psrparms):
+        xdot = NP.random.normal(loc=psrparms['XDOT'], scale=psrparms['XDOT_ERR'], size=n_samples)
+        if NP.abs(psrparms['XDOT']) > 1e-10:
+            xdot *= 1e-12           
+        a1 = NP.random.normal(loc=psrparms['A1'], scale=psrparms['A1_ERR'], size=n_samples)
+        # get proper motion
+        if ('ELAT' in psrparms) and ('ELONG' in psrparms):
+            pm1 = NP.random.normal(loc=psrparms['PMELAT'], scale=psrparms['PMELAT_ERR'], size=n_samples)
+            pm2 = NP.random.normal(loc=psrparms['PMELONG'], scale=psrparms['PMELONG_ERR'], size=n_samples)
+        elif ('BETA' in psrparms) and ('LAMBDA' in psrparms):
+            pm1 = NP.random.normal(loc=psrparms['PMBETA'], scale=psrparms['PMBETA_ERR'], size=n_samples)
+            pm2 = NP.random.normal(loc=psrparms['PMLAMBDA'], scale=psrparms['PMLAMBDA_ERR'], size=n_samples)           
+        elif ('PMRA' in psrparms)or ('PMDEC' in psrparms):
+            if 'PMRA' in psrparms:
+                pm1 = NP.random.normal(loc=psrparms['PMRA'], scale=psrparms['PMRA_ERR'], size=n_samples)
+            if 'PMDEC' in psrparms:
+                pm2 = NP.random.normal(loc=psrparms['PMDEC'], scale=psrparms['PMDEC_ERR'], size=n_samples)
+            else:
+                pm2 = 0.0
+        else:
+            raise KeyError('Proper motion keys not found in input pulsar parameters')
+        pm_tot = NP.sqrt(pm1**2 + pm2**2)
+        pm = pm_tot/(sec_per_year*rad_to_mas)
+
+        Omega = 2*NP.pi * NP.random.rand(n_samples)
+        A = (-pm2/(sec_per_year*rad_to_mas))*NP.sin(Omega) + (-pm1/(sec_per_year*rad_to_mas))*NP.cos(Omega)
+        i = NP.degrees(NP.arctan2(a1 * A, xdot))
+        i[i>90.0] = i[i>90.0] - 180.0
+        i[i<0.0] = -i[i<0.0]
+        i[i>90.0] = i[i>90.0] - 180.0
+        i[i<0.0] = -i[i<0.0]
+
+        i_lim = NP.percentile(i, q=95.0)
+        sini_lim = NP.sin(NP.radians(i_lim))        
+        # i_limit =  np.abs(np.arctan(a1 * pm / xdot))
+        # sini_lim = np.sin(np.percentile(i_limit, q=84.0))
+    else:
+        sini_lim = 1.0
+
+    cut = NP.argwhere((m2 > mass_func) * (m2 < 1.4) * (sini < sini_lim))
     m2 = m2[cut]
     sini = sini[cut]
     inc = NP.arcsin(sini)*180/NP.pi
     mtot2 = (m2 * sini)**3 / mass_func
     mp = NP.sqrt(mtot2[is_valid(mtot2)*is_valid(m2)]) - m2[is_valid(mtot2)*is_valid(m2)]
     mp = mp[is_valid(mp)]
-    mtot = NP.sqrt(mtot2[is_valid(mtot2)])
+    mtot2 = mtot2[is_valid(mtot2)]
+    mtot = NP.sqrt(mtot2[(mtot2 > 0)])
     inc = inc[is_valid(inc)]
 
     return {'M2': NP.median(m2), 'M2_std': NP.std(m2), 'M2_lolim': NP.percentile(m2, q=16.0), 'M2_uplim': NP.percentile(m2, q=84.0), 'Mpsr': NP.median(mp), 'Mpsr_std': NP.std(mp), 'Mpsr_lolim': NP.percentile(mp, q=16.0), 'Mpsr_uplim': NP.percentile(mp, q=84.0), 'Mtot': NP.median(mtot), 'Mtot_std': NP.std(mtot), 'Mtot_lolim': NP.percentile(mtot, q=16.0), 'Mtot_uplim': NP.percentile(mtot, q=84.0), 'inc': NP.median(inc), 'inc_std': NP.std(inc), 'inc_lolim': NP.percentile(inc, q=16.0), 'inc_uplim': NP.percentile(inc, q=84.0)}

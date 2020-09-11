@@ -29,7 +29,8 @@ import scipy.stats as stats
 from astropy import units as u
 from scipy.signal import savgol_filter
 from astropy.coordinates import SkyCoord, ICRS, BarycentricTrueEcliptic
-
+import sys
+sys.path.insert(0, '/Users/dreardon/Dropbox/Git/ppta_dr2_ephemerides/parameterComparisonScripts/')
 
 
 """
@@ -222,7 +223,7 @@ outfile = outdir + 'derived_params.txt'
 if path.exists(outfile):
     os.remove(outfile)
 
-n_samples = 10000
+n_samples = 1000000
 # Define other useful constants
 M_sun = 1.98847542e+30  # kg
 Tsun = 4.926790353700459e-06  #s
@@ -318,9 +319,9 @@ for par in parfiles:
         om_array = np.arctan2(eps1, eps2) * 180/np.pi
         t0_array = tasc + (om_array/nb)
         with open(outfile, 'a+') as f:
-            f.write("ECC(med/16th/84th)" + '\t' + str(np.median(ecc_array)) + '\t' + str(np.percentile(ecc_array, q=16)) + '\t' + str(np.percentile(ecc_array, q=84)) + '\n')
-            f.write("OM(med/16th/84th)" + '\t' + str(np.median(om_array)) + '\t' + str(np.percentile(om_array, q=16)) + '\t' + str(np.percentile(om_array, q=84)) + '\n')
-            f.write("T0(med/16th/84th)" + '\t' + str(np.median(t0_array)) + '\t' + str(np.percentile(t0_array, q=16)) + '\t' + str(np.percentile(t0_array, q=84)) + '\n')
+            f.write("ECC(med/std)" + '\t' + str(np.median(ecc_array)) + '\t' + str(np.std(ecc_array)) + '\n')
+            f.write("OM(med/std)" + '\t' + str(np.median(om_array)) + '\t' + str(np.std(om_array)) + '\n')
+            f.write("T0(med/std)" + '\t' + str(np.median(t0_array)) + '\t' + str(np.std(t0_array)) + '\n')
 
 
     # Check if pulsar requires Kopeikin terms
@@ -514,9 +515,15 @@ for par in parfiles:
 
 
         i_limit =  np.abs(180/np.pi * np.arctan(a1 * pm / xdot))
+        i_lim_95 = np.percentile(i_limit, q=95)
+        sini_lim_95 = np.sin(np.percentile(i_limit, q=84)*np.pi/180)
+        #sini_lim_95 = 1
         #print("i <= ", int(np.ceil(i_limit)))
         with open(outfile, 'a+') as f:
             f.write("INC_LIM(med/std)" + '\t' + "<" + str(np.median(i_limit))+ '\t'+ str(np.std(i_limit)) +'\n')
+            f.write("INC_LIM_95" + '\t' + "<" + str(i_lim_95)+ '\n')
+    else:
+        sini_lim_95 = 1
 
     mtot2 = 0
     if 'H3' in params.keys():
@@ -530,14 +537,15 @@ for par in parfiles:
             sini = 2 * h3 * h4 / ( h3**2 + h4**2 )
             m2 = h3**4 / h4**3  # in us
             m2 = m2/(Tsun*10**6)
-            cut = np.argwhere((m2 > mass_func) * (m2 < 10))
+            cut = np.argwhere((m2 > mass_func) * (m2 < 1.4) * (sini < sini_lim_95))
             m2 = m2[cut]
             sini = sini[cut]
             inc = np.arcsin(sini)*180/np.pi
             mtot2 = (m2 * sini)**3 / mass_func
             mp = np.sqrt(mtot2[is_valid(mtot2)*is_valid(m2)]) - m2[is_valid(mtot2)*is_valid(m2)]
             mp = mp[is_valid(mp)]
-            mtot = np.sqrt(mtot2[is_valid(mtot2)])
+            mtot2 = mtot2[is_valid(mtot2)]
+            mtot = np.sqrt(mtot2[(mtot2 > 0)])
             inc = inc[is_valid(inc)]
 
             with open(outfile, 'a+') as f:
@@ -545,6 +553,7 @@ for par in parfiles:
             with open(outfile, 'a+') as f:
                 f.write("M2(med/16th/84th)" + '\t' + str(np.median(m2)) + '\t' + str(np.percentile(m2, q=16)) + '\t' + str(np.percentile(m2, q=84)) + '\n')
             with open(outfile, 'a+') as f:
+                f.write("MP(med/16th/84th)" + '\t' + str(np.median(mp)) + '\t' + str(np.percentile(mp, q=16)) + '\t' + str(np.percentile(mp, q=84)) + '\n')
                 f.write("MP(med/16th/84th)" + '\t' + str(np.median(mp)) + '\t' + str(np.percentile(mp, q=16)) + '\t' + str(np.percentile(mp, q=84)) + '\n')
             with open(outfile, 'a+') as f:
                 f.write("MTOT(med/16th/84th)" + '\t' + str(np.median(mtot)) + '\t' + str(np.percentile(mtot, q=16)) + '\t' + str(np.percentile(mtot, q=84)) + '\n')
@@ -569,14 +578,20 @@ for par in parfiles:
             sini = 2 * h3 * h4 / ( h3**2 + h4**2 )
             m2 = h3**4 / h4**3
             m2 = m2/(Tsun*10**6)
-            cut = np.argwhere((m2 > mass_func) * (m2 < 10))
+            if '1017' in psrname:
+                sini_lim_95 = np.sin(46.2 * np.pi/180)
+                sini_min = np.sin(29.3 * np.pi/180)
+                cut = np.argwhere((m2 > mass_func) * (m2 < 1.4) * (sini < sini_lim_95) * (sini > sini_min))
+            else:
+                cut = np.argwhere((m2 > mass_func) * (m2 < 1.4) * (sini < sini_lim_95))
             m2 = m2[cut]
             sini = sini[cut]
             inc = np.arcsin(sini)*180/np.pi
             mtot2 = (m2 * sini)**3 / mass_func
             mp = np.sqrt(mtot2[is_valid(mtot2)*is_valid(m2)]) - m2[is_valid(mtot2)*is_valid(m2)]
             mp = mp[is_valid(mp)]
-            mtot = np.sqrt(mtot2[is_valid(mtot2)])
+            mtot2 = mtot2[is_valid(mtot2)]
+            mtot = np.sqrt(mtot2[(mtot2 > 0)])
             inc = inc[is_valid(inc)]
 
             try:
@@ -610,14 +625,15 @@ for par in parfiles:
         else:
             sini = np.random.normal(loc=params["SINI"], scale=params["SINI_ERR"], size=n_samples)
             inc = np.arcsin(sini)*180/np.pi
-        cut = np.argwhere((m2 > mass_func) * (m2 < 10))
+        cut = np.argwhere((m2 > mass_func) * (m2 < 1.4) *  (sini < sini_lim_95))
         m2 = m2[cut]
         sini = sini[cut]
         inc = np.arcsin(sini)*180/np.pi
         mtot2 = (m2 * sini)**3 / mass_func
         mp = np.sqrt(mtot2[is_valid(mtot2)*is_valid(m2)]) - m2[is_valid(mtot2)*is_valid(m2)]
         mp = mp[is_valid(mp)]
-        mtot = np.sqrt(mtot2[is_valid(mtot2)])
+        mtot2 = mtot2[is_valid(mtot2)]
+        mtot = np.sqrt(mtot2[(mtot2 > 0)])
         inc = inc[is_valid(inc)]
 
         if not 'KIN' in params.keys():
@@ -639,13 +655,18 @@ for par in parfiles:
         #plt.show()
 
 
-    if 'OMDOT' in params.keys() or 'EPS1DOT' in params.keys() or 'EPS2DOT' in params.keys():
+    if 'OMDOT' in params.keys():
         #print(' ')
         #print('=== Computing GR contribution ===')
 
         if 'ECC' in params.keys():
             ecc = params['ECC']
             ecc_err = params['ECC_ERR']
+            ecc_posterior = np.random.normal(loc=params["ECC"], scale=params["ECC_ERR"], size=n_samples)
+            omdot_posterior = np.random.normal(loc=params["OMDOT"], scale=params["OMDOT_ERR"], size=n_samples)
+            cut = np.argwhere(omdot_posterior > 0)
+            omdot_posterior = omdot_posterior[cut]
+            ecc_posterior = ecc_posterior[cut]
         elif 'EPS1' in params.keys():
             eps1_posterior = np.random.normal(loc=params["EPS1"],
                                            scale=params["EPS1_ERR"], size=n_samples)  # observed
@@ -661,11 +682,15 @@ for par in parfiles:
                                            scale=params["EPS2DOT_ERR"], size=n_samples)  # observed
 
             omdot_posterior = (86400*365.2425*180/np.pi)*np.sqrt(eps1dot_posterior**2 + eps2dot_posterior**2)/ecc
+            cut = np.argwhere(omdot_posterior > 0)
+            omdot_posterior = omdot_posterior[cut]
+            ecc_posterior = ecc_posterior[cut]
             omdot = np.mean(omdot_posterior)
             omdot_err = np.std(omdot_posterior)
             #print("Observed OMDOT = ", omdot, " +/- ", omdot_err)
             with open(outfile, 'a+') as f:
                 f.write("OMDOT" + '\t' + str(omdot) + '\t' + str(omdot_err) + '\n')
+
 
         Msun = 1.989*10**30  # kg
         Tsun = sc.G * Msun / (sc.c**3)
@@ -678,10 +703,13 @@ for par in parfiles:
         with open(outfile, 'a+') as f:
             f.write("OMDOT_GR" + '\t' + str(omdot_gr) + ' for M_TOT = ' + str(Mtot) + '\n')
 
+        # Now derive Mtot
+        omdot_posterior = omdot_posterior / 86400 / 365.2425 * np.pi/180
+        Mtot = (omdot_posterior*(1 - ecc_posterior**2) / (3 * n**(5/3)))**(3/2)/Tsun
+        with open(outfile, 'a+') as f:
+            f.write("MTOT_GR(med/16th/84th)" + '\t' + str(np.median(Mtot)) + '\t' + str(np.percentile(Mtot, q=16)) + '\t' + str(np.percentile(Mtot, q=84)) + '\n')
+
     with open(outfile, 'a+') as f:
         f.write('\n')
 
     print(" ")
-
-
-

@@ -130,13 +130,22 @@ def get_derived_params(parfilename):
           if param != "ELAT" and param != "ELONG" and param != "PMELAT" and param != "PMELONG" and param != "MASS_FUNC" and param != "OMDOT_GR" and len(sline)>=3:
             sixteenth = sline[2]
             eighty_fourth = sline[3]
+
+        except:
           if param == "INC_LIM(med/std)":
             err = sline[2]
-        except: pass
+          elif param == "ECC(med/std)":
+            err = sline[2]
+          elif param == "OM(med/std)":
+            err = sline[2]
+          elif param == "T0(med/std)":
+            err = sline[2]
+
 
 
         if take==True and line[0]!="J":
 
+            # fill par with the parameter values 
             par[param] = val
             if err:
                 par[param+"_ERR"] = float(err)
