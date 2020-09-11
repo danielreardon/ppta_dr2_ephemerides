@@ -133,8 +133,7 @@ def writeLine(parameters,tableFile,parameterName,keepTrackFitOrDer,parLabel=None
             shortFormat = replaceEWithTimes10(shortFormat)
         except:
             shortFormat = p
-
-
+  
         # fitted in bold
         if keepTrackFitOrDer[i]=='f':
             table.write('\t & \t $\\mathbf{{ {} }}$'.format(shortFormat))
@@ -602,9 +601,18 @@ for solBin in ['solitary', 'binary']:
             #print(fittedOrDerived[par])
             if fittedOrDerived[par]==0:
               try:
+                if par!='DM':
+                  parameter = ufloat(psrDetails[ipsr][par], psrDetails[ipsr][str(par+'_ERR')])
+                  paramList.append(parameter)
+                  keepingTrackFitDerived[ipsr] = 'f'
+                else: 
+                  paramList.append(psrDetails[ipsr][par])
+                  
+                """
                 parameter = ufloat(psrDetails[ipsr][par], psrDetails[ipsr][str(par+'_ERR')])
                 paramList.append(parameter)
                 keepingTrackFitDerived[ipsr] = 'f'
+                """
               except:
                 # is there a derived parameter for some parameters and gets ecliptic values for J1713 only
                 if par=='M2':
