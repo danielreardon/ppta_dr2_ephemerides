@@ -120,12 +120,15 @@ def writeLine(parameters,tableFile,parameterName,keepTrackFitOrDer,parLabel=None
     for i,p in enumerate(parameters):
 
         try:
-            #does the error start with a 1? 
-            if str(p.std_dev*10**10)[0]=='1':
-                shortFormat = frmtr.format("{0:.2u}",p)
+            #does the error start with a 1?
+            errorRounded = round_sig(p.std_dev)
+            if str(p.std_dev*10**10)[0] == '1' and errorRounded!=0:
+                p.std_dev = errorRounded
+                shortFormat = frmtr.format("{0}",p)
             else: 
                 shortFormat = frmtr.format("{0:.1u}",p)
-            #(p.std_dev,shortFormat,str(p.std_dev*10**10)[0])        
+            #old version shortFormat = frmtr.format("{0:.1u}",p)
+
             # does the string contain "e" ?
             shortFormat = replaceEWithTimes10(shortFormat)
         except:
@@ -166,8 +169,10 @@ def formatDerivedParams(psrDerived,ipsr,par):
 
     high = float(psrDerived[ipsr][par+'_84th']) - float(psrDerived[ipsr][par])
     low  = float(psrDerived[ipsr][par]) - float(psrDerived[ipsr][par+'_16th'])
+    #print(high,low)
     high = round_sig(high)
     low = round_sig(low)
+    #print(high,low)
     if high%1 == 0:
          high = int(high)
     if low%1 == 0:
@@ -262,11 +267,12 @@ def writeSkyPos(psrDets,tabFile,parLabels):
         shortFormat = frmtr.format("{0:.1u}",decSecondsAndErr)
         decs.append('$'+str(int(pos.dec.dms.d))+'$:$'+str(int(abs(pos.dec.dms.m)))+'$:$'+str(shortFormat)+'$')
 
-        # PMRA and PMDEC
-        #print('PMRA,PMDEC: ',psrDetails[ipsr]['PMRA'], psrDetails[ipsr]['PMDEC'])
-        pmras.append( frmtr.format("{0:.1u}",ufloat(psrDets[ipsr]['PMRA'], psrDets[ipsr]['PMRA_ERR'])))
-        pmdecs.append(frmtr.format("{0:.1u}",ufloat(psrDets[ipsr]['PMDEC'],psrDets[ipsr]['PMDEC_ERR'])))
-
+        # PMRA and PMDEC - old version
+        #pmras.append( frmtr.format("{0:.1u}",ufloat(psrDets[ipsr]['PMRA'], psrDets[ipsr]['PMRA_ERR'])))
+        #pmdecs.append(frmtr.format("{0:.1u}",ufloat(psrDets[ipsr]['PMDEC'],psrDets[ipsr]['PMDEC_ERR'])))
+        pmras.append(ufloat(psrDets[ipsr]['PMRA'], psrDets[ipsr]['PMRA_ERR']))
+        pmdecs.append(ufloat(psrDets[ipsr]['PMDEC'],psrDets[ipsr]['PMDEC_ERR']))
+  
 
     # write ra
     table.write(parLabels['RAJ'])
@@ -279,20 +285,12 @@ def writeSkyPos(psrDets,tabFile,parLabels):
     for dec in decs:
         table.write('\t & \t {}'.format(dec))
     table.write('\\\\ \n')
-
-    # write pmra
-    table.write(parLabels['PMRA'])
-    for pmra in pmras: 
-        table.write('\t & \t {}'.format(pmra))
-    table.write('\\\\ \n')
-
-    # write pmdec
-    table.write(parLabels['PMDEC'])
-    for pmdec in pmdecs:
-        table.write('\t & \t {}'.format(pmdec))
-    table.write('\\\\ \n')
-
-
+    table.close()
+   
+    fitOrDerived = ['f' for i in range(len(pmras))]
+    writeLine(pmras,tabFile,parLabels['PMRA'],fitOrDerived,parLabel='PMRA')
+    writeLine(pmdecs,tabFile,parLabels['PMDEC'],fitOrDerived,parLabel='PMDEC')
+  
     return None
 
 
