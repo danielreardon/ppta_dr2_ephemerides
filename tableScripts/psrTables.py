@@ -120,7 +120,12 @@ def writeLine(parameters,tableFile,parameterName,keepTrackFitOrDer,parLabel=None
     for i,p in enumerate(parameters):
 
         try:
-            shortFormat = frmtr.format("{0:.1u}",p)
+            #does the error start with a 1? 
+            if str(p.std_dev*10**10)[0]=='1':
+                shortFormat = frmtr.format("{0:.2u}",p)
+            else: 
+                shortFormat = frmtr.format("{0:.1u}",p)
+            #(p.std_dev,shortFormat,str(p.std_dev*10**10)[0])        
             # does the string contain "e" ?
             shortFormat = replaceEWithTimes10(shortFormat)
         except:
