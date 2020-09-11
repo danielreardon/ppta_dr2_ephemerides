@@ -160,6 +160,7 @@ TNChromAmp -14.4146
 TNChromGam 2.42689
 TNChromIdx 4
 TNChromC 91
+TNGroupSetSpan 1
 TNGroupNoise -group CPSR2_20CM -13.276 1.17829 40 2406
 TNGroupNoise -group CPSR2_10CM -13.4047 1.12984 37 2221
 TNGroupNoise -group CPSR2_50CM -12.8538 2.42551 37 2248
