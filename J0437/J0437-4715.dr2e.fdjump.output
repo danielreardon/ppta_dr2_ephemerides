@@ -1,0 +1,76 @@
+This program comes with ABSOLUTELY NO WARRANTY.
+This is free software, and you are welcome to redistribute it
+under conditions of GPL license.
+
+[clkcorr.C:157] Note, using '/home/dreardon/tempo2/clock' to look for extra clock files
+[clkcorr.C:179] Loaded extra clock correction ao2gps.clk : UTC(AO) -> UTC(GPS) badness 1
+[clkcorr.C:179] Loaded extra clock correction ao2nist.clk : UTC(AO) -> UTC(NIST) badness 100
+[clkcorr.C:179] Loaded extra clock correction aus2utc.clk : UTC(AUS) -> UTC badness 1
+[clkcorr.C:179] Loaded extra clock correction ced2gps.clk : UTC(ced) -> UTC(GPS) badness 1
+[clkcorr.C:179] Loaded extra clock correction eff2gps.clk : UTC(EFF) -> UTC(GPS) badness 1
+[clkcorr.C:179] Loaded extra clock correction effix2gps.clk : UTC(EFFIX) -> UTC(GPS) badness 1
+[clkcorr.C:179] Loaded extra clock correction gb1402nist.clk : UTC(GB140) -> UTC(NIST) badness 1
+[clkcorr.C:179] Loaded extra clock correction gb8532nist.clk : UTC(GB853) -> UTC(NIST) badness 1
+[clkcorr.C:179] Loaded extra clock correction gbt2gps.clk : UTC(GBT) -> UTC(GPS) badness 1
+[clkcorr.C:179] Loaded extra clock correction gps2utc.clk : UTC(GPS) -> UTC badness 1
+[clkcorr.C:179] Loaded extra clock correction hob2gps.clk : UTC(hob) -> UTC(GPS) badness 1
+[clkcorr.C:179] Loaded extra clock correction jb2gps.clk : UTC(JBROACH) -> UTC(GPS) badness 1
+[clkcorr.C:179] Loaded extra clock correction jb422jb.clk : UTC(JB42) -> UTC(JBROACH) badness 1
+[clkcorr.C:179] Loaded extra clock correction jb422jbafb.clk : UTC(JB42) -> UTC(JBAFB) badness 1
+[clkcorr.C:179] Loaded extra clock correction jbafb2gps.clk : UTC(JBAFB) -> UTC(GPS) badness 1
+[clkcorr.C:179] Loaded extra clock correction jbafb2utc.clk : UTC(JBAFB) -> UTC badness 1
+[clkcorr.C:179] Loaded extra clock correction jbdfb2gps.clk : UTC(JBDFB) -> UTC(GPS) badness 1
+[clkcorr.C:179] Loaded extra clock correction jbdfb2jb.clk : UTC(JBDFB) -> UTC(JB) badness 1
+[clkcorr.C:179] Loaded extra clock correction jbm42gps.clk : UTC(JBM4) -> UTC(GPS) badness 1
+[clkcorr.C:179] Loaded extra clock correction jbmk22jb.clk : UTC(JBMK2) -> UTC(JB) badness 1
+[clkcorr.C:179] Loaded extra clock correction jbmk2dfb2jbdfb.clk : UTC(JBMK2DFB) -> UTC(JBDFB) badness 1
+[clkcorr.C:179] Loaded extra clock correction jbmk2roach2jbroach.clk : UTC(JBMK2ROACH) -> UTC(JBROACH) badness 1
+[clkcorr.C:179] Loaded extra clock correction jbroach2gps.clk : UTC(JBROACH) -> UTC(GPS) badness 1
+[clkcorr.C:179] Loaded extra clock correction jbroach2jb.clk : UTC(JBROACH) -> UTC(JB) badness 1
+[clkcorr.C:179] Loaded extra clock correction mk2utc.clk : UTC(meerkat) -> UTC badness 1
+[clkcorr.C:179] Loaded extra clock correction mk2utc_2019.clk : UTC(meerkat) -> UTC badness 1
+[clkcorr.C:179] Loaded extra clock correction mk_dummy.clk : UTC(meerkat) -> UTC badness 1e+03
+[clkcorr.C:179] Loaded extra clock correction mo2gps.clk : UTC(mo) -> UTC(GPS) badness 1
+[clkcorr.C:179] Loaded extra clock correction ncy2gps.clk : UTC(NCY) -> UTC(GPS) badness 1
+[clkcorr.C:179] Loaded extra clock correction ncy2obspm.clk : UTC(NCY) -> UTC(OP) badness 1
+[clkcorr.C:179] Loaded extra clock correction ncyobs2obspm.clk : UTC(NCYOBS) -> UTC(OP) badness 1
+[clkcorr.C:179] Loaded extra clock correction nist2tai.clk : TA(NIST) -> TAI badness 1
+[clkcorr.C:179] Loaded extra clock correction nist2tt_nist.clk : UTC(NIST) -> TT(UTC(NIST)) badness 1
+[clkcorr.C:179] Loaded extra clock correction nist2utc.clk : UTC(NIST) -> UTC badness 1
+[clkcorr.C:179] Loaded extra clock correction obspm2gps.clk : UTC(OP) -> UTC(GPS) badness 1
+[clkcorr.C:179] Loaded extra clock correction obspm2utc.clk : UTC(OP) -> UTC badness 1
+[clkcorr.C:179] Loaded extra clock correction pks2aus.clk : UTC(PKS) -> UTC(AUS) badness 100
+[clkcorr.C:179] Loaded extra clock correction pks2gps.clk : UTC(PKS) -> UTC(GPS) badness 1
+[clkcorr.C:179] Loaded extra clock correction pks2gps.dr2e.clk : UTC(PKS) -> UTC(GPS) badness 1e+03
+[clkcorr.C:179] Loaded extra clock correction pks2tid.clk : UTC(PKS) -> UTC(TID) badness 1
+[clkcorr.C:179] Loaded extra clock correction pks2tt_toasim.clk : UTC(PKS) -> TT(TOASIM) badness 1e+03
+[clkcorr.C:179] Loaded extra clock correction ptb2tai.clk : TA(PTB) -> TAI badness 1
+[clkcorr.C:179] Loaded extra clock correction tai2tt_bipm01.clk : TAI -> TT(BIPM01) badness 1
+[clkcorr.C:179] Loaded extra clock correction tai2tt_bipm05.clk : TAI -> TT(BIPM2005) badness 1
+[clkcorr.C:179] Loaded extra clock correction tai2tt_bipm06.clk : TAI -> TT(BIPM2006) badness 1
+[clkcorr.C:179] Loaded extra clock correction tai2tt_bipm2003.clk : TAI -> TT(BIPM2003) badness 1
+[clkcorr.C:179] Loaded extra clock correction tai2tt_bipm2004.clk : TAI -> TT(BIPM2004) badness 1
+[clkcorr.C:179] Loaded extra clock correction tai2tt_bipm2004ext.clk : TAI -> TT(BIPM2004ext) badness 1
+[clkcorr.C:179] Loaded extra clock correction tai2tt_bipm2010.clk : TAI -> TT(BIPM2010) badness 1
+[clkcorr.C:179] Loaded extra clock correction tai2tt_bipm2011.clk : TAI -> TT(BIPM2011) badness 1
+[clkcorr.C:179] Loaded extra clock correction tai2tt_bipm2012.clk : TAI -> TT(BIPM2012) badness 1
+[clkcorr.C:179] Loaded extra clock correction tai2tt_bipm2013.clk : TAI -> TT(BIPM2013) badness 1
+[clkcorr.C:179] Loaded extra clock correction tai2tt_bipm2014.clk : TAI -> TT(BIPM2014) badness 1
+[clkcorr.C:179] Loaded extra clock correction tai2tt_bipm2015.clk : TAI -> TT(BIPM2015) badness 1
+[clkcorr.C:179] Loaded extra clock correction tai2tt_bipm2016.clk : TAI -> TT(BIPM2016) badness 1
+[clkcorr.C:179] Loaded extra clock correction tai2tt_bipm2017.clk : TAI -> TT(BIPM2017) badness 1
+[clkcorr.C:179] Loaded extra clock correction tai2tt_bipm92.clk : TAI -> TT(BIPM92) badness 1
+[clkcorr.C:179] Loaded extra clock correction tai2tt_tai.clk : TAI -> TT(TAI) badness 1
+[clkcorr.C:179] Loaded extra clock correction tid2nist.clk : UTC(TID) -> UTC(NIST) badness 1
+[clkcorr.C:179] Loaded extra clock correction utc2tai.clk : UTC -> TAI badness 1
+[clkcorr.C:179] Loaded extra clock correction utc2ut1.clk : UTC -> UT1 badness 1
+[clkcorr.C:179] Loaded extra clock correction vla2nist.clk : UTC(VLA) -> UTC(NIST) badness 1
+[clkcorr.C:179] Loaded extra clock correction wsrt2gps.clk : UTC(wsrt) -> UTC(GPS) badness 1
+[tempo2Util.C:396] Warning: [TIM1] Please place MODE flags in the parameter file 
+Updating TOA errors using TN parameters.
+[tempo2Util.C:397] [TROP2] Assume standard atmospheric pressure (no data) for site pks at MJD 52741.4
+[tempo2Util.C:397] [TROP1] Assume zero zenith wet delay (no data) for site pks  at MJD 52741.4
+[tempo2Util.C:401] Warning: [DUP1] duplicated warnings have been suppressed.
+[t2fit.C:1072] Generated 3967 TNepochs from 13 TNECORRs
+[t2fit.C:1166] Warning: Refusing to fit for bad JUMP ' -f H-OH_cpsr2m -5.1787199445684e-06 1' which had no data points in range
+[t2fit.C:1166] Warning: Refusing to fit for bad JUMP ' -f H-OH_cpsr2n -5.1457435586121e-06 1' which had no data points in range
