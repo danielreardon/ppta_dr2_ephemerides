@@ -235,7 +235,7 @@ def apply_fd(params, toas, freqs, ref_freq=1000):
     correction = np.array([Decimal(c) for c in correction]).squeeze()
     correction /= 86400
 
-    return toas - correction
+    return toas + correction
 
 
 def correct_systems_fd(tim, toas, files, freqs, errs, flag='-h', plot=True,
