@@ -109,17 +109,47 @@ def read_tim(timfile):
     return tim
 
 
-def fitter(model, params, args):
+def fitter(model, params, args, mcmc=False):
     # Do fit
+    if not mcmc:
+        method = 'leastsq'
+    else:
+        method = 'emcee'
     func = Minimizer(model, params, fcn_args=args)
-    results = func.minimize()
+    results = func.minimize(method=method)
     return results
 
 
 def polynomial(params, x, y, w):
     model = params['p0'] + params['p1']*x + params['p2']*x**2 + \
-         + params['p3']*x**3 + params['p4']*x**4 + params['p5']*x**5
+            params['p3']*x**3 + params['p4']*x**4 + params['p5']*x**5 + \
+            params['p6']*x**6 + params['p7']*x**7 + params['p8']*x**8
     return (y - model) * w
+
+
+def dm_model(params, freqs, toas, files, pars, w):
+    """
+    Determine the best DM
+    """
+    dm = params['dm']
+    toas = dedisperse(toas, freqs, pars, dm=dm)
+
+    # Now remove all time-structure by subtracting mean TOA
+    for file in np.unique(files):
+        inds = np.argwhere(files == file).squeeze()
+        if np.size(np.array(inds)) > 1:
+            avg = np.average(toas[inds], weights=w[inds]**2)
+            toas[inds] -= avg
+        else:
+            toas[inds] = 0
+
+    toas = shift_turns(pars, toas, files)
+
+    # convert to float array for lmfit
+    toas = np.array([float(t) for t in toas]).squeeze()
+    weights = np.copy(w)
+    w = np.array([float(w) for w in weights]).squeeze()
+    return (toas) * w
 
 
 def get_data(tim, flag="-group"):
@@ -149,19 +179,36 @@ def get_data(tim, flag="-group"):
     return files, freqs, toas, errs, flag_vals
 
 
-def dedisperse(toas, freqs, params, dm=None, ref_freq=1000, reverse=False):
+def dedisperse(toas, freqs, params, dm=None, ref_freq=1000, reverse=False,
+               plot=False):
     """
     Add or subtract DM delay from TOAs
     """
     if dm is None:
         dm = Decimal(params['DM'])
+    else:
+        dm = Decimal(float(dm))
     dm_const = Decimal(2.41e-4)
     dm_delay = dm / dm_const / (freqs / Decimal(ref_freq))**2
 
+    period_us = 10**6/Decimal(params['F0'])
+    while np.any(dm_delay >= period_us):
+        dm_delay[dm_delay >= period_us] -= period_us
+
+    if plot:
+        plt.scatter(freqs, dm_delay, color='mediumblue')
+        plt.xlabel('Frequency')
+        plt.ylabel('Dispersion delay (us)')
+        plt.show()
+
+    delay_mjd = dm_delay / Decimal(86400) / Decimal(1e6)
+
     if reverse:
-        return toas + dm_delay / Decimal(86400) / Decimal(1e6)
+        print('De-dedispersion with DM={0}'.format(dm))
+        return toas + delay_mjd
     else:
-        return toas - dm_delay / Decimal(86400) / Decimal(1e6)
+        # print('De-dispersion with DM={0}'.format(dm))
+        return toas - delay_mjd
 
 
 def apply_efac_equad(params, errs, flag_vals):
@@ -198,7 +245,7 @@ def apply_efac_equad(params, errs, flag_vals):
     return errs
 
 
-def apply_fd(params, toas, freqs, ref_freq=1000):
+def apply_fd(params, toas, freqs, ref_freq=1000, plot=True):
     """
     Read FD parameters from .par file and apply to TOAs
     Applies FD parameters with respect to reference frequencyref_freq (MHz)
@@ -224,22 +271,32 @@ def apply_fd(params, toas, freqs, ref_freq=1000):
     for ii in range(0, polyorder.size):
         p = polyorder[ii]
         c = fd_vals[ii]
-        correction += c * np.log(freqs/ref_freq)**p
+        correction += c * np.log(freqs/ref_freq)**p * 10**6
 
-    mx = round(max(correction*10**6), 3)
-    mn = round(min(correction*10**6), 3)
+    period_us = 10**6/Decimal(params['F0'])
+    while np.any(correction > period_us):
+        correction[correction > period_us] -= period_us
+
+    if plot:
+        plt.scatter(freqs, correction, color='mediumblue')
+        plt.xlabel('Frequency')
+        plt.ylabel('FD correction (us)')
+        plt.show()
+
+    mx = round(max(correction), 3)
+    mn = round(min(correction), 3)
     print("Correction ranges from {0}us to {1}us".format(mx, mn))
     print(" ")
 
     # convert correction into Decimal days to apply to TOAs in MJD
     correction = np.array([Decimal(c) for c in correction]).squeeze()
-    correction /= 86400
+    correction /= (86400 * 10**6)
 
-    return toas + correction
+    return toas - correction
 
 
 def correct_systems_fd(tim, toas, files, freqs, errs, flag='-h', plot=True,
-                       max_polyorder=5, downweight_outliers=True, nsig=5,
+                       max_polyorder=8, downweight_outliers=True, nsig=5,
                        maxoutliers=0.05):
     """
     For each group of TOAs defined by a flag value, fit and remove a
@@ -253,12 +310,20 @@ def correct_systems_fd(tim, toas, files, freqs, errs, flag='-h', plot=True,
     for line in tim:
         line = line.split()
         ind = np.argwhere([l.strip() == flag for l in line])
-        flag_vals.append(line[int(ind + 1)])
+        try:
+            flag_vals.append(line[int(ind + 1)])
+        except TypeError:
+            flag_vals.append('None')
     flag_vals = np.array(flag_vals).squeeze()
 
     for val in np.unique(flag_vals):
+        if val == 'None':
+            continue
         print("FD system correction for {0} {1}".format(flag, val))
         flaginds = np.argwhere(flag_vals == val).squeeze()
+        if flaginds.size < 20:
+            print('Too few TOAs')
+            continue
         ifiles = files[flaginds].squeeze()
         itoas = toas[flaginds].squeeze()
         ifreqs = freqs[flaginds].squeeze()
@@ -272,9 +337,9 @@ def correct_systems_fd(tim, toas, files, freqs, errs, flag='-h', plot=True,
                 itoas[inds] -= avg
             else:
                 itoas[inds] = 0
-        if plot:
-            plt.errorbar(ifreqs, itoas * 86400 * 10**6,
-                         yerr=ierrs, fmt='.', color='mediumblue', alpha=0.5)
+            if plot:
+                plt.errorbar(ifreqs[inds], itoas[inds] * 86400 * 10**6,
+                             yerr=ierrs[inds], fmt='.', alpha=0.5)
 
         x = np.array([float(f) for f in ifreqs]).squeeze()
         y = np.array([float(t) for t in itoas * 86400 * 10**6]).squeeze()
@@ -299,6 +364,15 @@ def correct_systems_fd(tim, toas, files, freqs, errs, flag='-h', plot=True,
             params.add('p5', value=0, vary=False, min=-np.inf, max=np.inf)
             if o >= 5:
                 params['p5'].vary = True
+            params.add('p6', value=0, vary=False, min=-np.inf, max=np.inf)
+            if o >= 6:
+                params['p6'].vary = True
+            params.add('p7', value=0, vary=False, min=-np.inf, max=np.inf)
+            if o >= 7:
+                params['p7'].vary = True
+            params.add('p8', value=0, vary=False, min=-np.inf, max=np.inf)
+            if o >= 8:
+                params['p8'].vary = True
 
             results_new = fitter(polynomial, params, (x, y, w))
             if results_new.chisqr < chisqr - 2:
@@ -423,12 +497,43 @@ def write_timfile(outfile, tim, files, freqs, toas, errs, flag_vals):
             f.write("{0} {1} {2} {3} {4}\n".
                     format(ifile, round(freqs[ii], 8), toas[ii],
                            round(errs[ii], 6), writeline))
+    return
+
+
+def shift_turns(params, toas, files, plot=False):
+    """
+    For each group of sub-bands, shift TOAs to the same pulse number
+    """
+
+    period_us = 10**6/Decimal(params['F0'])
+    period_mjd = Decimal(period_us / 10**6 / 86400)
+
+    for file in np.unique(files):
+        inds = np.argwhere(files == file).squeeze()
+        if np.size(np.array(inds)) > 1:
+            dt = np.diff(toas[inds] - np.median(toas[inds]))
+
+            while np.any(dt > period_mjd/2):
+                turns = np.zeros(np.shape(toas[inds]))
+                turns = np.array([Decimal(t) for t in turns]).squeeze()
+                turnind = np.argwhere(dt > period_mjd/2)
+                turns[turnind] += period_mjd
+                toas[inds] += turns
+                dt = np.diff(toas[inds])
+            while np.any(dt < -period_mjd/2):
+                turns = np.zeros(np.shape(toas[inds]))
+                turns = np.array([Decimal(t) for t in turns]).squeeze()
+                turnind = np.argwhere(dt < -period_mjd/2)
+                turns[turnind] -= period_mjd
+                toas[inds] += turns
+                dt = np.diff(toas[inds])
+    return toas
 
 
 def average_timfile(parfile, timfile, outfile=None, fd_correct=True,
                     fd_systems=False, white_flag='-group', fd_flag='-h',
-                    plot=True, max_polyorder=5, downweight=True,
-                    nsig=5):
+                    plot=False, max_polyorder=8, downweight=True,
+                    nsig=5, dm=None, fit_dm=False, ndm=100):
     """
     Reads a .par file and .tim file, and frequency-averages the TOAs,
         saving output to outfile
@@ -448,11 +553,47 @@ def average_timfile(parfile, timfile, outfile=None, fd_correct=True,
     files, freqs, toas, errs, flag_vals = get_data(tim, flag=white_flag)
     # Apply EFACs and EQUADs to subbanded data
     errs = apply_efac_equad(params, errs, flag_vals)
-    # De-disperse
-    toas = dedisperse(toas, freqs, params)
     # Correct TOAs for FD parameters
     if fd_correct:
-        toas = apply_fd(params, toas, freqs)
+        toas = apply_fd(params, toas, freqs, plot=plot)
+
+    if dm is None:
+        dm = params['DM']
+
+    if fit_dm:
+        print("Original DM = {0}. Now fitting".format(dm))
+        # reverse-engineer folding DM value
+        dm_params = Parameters()
+        dm_params.add('dm', value=dm, vary=True,
+                      min=-np.inf, max=np.inf)
+        results = fitter(dm_model, dm_params,
+                         (freqs, toas, files, params, 1/errs), mcmc=False)
+        dm = results.params['dm'].value
+        print("Fitted DM = {0}".format(dm))
+
+    # De-disperse
+    toas = dedisperse(toas, freqs, params, plot=plot, dm=dm)
+    # Shift TOAs by pulse period if needed
+    toas = shift_turns(params, toas, files, plot=plot)
+
+    # Now remove all time-structure by subtracting mean TOA
+    if plot:
+        for file in np.unique(files):
+            toas_plot = np.copy(toas)
+            inds = np.argwhere(files == file).squeeze()
+            if np.size(np.array(inds)) > 1:
+                avg = np.average(toas_plot[inds], weights=1/errs[inds]**2)
+                toas_plot[inds] -= avg
+            else:
+                toas_plot[inds] = 0
+            if plot:
+                plt.errorbar(freqs[inds], toas_plot[inds] * 86400 * 10**6,
+                             yerr=errs[inds], fmt='.', alpha=0.5)
+
+        plt.ylabel('residual')
+        plt.xlabel('frequency')
+        plt.show()
+
     if fd_systems:
         toas, errs = correct_systems_fd(tim, toas, files, freqs, errs,
                                         flag=fd_flag, plot=plot,
@@ -465,7 +606,7 @@ def average_timfile(parfile, timfile, outfile=None, fd_correct=True,
     errs = apply_ecorr(params, errs, flag_vals)
 
     # De-dedisperse
-    toas = dedisperse(toas, freqs, params, reverse=True)
+    toas = dedisperse(toas, freqs, params, reverse=True, dm=dm)
 
     write_timfile(outfile, tim, files, freqs, toas, errs, flag_vals)
 
@@ -473,11 +614,13 @@ def average_timfile(parfile, timfile, outfile=None, fd_correct=True,
 
 
 datadir = '/Users/dreardon/Dropbox/Git/ppta_dr2_ephemerides/'
-# parfile = datadir + 'J0437/new.dr2.par'
-# timfile = datadir + 'J0437/J0437-4715.tim'
+# parfiles = [datadir + 'J0437/new.dr2.par']
+# timfiles = [datadir + 'J0437/J0437-4715.tim']
 
-parfiles = sorted(glob.glob(datadir + 'final/averaged/*.par'))
-timfiles = sorted(glob.glob(datadir + 'final/averaged/*.tim'))
+parfiles = sorted(glob.glob(datadir +
+                  'final/averaged/*.par'))
+timfiles = sorted(glob.glob(datadir +
+                  'final/averaged/*.tim'))
 
 for ii in range(0, len(timfiles)):
     parfile = parfiles[ii]
@@ -485,5 +628,5 @@ for ii in range(0, len(timfiles)):
     print(parfile)
     print(timfile)
     average_timfile(parfile=parfile, timfile=timfile, outfile=None,
-                    fd_correct=True, fd_systems=False, white_flag='-group',
-                    fd_flag='-group')
+                    fd_correct=True, fd_systems=True, white_flag='-group',
+                    fd_flag='-h', dm=None, fit_dm=True, plot=True)
