@@ -31,6 +31,7 @@ import numpy as np
 from lmfit import Parameters, Minimizer
 import matplotlib.pyplot as plt
 import glob
+import time
 
 
 def read_par(parfile):
@@ -211,7 +212,7 @@ def dedisperse(toas, freqs, params, dm=None, ref_freq=1000, reverse=False,
         return toas - delay_mjd
 
 
-def apply_efac_equad(params, errs, flag_vals):
+def apply_efac_equad(params, errs, flag_vals, outfile=None):
     """
     Applies efacs (TNEF) and equads (TNEQ) from .par file to toa errors
 
@@ -223,6 +224,10 @@ def apply_efac_equad(params, errs, flag_vals):
             efac = Decimal(params[key])  # efac value
             group = '_'.join(key.split('_')[2:])
 
+            if outfile is not None:
+                with open(outfile, "a+") as f:
+                    f.write('# Applied TNEF of {0} to {1} \n'.
+                            format(round(efac, 3), group))
             print('Applying EFAC of {0} to {1}'.format(round(efac, 3), group))
 
             inds = np.argwhere(flag_vals == group)
@@ -235,6 +240,10 @@ def apply_efac_equad(params, errs, flag_vals):
             equad = Decimal(10**(params[key] + 6))  # equad value
             group = '_'.join(key.split('_')[2:])
 
+            if outfile is not None:
+                with open(outfile, "a+") as f:
+                    f.write('# Applied TNEQ of {0}us to {1}\n'.
+                            format(round(equad, 3), group))
             print('Applying EQUAD of {0}us to {1}'.format(round(equad, 3),
                   group))
 
@@ -242,10 +251,14 @@ def apply_efac_equad(params, errs, flag_vals):
             errs[inds] = np.sqrt(errs[inds]**2 + equad**2)
     print(" ")
 
+    if outfile is not None:
+        with open(outfile, "a+") as f:
+            f.write('# \n')
+
     return errs
 
 
-def apply_fd(params, toas, freqs, ref_freq=1000, plot=True):
+def apply_fd(params, toas, freqs, ref_freq=1000, plot=True, outfile=None):
     """
     Read FD parameters from .par file and apply to TOAs
     Applies FD parameters with respect to reference frequencyref_freq (MHz)
@@ -261,6 +274,13 @@ def apply_fd(params, toas, freqs, ref_freq=1000, plot=True):
 
     if polyorder.size == 0:
         return toas
+
+    if outfile is not None:
+        with open(outfile, "a+") as f:
+            f.write('# Applied FD correction using: \n')
+            for ii in range(0, polyorder.size):
+                f.write("# FD{0} = {1} \n".format(polyorder[ii], fd_vals[ii]))
+            f.write('# \n')
 
     print("Applying FD parameters")
     print("FD polynomial orders:", polyorder)
@@ -461,7 +481,7 @@ def form_avg(files, freqs, toas, errs, flag_vals):
     return files, freqs, toas, errs, flag_vals
 
 
-def apply_ecorr(params, errs, flag_vals):
+def apply_ecorr(params, errs, flag_vals, outfile=None):
     """
     Applies ecorrs (TNECORR) from .par file to toa errors
     """
@@ -471,12 +491,21 @@ def apply_ecorr(params, errs, flag_vals):
             ecorr = Decimal(params[key])  # equad value
             group = '_'.join(key.split('_')[2:])
 
+            if outfile is not None:
+                with open(outfile, "a+") as f:
+                    f.write('# Applied TNECORR of {0}us to {1} \n'.
+                            format(round(ecorr, 3), group))
+
             print('Applying ECORR of {0}us to {1}'.format(round(ecorr, 3),
                   group))
 
             inds = np.argwhere(flag_vals == group)
             errs[inds] = np.sqrt(errs[inds]**2 + ecorr**2)
     print(" ")
+
+    if outfile is not None:
+        with open(outfile, "a+") as f:
+            f.write("# \n")
 
     return errs
 
@@ -485,18 +514,20 @@ def write_timfile(outfile, tim, files, freqs, toas, errs, flag_vals):
     """
     Output new averaged data to a new .tim file
     """
-    with open(outfile, "w+") as f:
+    with open(outfile, "a+") as f:
         f.write("FORMAT 1\n")
         f.write("MODE 1\n")
+        sortind = np.argsort(toas)
         for ii in range(0, len(files)):
-            ifile = files[ii]
+            ifile = files[sortind][ii]
             for line in tim:
                 lsplit = line.split()
                 if lsplit[0] == ifile:
                     writeline = ' '.join(lsplit[4:])
             f.write("{0} {1} {2} {3} {4}\n".
-                    format(ifile, round(freqs[ii], 8), toas[ii],
-                           round(errs[ii], 6), writeline))
+                    format(ifile, round(freqs[sortind][ii], 8),
+                           toas[sortind][ii],
+                           round(errs[sortind][ii], 6), writeline))
     return
 
 
@@ -543,8 +574,21 @@ def average_timfile(parfile, timfile, outfile=None, fd_correct=True,
     """
 
     if outfile is None:
-        outfile = timfile.replace('.tim', '.avg_nosystem_correct.tim')
+        outfile = timfile.replace('.tim', '.avg.tim')
 
+    with open(outfile, "w+") as f:
+        now = time.gmtime()
+        f.write("# Averaged .tim file prepared at {0}:{1}:{2} (UTC, 12h) on {3}/{4}/{5} \n".
+                format(now.tm_hour,
+                       now.tm_min,
+                       now.tm_sec,
+                       now.tm_mday,
+                       now.tm_mon,
+                       now.tm_year))
+        f.write("# Using Daniel Reardon's 'frequency_average.py' for PPTA-DR2 \n")
+        f.write("# \n")
+    with open(outfile, "a+") as f:
+        f.write("# White noise flag is {0} \n".format(white_flag))
     # Read .par file
     params = read_par(parfile)
     # Read tim file
@@ -552,10 +596,10 @@ def average_timfile(parfile, timfile, outfile=None, fd_correct=True,
     # Get necessary data from .tim file
     files, freqs, toas, errs, flag_vals = get_data(tim, flag=white_flag)
     # Apply EFACs and EQUADs to subbanded data
-    errs = apply_efac_equad(params, errs, flag_vals)
+    errs = apply_efac_equad(params, errs, flag_vals, outfile=outfile)
     # Correct TOAs for FD parameters
     if fd_correct:
-        toas = apply_fd(params, toas, freqs, plot=plot)
+        toas = apply_fd(params, toas, freqs, plot=plot, outfile=outfile)
 
     if dm is None:
         dm = params['DM']
@@ -569,7 +613,11 @@ def average_timfile(parfile, timfile, outfile=None, fd_correct=True,
         results = fitter(dm_model, dm_params,
                          (freqs, toas, files, params, 1/errs), mcmc=False)
         dm = results.params['dm'].value
-        print("Fitted DM = {0}".format(dm))
+        print("Fitted DM".format(dm))
+
+    with open(outfile, "a+") as f:
+        f.write("# Dedispersed with DM = {0} \n".format(round(dm, 6)))
+        f.write("# \n")
 
     # De-disperse
     toas = dedisperse(toas, freqs, params, plot=plot, dm=dm)
@@ -590,8 +638,8 @@ def average_timfile(parfile, timfile, outfile=None, fd_correct=True,
                 plt.errorbar(freqs[inds], toas_plot[inds] * 86400 * 10**6,
                              yerr=errs[inds], fmt='.', alpha=0.5)
 
-        plt.ylabel('residual')
-        plt.xlabel('frequency')
+        plt.ylabel('Residual')
+        plt.xlabel('Frequency')
         plt.show()
 
     if fd_systems:
@@ -603,7 +651,7 @@ def average_timfile(parfile, timfile, outfile=None, fd_correct=True,
 
     files, freqs, toas, errs, flag_vals = form_avg(files, freqs, toas, errs,
                                                    flag_vals)
-    errs = apply_ecorr(params, errs, flag_vals)
+    errs = apply_ecorr(params, errs, flag_vals, outfile)
 
     # De-dedisperse
     toas = dedisperse(toas, freqs, params, reverse=True, dm=dm)
@@ -629,4 +677,5 @@ for ii in range(0, len(timfiles)):
     print(timfile)
     average_timfile(parfile=parfile, timfile=timfile, outfile=None,
                     fd_correct=True, fd_systems=False, white_flag='-group',
-                    fd_flag='-h', dm=None, fit_dm=True, plot=False)
+                    fd_flag='-h', dm=None, fit_dm=True, plot=False,
+                    downweight=False)
