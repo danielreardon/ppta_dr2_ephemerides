@@ -244,6 +244,10 @@ def derive_combined_mass(params, plot=False, n_samples=10000000):
 
     elif 'KIN' in params.keys():
         i = np.random.normal(loc=params["KIN"], scale=params["KIN_ERR"], size=n_samples)
+        i[i>90] = i[i>90] - 180
+        i[i<0] = -i[i<0]
+        i[i>90] = i[i>90] - 180
+        i[i<0] = -i[i<0]
     #plt.figure()
     #plt.hist(i_prior, bins=1000, alpha=0.5)
     #plt.show()
@@ -272,7 +276,7 @@ def derive_combined_mass(params, plot=False, n_samples=10000000):
             #sini_lim = 0.96928029962
             sini_lim = 1
         else:
-            sini_lim = 0.9610881444044
+            sini_lim = 1
         cut = np.argwhere((m2 > mass_func) * (m2 < 1.4) * (sini < sini_lim))
         m2 = m2[cut]
         sini = sini[cut]
@@ -288,6 +292,7 @@ def derive_combined_mass(params, plot=False, n_samples=10000000):
         inc = inc[cut]
         i = i[cut]
         i_prior = i_prior[cut]
+        shap_label = r'Shapiro delay, $h_3$ and $\zeta$'
     else:
         sini_lim = 1
         m2 = np.random.normal(loc=params['M2'], scale=params['M2_ERR'], size=n_samples)
@@ -310,6 +315,7 @@ def derive_combined_mass(params, plot=False, n_samples=10000000):
         inc = inc[cut]
         i = i[cut]
         i_prior = i_prior[cut]
+        shap_label = r'Shapiro delay, $M_c$ and $\sin{i}$'
 
 
     #plt.figure()
@@ -391,9 +397,9 @@ def derive_combined_mass(params, plot=False, n_samples=10000000):
     #plt.plot(np.linspace(0,90,bins), n2/mx*np.max(n2))
     #plt.plot(np.linspace(0,90,bins), n3/mx*np.max(n3))
     if 'XDOT' in params.keys():
-        plt.legend([r'Kopeikin, $\dot{x}$', r'Shapiro delay, $h_3$ and $\zeta$',r'Uniform $\cos{i}$ prior',  r'Total'], loc='upper left')
+        plt.legend([r'Kopeikin, $\dot{x}$', shap_label,r'Uniform $\cos{i}$ prior',  r'Total'], loc='upper left')
     else:
-        plt.legend([r'Uniform $\cos(i)$ prior', r'Kopeikin, $i$', r'Shapiro delay', r'Total'], loc='upper left')
+        plt.legend([r'Kopeikin, $i$', shap_label,r'Uniform $\cos(i)$ prior', r'Total'] )#, loc='upper left')
     plt.xlim((0, 90))
     yl = plt.ylim()
     plt.ylim((0, yl[1]))
@@ -403,29 +409,34 @@ def derive_combined_mass(params, plot=False, n_samples=10000000):
     #labels[labels == '0.000'] = '0'
     #plt.yticks(locs, labels)  # Set locations and labels
 
-    plt.subplot(1, 2, 2)
+
     combined = n4*n5
+    plt.subplot(1, 2, 2)
     x = np.linspace(0,5, bins)
     dx = x[1] - x[0]
     scalefactor = 1 / dx
     plt.plot(x, scalefactor*savgol_filter(n4/np.sum(n4), 51, 3), color='midnightblue', linewidth=2)
     #plt.fill_between(np.linspace(0,5, bins), savgol_filter(n4/np.sum(n4), 51, 3), color='crimson', alpha=0.3)
     scalefactor = 1 / dx
-    plt.plot(x, scalefactor*savgol_filter(n5/np.sum(n5), 51, 3), color='darkmagenta', linewidth=2, alpha=0.7)
+    plt.plot(x, scalefactor*savgol_filter(n5/np.sum(n5), 51, 3), color='darkmagenta', linewidth=2, alpha=0.9)
     #plt.fill_between(np.linspace(0,5, bins), savgol_filter(n5/np.sum(n5), 51, 3), color='darkorange', alpha=0.3)
     #plt.plot(np.linspace(0,5, bins), savgol_filter(combined/np.sum(combined), 51, 3), color='k', linewidth=2)
     scalefactor = 1 / dx
     plt.fill_between(x, scalefactor*savgol_filter(combined/np.sum(combined), 51, 3), color='k', alpha=0.15)
     plt.xlim((0, 5))
     yl = plt.ylim()
-    plt.ylim((0, 1))
+    if '1600' in psrname:
+        plt.ylim((0, 1))
+    else:
+        plt.ylim((0, yl[1]))
     plt.xlabel(r'Total system mass, $M_{\rm tot}$ ($M_\odot$)')
     plt.ylabel(r'Probability')
     #locs, labels = plt.yticks()            # Get locations and labels
     #plt.yticks(locs, [])  # Set locations and labels
-    plt.legend(['Periastron advance $\dot{\omega}$', 'Inclination, $i$', 'Total'], loc='upper left')
+    plt.legend(['Periastron advance $\dot{\omega}$', 'Inclination, $i$', 'Total'] )#, loc='upper left')
     plt.tight_layout()
     if plot:
+        plt.savefig('{0}_mass.pdf'.format(psrname), bbox_inches='tight', pad_inches=0.1,)
         plt.show()
     else:
         plt.close()
@@ -455,6 +466,8 @@ def derive_combined_mass(params, plot=False, n_samples=10000000):
     mp = mp_new
     mtot = mtot_posterior
     inc = i_posterior
+
+    # print(np.percentile(mp, q=5.0))
 
     return {'M2': np.median(m2), 'M2_std': np.std(m2), 'M2_lolim': np.percentile(m2, q=16.0), 'M2_uplim': np.percentile(m2, q=84.0), 'Mpsr': np.median(mp), 'Mpsr_std': np.std(mp), 'Mpsr_lolim': np.percentile(mp, q=16.0), 'Mpsr_uplim': np.percentile(mp, q=84.0), 'Mtot': np.median(mtot), 'Mtot_std': np.std(mtot), 'Mtot_lolim': np.percentile(mtot, q=16.0), 'Mtot_uplim': np.percentile(mtot, q=84.0), 'inc': np.median(inc), 'inc_std': np.std(inc), 'inc_lolim': np.percentile(inc, q=16.0), 'inc_uplim': np.percentile(inc, q=84.0)}
 
