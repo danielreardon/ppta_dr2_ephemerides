@@ -121,6 +121,7 @@ def writeLine(parameters,tableFile,parameterName,keepTrackFitOrDer,parLabel=None
 
         try:
             #does the error start with a 1?
+<<<<<<< Updated upstream
             errorRounded = round_sig(p.std_dev)
             if str(p.std_dev*10**10)[0] == '1' and errorRounded!=0:
                 p.std_dev = errorRounded
@@ -129,6 +130,13 @@ def writeLine(parameters,tableFile,parameterName,keepTrackFitOrDer,parLabel=None
                 shortFormat = frmtr.format("{0:.1u}",p)
             #old version shortFormat = frmtr.format("{0:.1u}",p)
 
+=======
+            if str(p.std_dev*10**10)[0]=='1':
+                shortFormat = frmtr.format("{0:.2u}",p)
+            else:
+                shortFormat = frmtr.format("{0:.1u}",p)
+            #(p.std_dev,shortFormat,str(p.std_dev*10**10)[0])
+>>>>>>> Stashed changes
             # does the string contain "e" ?
             shortFormat = replaceEWithTimes10(shortFormat)
         except:
@@ -284,12 +292,29 @@ def writeSkyPos(psrDets,tabFile,parLabels):
     for dec in decs:
         table.write('\t & \t {}'.format(dec))
     table.write('\\\\ \n')
+<<<<<<< Updated upstream
     table.close()
    
     fitOrDerived = ['f' for i in range(len(pmras))]
     writeLine(pmras,tabFile,parLabels['PMRA'],fitOrDerived,parLabel='PMRA')
     writeLine(pmdecs,tabFile,parLabels['PMDEC'],fitOrDerived,parLabel='PMDEC')
   
+=======
+
+    # write pmra
+    table.write(parLabels['PMRA'])
+    for pmra in pmras:
+        table.write('\t & \t {}'.format(pmra))
+    table.write('\\\\ \n')
+
+    # write pmdec
+    table.write(parLabels['PMDEC'])
+    for pmdec in pmdecs:
+        table.write('\t & \t {}'.format(pmdec))
+    table.write('\\\\ \n')
+
+
+>>>>>>> Stashed changes
     return None
 
 
@@ -369,8 +394,8 @@ args = parser.parse_args()
 solBin = str(args.solOrBin)
 whichGroup = int(args.groupNo)
 
-#datadir = '/Users/dreardon/Dropbox/Git/'
-datadir = '/fred/oz002/hmiddleton/ppta_ephemeris/repositories'
+datadir = '/Users/dreardon/Dropbox/Git/'
+#datadir = '/fred/oz002/hmiddleton/ppta_ephemeris/repositories'
 
 for solBin in ['solitary', 'binary']:
 
@@ -655,7 +680,7 @@ for solBin in ['solitary', 'binary']:
                      or par=='PMELAT'  and psr=='J1713+0747' \
                      or par=='PMELONG' and psr=='J1713+0747':
                   try:
-                    paraString = ufloat(J1713EclipticParameters[par],J1713EclipticParameters[par+'_ERR']) 
+                    paraString = ufloat(J1713EclipticParameters[par],J1713EclipticParameters[par+'_ERR'])
                     paramList.append(paraString)
                     keepingTrackFitDerived[ipsr] = 'f'
                   except:
@@ -666,7 +691,7 @@ for solBin in ['solitary', 'binary']:
             else:
                 try:
                   # check about including errors for these params and how many dp to quote here.
-                  # is this first if used? 
+                  # is this first if used?
                   if par=='ELAT' or par=='ELONG' or par=='PMELAT' or par=='PMELONG' or par=='MASS_FUNC' or par=='OMDOT_GR':
                     print('test ', ipsr,psr,par,psrDerived[ipsr][par])
                     parameter = psrDerived[ipsr][par]

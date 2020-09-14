@@ -371,27 +371,21 @@ def derive_combined_mass(params, plot=False, n_samples=10000000):
 
     plt.figure(figsize=(18, 6))
     plt.subplot(1, 2, 1)
-    x = np.linspace(0,90, bins)
-    dx = x[1] - x[0]
-    scalefactor = 1 / dx
-    plt.plot(x, scalefactor*savgol_filter(n2/np.sum(n2), 51, 3), color='mediumblue', linewidth=2)
+    plt.plot(np.linspace(0,90,bins), savgol_filter(n2/np.sum(n2), 51, 3), color='mediumblue', linewidth=2)
     #plt.fill_between(np.linspace(0,90,bins), savgol_filter(n2/np.sum(n2), 51, 3), color='crimson', alpha=0.3)
-    scalefactor = 1 / dx
-    plt.plot(x, scalefactor*savgol_filter(n3/np.sum(n3), 51, 3), color='crimson', linewidth=2, alpha=0.8)
+    plt.plot(np.linspace(0,90,bins), savgol_filter(n3/np.sum(n3), 51, 3), color='crimson', linewidth=2, alpha=0.8)
     #plt.fill_between(np.linspace(0,90,bins), savgol_filter(n3/np.sum(n3), 51, 3), color='darkorange', alpha=0.3)
-    scalefactor = 1 / dx
-    plt.plot(x, scalefactor*savgol_filter(n/np.sum(n), 51, 3), color='dimgrey', linestyle='--', linewidth=2)
+    plt.plot(np.linspace(0,90,bins), savgol_filter(n/np.sum(n), 51, 3), color='dimgrey', linestyle='--', linewidth=2)
     #plt.fill_between(np.linspace(0,90,bins), savgol_filter(n/np.sum(n), 51, 3), color='mediumblue', alpha=0.3)
 
 
     #plt.plot(np.linspace(0,90,bins), savgol_filter(combined/np.sum(combined), 51, 3), color='k', linewidth=2)
-    scalefactor = 1 / dx
-    plt.fill_between(x, scalefactor*savgol_filter(combined/np.sum(combined), 51, 3), color='k', alpha=0.15)
+    plt.fill_between(np.linspace(0,90,bins), savgol_filter(combined/np.sum(combined), 51, 3), color='k', alpha=0.15)
     #plt.plot(np.linspace(0,90,bins), n/mx*np.max(n))
     #plt.plot(np.linspace(0,90,bins), n2/mx*np.max(n2))
     #plt.plot(np.linspace(0,90,bins), n3/mx*np.max(n3))
     if 'XDOT' in params.keys():
-        plt.legend([r'Kopeikin, $\dot{x}$', r'Shapiro delay, $h_3$ and $\zeta$',r'Uniform $\cos{i}$ prior',  r'Total'], loc='upper left')
+        plt.legend([r'Kopeikin, $\dot{x}$', r'Shapiro delay, $h_3$ and $\zeta$',r'Uniform $\cos(i)$ prior',  r'Total'], loc='upper left')
     else:
         plt.legend([r'Uniform $\cos(i)$ prior', r'Kopeikin, $i$', r'Shapiro delay', r'Total'], loc='upper left')
     plt.xlim((0, 90))
@@ -405,25 +399,23 @@ def derive_combined_mass(params, plot=False, n_samples=10000000):
 
     plt.subplot(1, 2, 2)
     combined = n4*n5
+    mx = np.max(combined)
     x = np.linspace(0,5, bins)
     dx = x[1] - x[0]
-    scalefactor = 1 / dx
+    scalefactor = (dx * bins)**2
     plt.plot(x, scalefactor*savgol_filter(n4/np.sum(n4), 51, 3), color='midnightblue', linewidth=2)
     #plt.fill_between(np.linspace(0,5, bins), savgol_filter(n4/np.sum(n4), 51, 3), color='crimson', alpha=0.3)
-    scalefactor = 1 / dx
-    plt.plot(x, scalefactor*savgol_filter(n5/np.sum(n5), 51, 3), color='darkmagenta', linewidth=2, alpha=0.7)
+    plt.plot(x, scalefactor*savgol_filter(n5/np.sum(n5), 51, 3), color='darkmagenta', linewidth=2, alpha=0.8)
     #plt.fill_between(np.linspace(0,5, bins), savgol_filter(n5/np.sum(n5), 51, 3), color='darkorange', alpha=0.3)
     #plt.plot(np.linspace(0,5, bins), savgol_filter(combined/np.sum(combined), 51, 3), color='k', linewidth=2)
-    scalefactor = 1 / dx
     plt.fill_between(x, scalefactor*savgol_filter(combined/np.sum(combined), 51, 3), color='k', alpha=0.15)
     plt.xlim((0, 5))
     yl = plt.ylim()
-    plt.ylim((0, 1))
+    plt.ylim((0, yl[1]))
     plt.xlabel(r'Total system mass, $M_{\rm tot}$ ($M_\odot$)')
-    plt.ylabel(r'Probability')
     #locs, labels = plt.yticks()            # Get locations and labels
     #plt.yticks(locs, [])  # Set locations and labels
-    plt.legend(['Periastron advance $\dot{\omega}$', 'Inclination, $i$', 'Total'], loc='upper left')
+    plt.legend(['Periastron advance $\dot{\omega}$', 'Shapiro and Kopeikin', 'Total'], loc='upper left')
     plt.tight_layout()
     if plot:
         plt.show()

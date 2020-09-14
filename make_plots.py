@@ -438,9 +438,15 @@ alpha=0.8
 #    if '1125' in psr:
 #        plt.savefig('/Users/dreardon/Dropbox/Git/ppta_dr2_ephemerides/J1125_Shapiro.pdf')
 #    plt.show()
+<<<<<<< Updated upstream
 
     #plt.scatter(data_noshap[:, -1], data_noshap[:, 4]*10**6 - data[:, 4]*10**6)
     #plt.show()
+=======
+#
+#    #plt.scatter(data_noshap[:, -1], data_noshap[:, 4]*10**6 - data[:, 4]*10**6)
+#    #plt.show()
+>>>>>>> Stashed changes
 
 
 """
@@ -448,8 +454,13 @@ Make residual plots for each pulsar
 """
 #output_files = sorted(glob.glob('/Users/dreardon/Dropbox/Git/ppta_dr2_ephemerides/final/tempo2/*.out'))
 #par_files = sorted(glob.glob('/Users/dreardon/Dropbox/Git/ppta_dr2_ephemerides/final/tempo2/*.par'))
+<<<<<<< Updated upstream
 output_files = sorted(glob.glob('/Users/dreardon/Dropbox/Git/ppta_dr2_ephemerides/J0437/J0437-4715.dr2.fdjump.output'))
 par_files = sorted(glob.glob('/Users/dreardon/Dropbox/Git/ppta_dr2_ephemerides/J0437/new.dr2.par'))
+=======
+output_files = sorted(glob.glob('/Users/dreardon/Dropbox/Git/ppta_dr2_ephemerides/J0437/J0437-4715.dr2e.output'))
+par_files = sorted(glob.glob('/Users/dreardon/Dropbox/Git/ppta_dr2_ephemerides/J0437/new.dr2e.par'))
+>>>>>>> Stashed changes
 
 dot_size = []
 dot_names = []
