@@ -30,6 +30,7 @@ from astropy import units as u
 from scipy.signal import savgol_filter
 from astropy.coordinates import SkyCoord, ICRS, BarycentricTrueEcliptic
 import sys
+from mass_constraints import derive_combined_mass
 sys.path.insert(0, '/Users/dreardon/Dropbox/Git/ppta_dr2_ephemerides/parameterComparisonScripts/')
 
 
@@ -218,6 +219,8 @@ fluxes = np.array([2.2, 2.1, 0.9, 3.1, 1.6,\
           3.5, 4.7, 7.4, 3.8, 1.8,\
           2.5, 2.4, 1.1, 4.1, 1.7,\
           12.6, 4.5, 0.8, 5.9, 1.8])
+
+special_pulsars = ['J1017-7156', 'J1022+1001', 'J1545-4550', 'J1600-3053', 'J1713+0747']
 
 outfile = outdir + 'derived_params.txt'
 if path.exists(outfile):
@@ -548,6 +551,9 @@ for par in parfiles:
             mtot = np.sqrt(mtot2[(mtot2 > 0)])
             inc = inc[is_valid(inc)]
 
+            if psrname in special_pulsars:
+                m2, inc, mp, mtot = derive_combined_mass(params, plot=True, n_samples=10000000, tables=True)
+
             with open(outfile, 'a+') as f:
                 f.write("INC(med/16th/84th)" + '\t' + str(np.median(inc)) + '\t' + str(np.percentile(inc, q=16)) + '\t' + str(np.percentile(inc, q=84)) + '\n')
             with open(outfile, 'a+') as f:
@@ -594,6 +600,9 @@ for par in parfiles:
             mtot = np.sqrt(mtot2[(mtot2 > 0)])
             inc = inc[is_valid(inc)]
 
+            if psrname in special_pulsars:
+                m2, inc, mp, mtot = derive_combined_mass(params, plot=True, n_samples=10000000, tables=True)
+
             try:
                 with open(outfile, 'a+') as f:
                     f.write("INC(med/16th/84th)" + '\t' + str(np.median(inc)) + '\t' + str(np.percentile(inc, q=16)) + '\t' + str(np.percentile(inc, q=84)) + '\n')
@@ -635,6 +644,9 @@ for par in parfiles:
         mtot2 = mtot2[is_valid(mtot2)]
         mtot = np.sqrt(mtot2[(mtot2 > 0)])
         inc = inc[is_valid(inc)]
+
+        if psrname in special_pulsars:
+            m2, inc, mp, mtot = derive_combined_mass(params, plot=True, n_samples=10000000, tables=True)
 
         if not 'KIN' in params.keys():
             with open(outfile, 'a+') as f:

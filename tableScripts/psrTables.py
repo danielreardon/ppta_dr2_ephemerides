@@ -121,27 +121,27 @@ def writeLine(parameters,tableFile,parameterName,keepTrackFitOrDer,parLabel=None
 
         try:
             #does the error start with a 1?
-<<<<<<< Updated upstream
+#<<<<<<< Updated upstream
             errorRounded = round_sig(p.std_dev)
             if str(p.std_dev*10**10)[0] == '1' and errorRounded!=0:
                 p.std_dev = errorRounded
                 shortFormat = frmtr.format("{0}",p)
-            else: 
+            else:
                 shortFormat = frmtr.format("{0:.1u}",p)
             #old version shortFormat = frmtr.format("{0:.1u}",p)
 
-=======
-            if str(p.std_dev*10**10)[0]=='1':
-                shortFormat = frmtr.format("{0:.2u}",p)
-            else:
-                shortFormat = frmtr.format("{0:.1u}",p)
-            #(p.std_dev,shortFormat,str(p.std_dev*10**10)[0])
->>>>>>> Stashed changes
+#=======
+#            if str(p.std_dev*10**10)[0]=='1':
+#                shortFormat = frmtr.format("{0:.2u}",p)
+#            else:
+#                shortFormat = frmtr.format("{0:.1u}",p)
+#            #(p.std_dev,shortFormat,str(p.std_dev*10**10)[0])
+#>>>>>>> Stashed changes
             # does the string contain "e" ?
             shortFormat = replaceEWithTimes10(shortFormat)
         except:
             shortFormat = p
-  
+
         # fitted in bold
         if keepTrackFitOrDer[i]=='f':
             table.write('\t & \t $\\mathbf{{ {} }}$'.format(shortFormat))
@@ -279,7 +279,7 @@ def writeSkyPos(psrDets,tabFile,parLabels):
         #pmdecs.append(frmtr.format("{0:.1u}",ufloat(psrDets[ipsr]['PMDEC'],psrDets[ipsr]['PMDEC_ERR'])))
         pmras.append(ufloat(psrDets[ipsr]['PMRA'], psrDets[ipsr]['PMRA_ERR']))
         pmdecs.append(ufloat(psrDets[ipsr]['PMDEC'],psrDets[ipsr]['PMDEC_ERR']))
-  
+
 
     # write ra
     table.write(parLabels['RAJ'])
@@ -292,29 +292,29 @@ def writeSkyPos(psrDets,tabFile,parLabels):
     for dec in decs:
         table.write('\t & \t {}'.format(dec))
     table.write('\\\\ \n')
-<<<<<<< Updated upstream
+#<<<<<<< Updated upstream
     table.close()
-   
+
     fitOrDerived = ['f' for i in range(len(pmras))]
     writeLine(pmras,tabFile,parLabels['PMRA'],fitOrDerived,parLabel='PMRA')
     writeLine(pmdecs,tabFile,parLabels['PMDEC'],fitOrDerived,parLabel='PMDEC')
-  
-=======
 
-    # write pmra
-    table.write(parLabels['PMRA'])
-    for pmra in pmras:
-        table.write('\t & \t {}'.format(pmra))
-    table.write('\\\\ \n')
-
-    # write pmdec
-    table.write(parLabels['PMDEC'])
-    for pmdec in pmdecs:
-        table.write('\t & \t {}'.format(pmdec))
-    table.write('\\\\ \n')
-
-
->>>>>>> Stashed changes
+#=======
+#
+#    # write pmra
+#    table.write(parLabels['PMRA'])
+#    for pmra in pmras:
+#        table.write('\t & \t {}'.format(pmra))
+#    table.write('\\\\ \n')
+#
+#    # write pmdec
+#    table.write(parLabels['PMDEC'])
+#    for pmdec in pmdecs:
+#        table.write('\t & \t {}'.format(pmdec))
+#    table.write('\\\\ \n')
+#
+#
+#>>>>>>> Stashed changes
     return None
 
 
@@ -630,9 +630,9 @@ for solBin in ['solitary', 'binary']:
                   parameter = ufloat(psrDetails[ipsr][par], psrDetails[ipsr][str(par+'_ERR')])
                   paramList.append(parameter)
                   keepingTrackFitDerived[ipsr] = 'f'
-                else: 
+                else:
                   paramList.append(psrDetails[ipsr][par])
-                  
+
                 """
                 parameter = ufloat(psrDetails[ipsr][par], psrDetails[ipsr][str(par+'_ERR')])
                 paramList.append(parameter)

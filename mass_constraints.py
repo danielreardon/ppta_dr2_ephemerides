@@ -200,7 +200,7 @@ def is_valid(array):
 Start of code
 """
 
-def derive_combined_mass(params, plot=False, n_samples=10000000):
+def derive_combined_mass(params, plot=False, n_samples=10000000, tables=False):
 
     if 'PSRJ' in params:
         psrname = params['PSRJ']
@@ -469,7 +469,10 @@ def derive_combined_mass(params, plot=False, n_samples=10000000):
 
     # print(np.percentile(mp, q=5.0))
 
-    return {'M2': np.median(m2), 'M2_std': np.std(m2), 'M2_lolim': np.percentile(m2, q=16.0), 'M2_uplim': np.percentile(m2, q=84.0), 'Mpsr': np.median(mp), 'Mpsr_std': np.std(mp), 'Mpsr_lolim': np.percentile(mp, q=16.0), 'Mpsr_uplim': np.percentile(mp, q=84.0), 'Mtot': np.median(mtot), 'Mtot_std': np.std(mtot), 'Mtot_lolim': np.percentile(mtot, q=16.0), 'Mtot_uplim': np.percentile(mtot, q=84.0), 'inc': np.median(inc), 'inc_std': np.std(inc), 'inc_lolim': np.percentile(inc, q=16.0), 'inc_uplim': np.percentile(inc, q=84.0)}
+    if tables:
+        return m2, inc, mp, mtot
+    else:
+        return {'M2': np.median(m2), 'M2_std': np.std(m2), 'M2_lolim': np.percentile(m2, q=16.0), 'M2_uplim': np.percentile(m2, q=84.0), 'Mpsr': np.median(mp), 'Mpsr_std': np.std(mp), 'Mpsr_lolim': np.percentile(mp, q=16.0), 'Mpsr_uplim': np.percentile(mp, q=84.0), 'Mtot': np.median(mtot), 'Mtot_std': np.std(mtot), 'Mtot_lolim': np.percentile(mtot, q=16.0), 'Mtot_uplim': np.percentile(mtot, q=84.0), 'inc': np.median(inc), 'inc_std': np.std(inc), 'inc_lolim': np.percentile(inc, q=16.0), 'inc_uplim': np.percentile(inc, q=84.0)}
 
 
 

@@ -543,7 +543,7 @@ def average_timfile(parfile, timfile, outfile=None, fd_correct=True,
     """
 
     if outfile is None:
-        outfile = timfile.replace('.tim', '.avg.tim')
+        outfile = timfile.replace('.tim', '.avg_nosystem_correct.tim')
 
     # Read .par file
     params = read_par(parfile)
@@ -614,13 +614,13 @@ def average_timfile(parfile, timfile, outfile=None, fd_correct=True,
 
 
 datadir = '/Users/dreardon/Dropbox/Git/ppta_dr2_ephemerides/'
-parfiles = [datadir + 'J0437/new.dr2e.par']
-timfiles = [datadir + 'J0437/J0437-4715.dr2e.tim']
+#parfiles = [datadir + 'J0437/new.dr2e.par']
+#timfiles = [datadir + 'J0437/J0437-4715.dr2e.tim']
 
-#parfiles = sorted(glob.glob(datadir +
-#                  'final/averaged/*.par'))
-#timfiles = sorted(glob.glob(datadir +
-#                  'final/averaged/*.tim'))
+parfiles = sorted(glob.glob(datadir +
+                  'final/tempo2/*.par'))
+timfiles = sorted(glob.glob(datadir +
+                  'final/tempo2/*.tim'))
 
 for ii in range(0, len(timfiles)):
     parfile = parfiles[ii]
@@ -628,5 +628,5 @@ for ii in range(0, len(timfiles)):
     print(parfile)
     print(timfile)
     average_timfile(parfile=parfile, timfile=timfile, outfile=None,
-                    fd_correct=False, fd_systems=True, white_flag='-group',
-                    fd_flag='-h', dm=1.75, fit_dm=True, plot=True)
+                    fd_correct=True, fd_systems=False, white_flag='-group',
+                    fd_flag='-h', dm=None, fit_dm=True, plot=False)
