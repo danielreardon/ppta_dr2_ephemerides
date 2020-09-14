@@ -93,7 +93,7 @@ JUMP -f MULTI_AFB -0.0020200750787434 1
 TNEF -group 20cm_cpsr2 2.11716
 TNEF -group 20cm_fptm1 4.10897
 TNEF -group 20cm_fptm 1.36693
-TNEF -group 20cm_afb 1.1081
+TNEF -group 20cm_afb 1.73971
 TNEF -group CASPSR_40CM 1.19507
 TNEF -group CPSR2_20CM 1.36186
 TNEF -group CPSR2_50CM 1.06451
@@ -109,7 +109,7 @@ TNEF -group WBCORR_10CM 1.16128
 TNEQ -group 20cm_cpsr2 -9.14629
 TNEQ -group 20cm_fptm1 -7.56689
 TNEQ -group 20cm_fptm -8.59428
-TNEQ -group 20cm_afb -5.88792
+TNEQ -group 20cm_afb -5.6920
 TNEQ -group CASPSR_40CM -7.41692
 TNEQ -group CPSR2_20CM -5.88419
 TNEQ -group CPSR2_50CM -7.56298
