@@ -89,7 +89,7 @@ dirstruct   :
 compareParms:
                                 # information relevant for comparison
 
-    params      : ['PX', 'PMELAT', 'PMELONG']
+    params      : ['PX']
                                 # List of parameters for which the
                                 # comparison is to be made
                                 
@@ -119,8 +119,6 @@ compareParms:
         plot_PTAs   : ['EPTA-DR1',
                        'NG-12.5yr-NB',
                        'PPTA-DR1',
-                       'PPTA-DR2O',
-                       'PPTA-DR2E',
                        'PPTA-DR2'
                       ]
                                 # The PTA's whose data are to be 
@@ -182,6 +180,7 @@ compareParms:
 
         spcl_psrs   : ['J1017-7156',
                        'J1022+1001',
+                       'J1545-4550',
                        'J1600-3053',
                        'J1713+0747'
                       ]
@@ -189,8 +188,6 @@ compareParms:
                                 # are to be estimated using Xdot
                                 # and Omdot parameters
 
-        excl_psrs   : ['J2145-0750',
-                       'J1545-4550',
-                       'J1732-5049'
+        excl_psrs   : ['2145-0750',
                       ]
                                 # Exclude these pulsars from the plot

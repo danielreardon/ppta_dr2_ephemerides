@@ -37,7 +37,7 @@ rc('font', **{'size': 14,'family': 'serif', 'serif': ['Computer Modern']})
 # In[2]:
 
 
-parmsfile = '/Users/dreardon/Dropbox/Git/ppta_dr2_ephemerides/parameterComparisonScripts/PSR_comparison_parms-daniel.yaml'
+parmsfile = '/Users/dreardon/Dropbox/Git/ppta_dr2_ephemerides/parameterComparisonScripts/PSR_comparison_parms-daniel-px.yaml'
 with open(parmsfile, 'r') as pfile:
     parms = yaml.safe_load(pfile)
 
@@ -106,14 +106,14 @@ psrnames_specific_union = sorted(psrnames_specific_union, key=lambda x: ((x[1:5]
 
 compare_parms = parms['compareParms']
 psr_parms = compare_parms['params']
-ptas = np.asarray(compare_parms['PX']['PTA'])
+ptas = np.asarray(compare_parms['PTA'])
 ptas_plot = [x.replace('_', '-') for x in ptas]
 # pta_psr_parm_vals = {parm: {} for parm in psr_parms}
 pta_psr_parm_uvals = {parm: {} for parm in psr_parms}
 pta_psr_parm_uvals_diff = {parm: {} for parm in psr_parms}
 pta_psr_parm_uvals_fracdiff = {parm: {} for parm in psr_parms}
 # pta_psr_parm_vals_normratio = {parm: {} for parm in psr_parms}
-ref_pta = compare_parms['PX']['ref_PTA']
+ref_pta = compare_parms['ref_PTA']
 ref_pta_plot = ref_pta.replace('_','-')
 ref_pta_ind = ptas.tolist().index(ref_pta)
 rest_pta_ind = np.setdiff1d(np.arange(ptas.size), ref_pta_ind)
@@ -128,19 +128,19 @@ for parm in psr_parms:
     for ptai,pta in enumerate(ptas):
         for psri,psr in enumerate(psrnames_simple_union):
             if psr in pta_info[pta]['PSRnames_simple']:
-                if pta == 'EPTA_DR1':
+                if pta == 'EPTA-DR1':
                     parfilename = pta_dir_info[pta]['PSRdir'] + '{0}/{0}.par'.format(psr)
-                elif pta == 'NG_11yr':
+                elif pta == 'NG-11yr':
                     parfilename = pta_dir_info[pta]['PSRdir'] + '{0}_NANOGrav_11yv1.gls.par'.format(psr)
-                elif pta == 'NG_12.5yr_NB':
+                elif pta == 'NG-12.5yr-NB':
                     parfilename = pta_dir_info[pta]['PSRdir'] + '{0}_NANOGrav_12yv3.gls.par'.format(psr)
-                elif pta == 'NG_12.5yr_WB':
+                elif pta == 'NG-12.5yr-WB':
                     parfilename = pta_dir_info[pta]['PSRdir'] + '{0}_NANOGrav_12yv3.wb.gls.par'.format(psr)
-                elif pta == 'PPTA_DR1':
+                elif pta == 'PPTA-DR1':
                     parfilename = pta_dir_info[pta]['PSRdir'] + '{0}.par'.format(psr)
-                elif pta == 'PPTA_DR2':
+                elif pta == 'PPTA-DR2':
                     parfilename = pta_dir_info[pta]['PSRdir'] + '{0}.par'.format(psr)
-                elif (pta == 'PPTA_DR2O') or (pta == 'PPTA_DR2E'):
+                elif (pta == 'PPTA-DR2O') or (pta == 'PPTA-DR2E'):
 #                     parfilename = pta_dir_info[pta]['PSRdir'] + '{0}.par'.format(psr)
                     parfilename = pta_dir_info[pta]['PSRdir'] + '{0}.par'.format(psr)
                     if not path.exists(parfilename):
@@ -197,66 +197,66 @@ print(ref_pta_psrs)
 # ## Compute and store derived PSR parms
 
 # In[7]:
-
-
-psr_derived_parms = compare_parms['derived_params']
-pta_psr_derived_parm_vals = {parm: {} for parm in psr_derived_parms}
-for parm in psr_derived_parms:
-    if 'Dpsr' in parm:
-        outvals = np.empty((len(psrnames_simple_union),len(ptas),3), dtype=np.float128)
-        outvals.fill(np.nan)
-    elif parm == 'psr_mass_parms':
-        outvals = np.empty((len(psrnames_simple_union),len(ptas),4,3), dtype=np.float128)
-        outvals.fill(np.nan)
-    for ptai,pta in enumerate(ptas):
-        for psri,psr in enumerate(psrnames_simple_union):
-            if psr in pta_info[pta]['PSRnames_simple']:
-                if pta == 'EPTA_DR1':
-                    parfilename = pta_dir_info[pta]['PSRdir'] + '{0}/{0}.par'.format(psr)
-                elif pta == 'NG_11yr':
-                    parfilename = pta_dir_info[pta]['PSRdir'] + '{0}_NANOGrav_11yv1.gls.par'.format(psr)
-                elif pta == 'NG_12.5yr_NB':
-                    parfilename = pta_dir_info[pta]['PSRdir'] + '{0}_NANOGrav_12yv3.gls.par'.format(psr)
-                elif pta == 'NG_12.5yr_WB':
-                    parfilename = pta_dir_info[pta]['PSRdir'] + '{0}_NANOGrav_12yv3.wb.gls.par'.format(psr)
-                elif pta == 'PPTA_DR1':
-                    parfilename = pta_dir_info[pta]['PSRdir'] + '{0}.par'.format(psr)
-                elif pta == 'PPTA_DR2':
-                    parfilename = pta_dir_info[pta]['PSRdir'] + '{0}.par'.format(psr)
-                elif (pta == 'PPTA_DR2O') or (pta == 'PPTA_DR2E'):
-#                     parfilename = pta_dir_info[pta]['PSRdir'] + '{0}.par'.format(psr)
-                    parfilename = pta_dir_info[pta]['PSRdir'] + '{0}.par'.format(psr)
-                    if not path.exists(parfilename):
-#                         parfilename = pta_dir_info[pta]['PSRdir'] + '{0}.kop.par'.format(psr)
-                        parfilename = pta_dir_info[pta]['PSRdir'] + '{0}_ecliptic.par'.format(psr)
-                    if not path.exists(parfilename):
-#                         parfilename = pta_dir_info[pta]['PSRdir'] + '{0}.kop.par'.format(psr)
-                        parfilename = pta_dir_info[pta]['PSRdir'] + '{0}.kop_ecliptic.par'.format(psr)
-                    if not path.exists(parfilename):
-#                         parfilename = pta_dir_info[pta]['PSRdir'] + '{0}.kop_alt.par'.format(psr)
-                        parfilename = pta_dir_info[pta]['PSRdir'] + '{0}.kop_alt_ecliptic.par'.format(psr)
-                else:
-                    raise ValueError('This PTA is either not requested in processing or unavailable in the database.')
-                parmdict = readParFile.read_par(parfilename)
-                if 'Dpsr' in parm:
-                    if parm == 'Dpsr_PX':
-                        outdict = derive_PSRparms.distance_from_parallax(parmdict)
-                    elif parm == 'Dpsr_Pbdot':
-                        outdict = derive_PSRparms.distance_from_pbdot(parmdict)
-                    if isinstance(outdict, dict):
-                        outvals[psri,ptai,:] = np.asarray([outdict['dpsr'], outdict['dpsr_lolim'], outdict['dpsr_uplim']], dtype=np.float128)
-                elif parm == 'psr_mass_parms':
-                    outdict = derive_PSRparms.mass_from_psrparms(parmdict)
-                    if isinstance(outdict, dict):
-                        outvals[psri,ptai,0,:] = np.asarray([outdict['Mpsr'], outdict['Mpsr_lolim'], outdict['Mpsr_uplim']], dtype=np.float128)
-                        outvals[psri,ptai,1,:] = np.asarray([outdict['M2'], outdict['M2_lolim'], outdict['M2_uplim']], dtype=np.float128)
-                        outvals[psri,ptai,2,:] = np.asarray([outdict['Mtot'], outdict['Mtot_lolim'], outdict['Mtot_uplim']], dtype=np.float128)
-                        outvals[psri,ptai,3,:] = np.asarray([outdict['inc'], outdict['inc_lolim'], outdict['inc_uplim']], dtype=np.float128)
-
-    if 'Dpsr' in parm:
-        pta_psr_derived_parm_vals[parm] = np.copy(outvals)
-    elif parm == 'psr_mass_parms':
-        pta_psr_derived_parm_vals[parm] = {'Mpsr': np.copy(outvals[:,:,0,:]), 'M2': np.copy(outvals[:,:,1,:]), 'Mtot': np.copy(outvals[:,:,2,:]), 'incl': np.copy(outvals[:,:,3,:])}
+#
+#
+#psr_derived_parms = compare_parms['derived_params']
+#pta_psr_derived_parm_vals = {parm: {} for parm in psr_derived_parms}
+#for parm in psr_derived_parms:
+#    if 'Dpsr' in parm:
+#        outvals = np.empty((len(psrnames_simple_union),len(ptas),3), dtype=np.float128)
+#        outvals.fill(np.nan)
+#    elif parm == 'psr_mass_parms':
+#        outvals = np.empty((len(psrnames_simple_union),len(ptas),4,3), dtype=np.float128)
+#        outvals.fill(np.nan)
+#    for ptai,pta in enumerate(ptas):
+#        for psri,psr in enumerate(psrnames_simple_union):
+#            if psr in pta_info[pta]['PSRnames_simple']:
+#                if pta == 'EPTA_-R1':
+#                    parfilename = pta_dir_info[pta]['PSRdir'] + '{0}/{0}.par'.format(psr)
+#                elif pta == 'NG-11yr':
+#                    parfilename = pta_dir_info[pta]['PSRdir'] + '{0}_NANOGrav_11yv1.gls.par'.format(psr)
+#                elif pta == 'NG-12.5yr-NB':
+#                    parfilename = pta_dir_info[pta]['PSRdir'] + '{0}_NANOGrav_12yv3.gls.par'.format(psr)
+#                elif pta == 'NG-12.5yr-WB':
+#                    parfilename = pta_dir_info[pta]['PSRdir'] + '{0}_NANOGrav_12yv3.wb.gls.par'.format(psr)
+#                elif pta == 'PPTA-DR1':
+#                    parfilename = pta_dir_info[pta]['PSRdir'] + '{0}.par'.format(psr)
+#                elif pta == 'PPTA-DR2':
+#                    parfilename = pta_dir_info[pta]['PSRdir'] + '{0}.par'.format(psr)
+#                elif (pta == 'PPTA-DR2O') or (pta == 'PPTA-DR2E'):
+##                     parfilename = pta_dir_info[pta]['PSRdir'] + '{0}.par'.format(psr)
+#                    parfilename = pta_dir_info[pta]['PSRdir'] + '{0}.par'.format(psr)
+#                    if not path.exists(parfilename):
+##                         parfilename = pta_dir_info[pta]['PSRdir'] + '{0}.kop.par'.format(psr)
+#                        parfilename = pta_dir_info[pta]['PSRdir'] + '{0}_ecliptic.par'.format(psr)
+#                    if not path.exists(parfilename):
+##                         parfilename = pta_dir_info[pta]['PSRdir'] + '{0}.kop.par'.format(psr)
+#                        parfilename = pta_dir_info[pta]['PSRdir'] + '{0}.kop_ecliptic.par'.format(psr)
+#                    if not path.exists(parfilename):
+##                         parfilename = pta_dir_info[pta]['PSRdir'] + '{0}.kop_alt.par'.format(psr)
+#                        parfilename = pta_dir_info[pta]['PSRdir'] + '{0}.kop_alt_ecliptic.par'.format(psr)
+#                else:
+#                    raise ValueError('This PTA is either not requested in processing or unavailable in the database.')
+#                parmdict = readParFile.read_par(parfilename)
+#                if 'Dpsr' in parm:
+#                    if parm == 'Dpsr_PX':
+#                        outdict = derive_PSRparms.distance_from_parallax(parmdict)
+#                    elif parm == 'Dpsr_Pbdot':
+#                        outdict = derive_PSRparms.distance_from_pbdot(parmdict)
+#                    if isinstance(outdict, dict):
+#                        outvals[psri,ptai,:] = np.asarray([outdict['dpsr'], outdict['dpsr_lolim'], outdict['dpsr_uplim']], dtype=np.float128)
+#                elif parm == 'psr_mass_parms':
+#                    outdict = derive_PSRparms.mass_from_psrparms(parmdict)
+#                    if isinstance(outdict, dict):
+#                        outvals[psri,ptai,0,:] = np.asarray([outdict['Mpsr'], outdict['Mpsr_lolim'], outdict['Mpsr_uplim']], dtype=np.float128)
+#                        outvals[psri,ptai,1,:] = np.asarray([outdict['M2'], outdict['M2_lolim'], outdict['M2_uplim']], dtype=np.float128)
+#                        outvals[psri,ptai,2,:] = np.asarray([outdict['Mtot'], outdict['Mtot_lolim'], outdict['Mtot_uplim']], dtype=np.float128)
+#                        outvals[psri,ptai,3,:] = np.asarray([outdict['inc'], outdict['inc_lolim'], outdict['inc_uplim']], dtype=np.float128)
+#
+#    if 'Dpsr' in parm:
+#        pta_psr_derived_parm_vals[parm] = np.copy(outvals)
+#    elif parm == 'psr_mass_parms':
+#        pta_psr_derived_parm_vals[parm] = {'Mpsr': np.copy(outvals[:,:,0,:]), 'M2': np.copy(outvals[:,:,1,:]), 'Mtot': np.copy(outvals[:,:,2,:]), 'incl': np.copy(outvals[:,:,3,:])}
 
 
 # In[41]:
@@ -350,6 +350,18 @@ nsigma_colors = np.linspace(0.6, 0.9, nsigma_fill)
 # EPTA-DR1, NG12, PPTA-DR1
 ptasymbols = ['>', '^', 'v']
 ptacolors = ['crimson', 'darkorange', 'darkorchid']
+
+ptasymbols = ['>', 'd', '^', '*', 'v', '<', 's', '+']
+ptacolors = ['C0', 'C1', 'C2', 'C3', 'C4', 'C5', 'C6', 'C7']
+ptasymbols[ptas.tolist().index('EPTA-DR1')] = '>'
+ptacolors[ptas.tolist().index('EPTA-DR1')] = 'crimson'
+ptasymbols[ptas.tolist().index('NG-12.5yr-NB')] = '^'
+ptacolors[ptas.tolist().index('NG-12.5yr-NB')] = 'darkorange'
+ptasymbols[ptas.tolist().index('PPTA-DR1')] = 'v'
+ptacolors[ptas.tolist().index('PPTA-DR1')] = 'darkorchid'
+ptasymbols[ref_pta_ind] = '.'
+ptacolors[ref_pta_ind] = 'mediumblue'
+
 for parm in psr_parms:
     parm_vals = unumpy.nominal_values(pta_psr_parm_uvals[parm]['all'])
     parm_err_vals = unumpy.std_devs(pta_psr_parm_uvals[parm]['all'])
@@ -373,17 +385,24 @@ for parm in psr_parms:
 #    ref_pta_psrs_plot = np.array(ref_pta_psrs_plot)[ind]
 
 
-    fig, axs = plt.subplots(nrows=1, ncols=2, squeeze=True, sharey=True, figsize=(10,11))
+    fig, axs = plt.subplots(nrows=1, ncols=2, squeeze=True, sharey=True, figsize=(10, 9))
 
     plot_offset = [0.1, -0.06, -0.1, -0.1]
 
-    print(ref_pta_psrs_ind, ptai, ref_pta_ind)
-    print(np.shape(parm_vals))
-    print(np.shape(parm_err_vals))
+    if len(ind_ptas_to_plot)%2 == 1:
+        plot_offset = NP.linspace(-0.2, 0.2, len(ind_ptas_to_plot)-1, endpoint=True)
+    else:
+        plot_offset = NP.linspace(-0.2, 0.2, len(ind_ptas_to_plot), endpoint=True)[:-1]
+
+    plot_offset = NP.insert(plot_offset, ind_ptas_to_plot.index(ref_pta_ind), 0.0)
+
     for ptai in ind_ptas_to_plot:
         if ptas[ptai] != ref_pta:
             arg = np.argwhere(np.array(ind_ptas_to_plot) == ptai).squeeze()
-            axs[0].errorbar(parm_vals[ref_pta_psrs_ind,ptai], np.arange(len(ref_pta_psrs_ind)) + plot_offset[arg], xerr=parm_err_vals[ref_pta_psrs_ind,ptai], ls='none', marker=ptasymbols[ptai], color=ptacolors[ptai], ecolor=ptacolors[ptai], capsize=6, alpha=0.5, label='{0}'.format(ptas_plot[ptai]), zorder=5)
+            axs[0].errorbar(parm_vals[ref_pta_psrs_ind,ptai],
+                            np.arange(len(ref_pta_psrs_ind)) + plot_offset[arg],
+                            xerr=parm_err_vals[ref_pta_psrs_ind,ptai],
+                            ls='none', marker=ptasymbols[ptai], color=ptacolors[ptai], ecolor=ptacolors[ptai], capsize=6, alpha=0.5, label='{0}'.format(ptas_plot[ptai]), zorder=5)
     axs[0].errorbar(parm_vals[ref_pta_psrs_ind,ref_pta_ind], np.arange(len(ref_pta_psrs_ind)), xerr=parm_err_vals[ref_pta_psrs_ind,ref_pta_ind], ls='none', marker='.', mfc='mediumblue', mec='mediumblue', mew=1, color='mediumblue', ecolor='mediumblue', capsize=6, alpha=0.5, label=ref_pta_plot, zorder=10)
 
     axs[1].axvline(x=0, ls='-', lw=1, color='gray')
@@ -432,6 +451,8 @@ for parm in psr_parms:
 ref_pta_psrs_ind = ref_pta_psrs_ind_old
 ref_pta_psrs_plot = ref_pta_psrs_plot_old
 # ## Plot derived PSR distances
+
+sys.exit()
 
 # In[50]:
 #

@@ -1,12 +1,12 @@
 
 # coding: utf-8
 
-# In[28]:
+# In[1]:
 
 
 from __future__ import unicode_literals
 import sys, glob, copy, re
-import os
+import os, pprint
 from os import path
 import yaml
 import numpy as NP
@@ -17,23 +17,25 @@ from uncertainties import ufloat, unumpy
 import matplotlib.pyplot as PLT
 from matplotlib.ticker import FormatStrFormatter, LogLocator, NullFormatter
 from IPython.core.debugger import set_trace
-get_ipython().run_line_magic('matplotlib', 'notebook')
+#get_ipython().run_line_magic('matplotlib', 'notebook')
 
 import derive_PSRparms
+sys.path.append('..')
+from mass_constraints import derive_combined_mass
 sys.path.append('../tableScripts')
 import readParFile
-os.environ["PATH"] += os.pathsep + '/usr/bin/'
+os.environ["PATH"] += os.pathsep + '/Library/TeX/texbin/'
 PLT.rcParams["text.usetex"] = False
 from matplotlib import rc
-# rc('text', usetex=True)
-# rc('text.latex',unicode=True)
+rc('text', usetex=True)
+rc('text.latex',unicode=True)
 
 font = {'family' : 'serif',
-        'weight' : 'medium',
-        'size'   : 12,
-        'serif'  : ['Computer Modern']}
-rc('font', **font)
-# rc('font', **{'size': 14,'family': 'serif', 'serif': ['Computer Modern']})
+         'weight' : 'medium',
+         'size'   : 12,
+         'serif'  : ['Computer Modern']}
+#rc('font', **font)
+rc('font', **{'size': 14,'family': 'serif', 'serif': ['Computer Modern']})
 
 
 # ## Read input file containing parameters for the script
@@ -41,7 +43,8 @@ rc('font', **font)
 # In[2]:
 
 
-parmsfile = '/Users/dreardon/Dropbox/Git/ppta_dr2_ephemerides/parameterComparisonScripts/PSR_comparison_parms.yaml'
+parmsfile = './PSR_comparison_parms-daniel.yaml'
+# parmsfile = '/fred/oz002/nthyagar/codes/mine/python/projects/dr2e/PSR_comparison/PSR_comparison_parms.yaml'
 with open(parmsfile, 'r') as pfile:
     parms = yaml.safe_load(pfile)
 
@@ -60,13 +63,13 @@ print(pta_dir_info)
 
 # ## Parse standard and specific (with variation) pulsar names in each PTA
 
-# In[4]:
+# In[15]:
 
 
 pta_info = {}
 for pta in pta_dir_info:
     pta_info[pta] = {'PSRdir': pta_dir_info[pta]['PSRdir']}
-    if pta == 'EPTA_DR1':
+    if pta == 'EPTA-DR1':
         path_to_parfile_names = glob.glob(pta_dir_info[pta]['PSRdir']+'*')
         pta_info[pta]['PSRnames_simple'] = [fname_str.split('/')[-1] for fname_str in path_to_parfile_names]
         pta_info[pta]['PSRnames_specific'] = pta_info[pta]['PSRnames_simple']
@@ -94,9 +97,15 @@ for pta in pta_dir_info:
                     pta_info[pta]['PSRnames_specific'][ind] = pta_info[pta]['PSRnames_simple'][ind] + '.' + append_str
 
 
+# In[16]:
+
+
+print(pta_info)
+
+
 # ## Create a sorted union of pulsar names
 
-# In[5]:
+# In[17]:
 
 
 psrnames_simple_union = []
@@ -115,7 +124,7 @@ psrnames_specific_union = sorted(psrnames_specific_union, key=lambda x: ((x[1:5]
 
 # ## Populate the Numpy array with parameter values along with uncertainties from all PTA for all pulsars
 
-# In[6]:
+# In[18]:
 
 
 compare_parms = parms['compareParms']
@@ -134,7 +143,7 @@ ref_pta_psrs_ind = NP.sort([psrnames_simple_union.index(psrnam) for psrnam in NP
 ref_pta_psrs = NP.asarray(psrnames_simple_union)[ref_pta_psrs_ind]
 
 
-# In[7]:
+# In[19]:
 
 
 for parm in psr_parms:
@@ -143,28 +152,29 @@ for parm in psr_parms:
     for ptai,pta in enumerate(ptas):
         for psri,psr in enumerate(psrnames_simple_union):
             if psr in pta_info[pta]['PSRnames_simple']:
-                if pta == 'EPTA_DR1':
+                if pta == 'EPTA-DR1':
                     parfilename = pta_dir_info[pta]['PSRdir'] + '{0}/{0}.par'.format(psr)
-                elif pta == 'NG_11yr':
+                elif pta == 'NG-11yr':
                     parfilename = pta_dir_info[pta]['PSRdir'] + '{0}_NANOGrav_11yv1.gls.par'.format(psr)
-                elif pta == 'NG_12.5yr_NB':
+                elif pta == 'NG-12.5yr-NB':
                     parfilename = pta_dir_info[pta]['PSRdir'] + '{0}_NANOGrav_12yv3.gls.par'.format(psr)
-                elif pta == 'NG_12.5yr_WB':
+                elif pta == 'NG-12.5yr-WB':
                     parfilename = pta_dir_info[pta]['PSRdir'] + '{0}_NANOGrav_12yv3.wb.gls.par'.format(psr)
-                elif pta == 'PPTA_DR1':
+                elif pta == 'PPTA-DR1':
                     parfilename = pta_dir_info[pta]['PSRdir'] + '{0}.par'.format(psr)
-                elif (pta == 'PPTA_DR2O') or (pta == 'PPTA_DR2E'):
+                elif (pta == 'PPTA-DR2O') or (pta == 'PPTA-DR2E'):
 #                     parfilename = pta_dir_info[pta]['PSRdir'] + '{0}.par'.format(psr)
-                    parfilename = pta_dir_info[pta]['PSRdir'] + '{0}_ecliptic.par'.format(psr)
+                    parfilename = pta_dir_info[pta]['PSRdir'] + '{0}.par'.format(psr)
                     if not path.exists(parfilename):
 #                         parfilename = pta_dir_info[pta]['PSRdir'] + '{0}.kop.par'.format(psr)
-                        parfilename = pta_dir_info[pta]['PSRdir'] + '{0}.kop_ecliptic.par'.format(psr)
+                        parfilename = pta_dir_info[pta]['PSRdir'] + '{0}.kop.par'.format(psr)
                     if not path.exists(parfilename):
 #                         parfilename = pta_dir_info[pta]['PSRdir'] + '{0}.kop_alt.par'.format(psr)
-                        parfilename = pta_dir_info[pta]['PSRdir'] + '{0}.kop_alt_ecliptic.par'.format(psr)
-                elif pta == 'PPTA_DR2':
+                        parfilename = pta_dir_info[pta]['PSRdir'] + '{0}.kop_alt.par'.format(psr)
+                elif pta == 'PPTA-DR2':
                     parfilename = pta_dir_info[pta]['PSRdir'] + '{0}.par'.format(psr)
                 else:
+                    print(pta)
                     raise ValueError('This PTA is either not requested in processing or unavailable in the database.')
                 parmdict = readParFile.read_par(parfilename)
                 if (parm in parmdict) and (parm+'_ERR' in parmdict):
@@ -194,7 +204,7 @@ for parm in psr_parms:
         pta_psr_parm_uvals_fracdiff[parm][psr] = pta_psr_parm_uvals_fracdiff[parm]['all'][psri,:]
 
 
-# In[8]:
+# In[20]:
 
 
 print('All pulsars [Simple Names]\n--------------------------')
@@ -207,7 +217,7 @@ print(ref_pta_psrs)
 
 # ## Compute and store derived PSR parms
 
-# In[9]:
+# In[22]:
 
 
 psr_derived_parms = compare_parms['derived_params']
@@ -222,39 +232,42 @@ for parm in psr_derived_parms:
     for ptai,pta in enumerate(ptas):
         for psri,psr in enumerate(psrnames_simple_union):
             if psr in pta_info[pta]['PSRnames_simple']:
-                if pta == 'EPTA_DR1':
+                if pta == 'EPTA-DR1':
                     parfilename = pta_dir_info[pta]['PSRdir'] + '{0}/{0}.par'.format(psr)
-                elif pta == 'NG_11yr':
+                elif pta == 'NG-11yr':
                     parfilename = pta_dir_info[pta]['PSRdir'] + '{0}_NANOGrav_11yv1.gls.par'.format(psr)
-                elif pta == 'NG_12.5yr_NB':
+                elif pta == 'NG-12.5yr-NB':
                     parfilename = pta_dir_info[pta]['PSRdir'] + '{0}_NANOGrav_12yv3.gls.par'.format(psr)
-                elif pta == 'NG_12.5yr_WB':
+                elif pta == 'NG-12.5yr-WB':
                     parfilename = pta_dir_info[pta]['PSRdir'] + '{0}_NANOGrav_12yv3.wb.gls.par'.format(psr)
-                elif pta == 'PPTA_DR1':
+                elif pta == 'PPTA-DR1':
                     parfilename = pta_dir_info[pta]['PSRdir'] + '{0}.par'.format(psr)
-                elif (pta == 'PPTA_DR2O') or (pta == 'PPTA_DR2E'):
+                elif (pta == 'PPTA-DR2O') or (pta == 'PPTA-DR2E'):
 #                     parfilename = pta_dir_info[pta]['PSRdir'] + '{0}.par'.format(psr)
-                    parfilename = pta_dir_info[pta]['PSRdir'] + '{0}_ecliptic.par'.format(psr)
+                    parfilename = pta_dir_info[pta]['PSRdir'] + '{0}.par'.format(psr)
                     if not path.exists(parfilename):
 #                         parfilename = pta_dir_info[pta]['PSRdir'] + '{0}.kop.par'.format(psr)
-                        parfilename = pta_dir_info[pta]['PSRdir'] + '{0}.kop_ecliptic.par'.format(psr)
+                        parfilename = pta_dir_info[pta]['PSRdir'] + '{0}.kop.par'.format(psr)
                     if not path.exists(parfilename):
 #                         parfilename = pta_dir_info[pta]['PSRdir'] + '{0}.kop_alt.par'.format(psr)
-                        parfilename = pta_dir_info[pta]['PSRdir'] + '{0}.kop_alt_ecliptic.par'.format(psr)
-                elif pta == 'PPTA_DR2':
+                        parfilename = pta_dir_info[pta]['PSRdir'] + '{0}.kop_alt.par'.format(psr)
+                elif pta == 'PPTA-DR2':
                     parfilename = pta_dir_info[pta]['PSRdir'] + '{0}.par'.format(psr)
                 else:
                     raise ValueError('This PTA is either not requested in processing or unavailable in the database.')
                 parmdict = readParFile.read_par(parfilename)
                 if 'Dpsr' in parm:
                     if parm == 'Dpsr_PX':
-                        outdict = derive_PSRparms.distance_from_parallax(parmdict)
+                        outdict = derive_PSRparms.distance_from_parallax(parmdict, n_samples=100000)
                     elif parm == 'Dpsr_Pbdot':
-                        outdict = derive_PSRparms.distance_from_pbdot(parmdict)
+                        outdict = derive_PSRparms.distance_from_pbdot(parmdict, n_samples=100000)
                     if isinstance(outdict, dict):
                         outvals[psri,ptai,:] = NP.asarray([outdict['dpsr'], outdict['dpsr_lolim'], outdict['dpsr_uplim']], dtype=NP.float128)
                 elif parm == 'psr_mass_parms':
-                    outdict = derive_PSRparms.mass_from_psrparms(parmdict)
+                    if (psr in compare_parms['psr_mass_parms']['spcl_psrs']) and (pta == 'PPTA-DR2'):
+                        outdict = derive_combined_mass(parmdict, plot=False, n_samples=100000)
+                    else:
+                        outdict = derive_PSRparms.mass_from_psrparms(parmdict, n_samples=100000)
                     if isinstance(outdict, dict):
                         outvals[psri,ptai,0,:] = NP.asarray([outdict['Mpsr'], outdict['Mpsr_lolim'], outdict['Mpsr_uplim']], dtype=NP.float128)
                         outvals[psri,ptai,1,:] = NP.asarray([outdict['M2'], outdict['M2_lolim'], outdict['M2_uplim']], dtype=NP.float128)
@@ -267,24 +280,29 @@ for parm in psr_derived_parms:
         pta_psr_derived_parm_vals[parm] = {'Mpsr': NP.copy(outvals[:,:,0,:]), 'M2': NP.copy(outvals[:,:,1,:]), 'Mtot': NP.copy(outvals[:,:,2,:]), 'incl': NP.copy(outvals[:,:,3,:])}
 
 
-# In[58]:
+# In[23]:
 
 
-print(psrnames_simple_union.index('J1446-4701'))
+psrind = psrnames_simple_union.index('J1600-3053')
+print(psrind)
 print(ptas)
 print(pta_psr_derived_parm_vals.keys())
 print(pta_psr_derived_parm_vals['Dpsr_PX'].shape)
 print(NP.nanmax(pta_psr_derived_parm_vals['Dpsr_Pbdot']))
 # print(pta_psr_derived_parm_vals['Dpsr_Pbdot']['EPTA_DR1'])
-print(pta_psr_derived_parm_vals['psr_mass_parms']['Mpsr'][23,5,:])
-print(pta_psr_derived_parm_vals['psr_mass_parms']['M2'][23,5,:])
-print(pta_psr_derived_parm_vals['psr_mass_parms']['Mtot'][23,5,:]**2)
-print(pta_psr_derived_parm_vals['psr_mass_parms']['incl'][23,5,:])
+print(pta_psr_derived_parm_vals['psr_mass_parms']['Mpsr'][psrind,0,:])
+print(pta_psr_derived_parm_vals['psr_mass_parms']['M2'][psrind,0,:])
+print(pta_psr_derived_parm_vals['psr_mass_parms']['Mtot'][psrind,0,:]**2)
+print(pta_psr_derived_parm_vals['psr_mass_parms']['incl'][psrind,0,:])
+ind_psr_in_ref_pta = NP.where(NP.isfinite(pta_psr_derived_parm_vals['psr_mass_parms']['Mpsr'][:,ref_pta_ind,0]))[0]
+print(NP.asarray(psrnames_simple_union)[ind_psr_in_ref_pta])
+print(pta_psr_derived_parm_vals['psr_mass_parms']['Mpsr'][ind_psr_in_ref_pta,ref_pta_ind,:])
+print(ref_pta_ind)
 
 
 # ## Make comparison dictionaries for requested parameters by creating an Astropy table for each and save the derived parameters in an NPZ file
 
-# In[60]:
+# In[24]:
 
 
 psrtables = {}
@@ -314,7 +332,7 @@ for parm in pta_psr_derived_parm_vals:
 NP.savez(outdir+'PSR_mass_parms.npz', Mpsr=pta_psr_derived_parm_vals['psr_mass_parms']['Mpsr'], M2=pta_psr_derived_parm_vals['psr_mass_parms']['M2'], Mtot=pta_psr_derived_parm_vals['psr_mass_parms']['Mtot'], incl=pta_psr_derived_parm_vals['psr_mass_parms']['incl'], psrnames=psrnames_simple_union, ptas=ptas)
 
 
-# In[41]:
+# In[25]:
 
 
 print(psrtables.keys())
@@ -322,19 +340,19 @@ print(psrtables.keys())
 
 # ## Print PSR parameter tables
 
-# In[13]:
+# In[26]:
 
 
 psrtables['PX'].show_in_notebook(display_length=100)
 
 
-# In[14]:
+# In[27]:
 
 
 psrtables['PMELAT'].show_in_notebook(display_length=100)
 
 
-# In[15]:
+# In[28]:
 
 
 psrtables['PMELONG'].show_in_notebook(display_length=100)
@@ -342,116 +360,119 @@ psrtables['PMELONG'].show_in_notebook(display_length=100)
 
 # ## Plot: Difference between various PTA estimates for each specified pulsar parameter along with uncertainties
 
-# In[16]:
+# In[29]:
 
-
-nsigma_fill = 5
-nsigma_colors = NP.linspace(0.7, 0.9, nsigma_fill)
-
-ptasymbols = ['>', 'd', '^', '*', 'v', '<', 's']
-ptacolors = ['C0', 'C1', 'C2', 'C3', 'C4', 'C5', 'C6']
-for parm in psr_parms:
-    ptas_to_plot = compare_parms[parm]['plot_PTAs']
-    ind_ptas_to_plot = [ptas.tolist().index(pta_to_plot) for pta_to_plot in ptas_to_plot]
-
-    parm_vals = unumpy.nominal_values(pta_psr_parm_uvals[parm]['all'])
-    parm_err_vals = unumpy.std_devs(pta_psr_parm_uvals[parm]['all'])
-
-    parm_diff_vals = unumpy.nominal_values(pta_psr_parm_uvals_diff[parm]['all'])
-    parm_diff_err_vals = unumpy.std_devs(pta_psr_parm_uvals_diff[parm]['all'])
-
-    fig, axs = PLT.subplots(nrows=1, ncols=2, squeeze=True, sharey=True, figsize=(6.5,4.5))
-
-    for ptai in ind_ptas_to_plot:
-        if ptas[ptai] != ref_pta:
-            axs[0].errorbar(parm_vals[ref_pta_psrs_ind,ptai], NP.arange(len(ref_pta_psrs_ind)), xerr=parm_err_vals[ref_pta_psrs_ind,ptai], ls='none', marker=ptasymbols[ptai], color=ptacolors[ptai], ecolor=ptacolors[ptai], capsize=4, alpha=0.5, label='{0}'.format(ptas[ptai]))
-    axs[0].errorbar(parm_vals[ref_pta_psrs_ind,ref_pta_ind], NP.arange(len(ref_pta_psrs_ind)), xerr=parm_err_vals[ref_pta_psrs_ind,ref_pta_ind], ls='none', marker='o', mfc='none', mec='black', mew=1, color='black', ecolor='black', capsize=4, alpha=0.5, label=ref_pta)
-
-    axs[1].axvline(x=0, ls='-', lw=1, color='gray')
-    for int_sigma in range(nsigma_fill,0,-1):
-        axs[1].fill_betweenx(NP.asarray([-10,100]), -int_sigma, int_sigma, color='{0}'.format(nsigma_colors[int_sigma-1]))
-
-    for ptai in ind_ptas_to_plot:
-        if ptas[ptai] != ref_pta:
-            axs[1].errorbar(parm_diff_vals[ref_pta_psrs_ind,ptai]/parm_err_vals[ref_pta_psrs_ind,ref_pta_ind], NP.arange(len(ref_pta_psrs_ind)), xerr=parm_err_vals[ref_pta_psrs_ind,ptai]/parm_err_vals[ref_pta_psrs_ind,ref_pta_ind], ls='none', marker=ptasymbols[ptai], color=ptacolors[ptai], ecolor=ptacolors[ptai], capsize=4, alpha=0.5, label='{0}'.format(ptas[ptai]))
-    axs[1].plot(parm_diff_vals[ref_pta_psrs_ind,ref_pta_ind]/parm_err_vals[ref_pta_psrs_ind,ref_pta_ind], NP.arange(len(ref_pta_psrs_ind)), ls='none', marker='o', mfc='none', mec='black', mew=1, label=ref_pta)
-#     axs[1].errorbar(parm_diff_vals[ref_pta_psrs_ind,ref_pta_ind]/parm_err_vals[ref_pta_psrs_ind,ref_pta_ind], NP.arange(len(ref_pta_psrs_ind)), xerr=parm_err_vals[ref_pta_psrs_ind,ref_pta_ind]/parm_err_vals[ref_pta_psrs_ind,ref_pta_ind], ls='none', marker='o', mfc='none', mec='black', mew=1, color='black', ecolor='black', capsize=4, alpha=0.5, label=ref_pta)
-#     axs[0].legend(loc='upper center', ncol=2, shadow=False, fontsize=8.25, labelspacing=0, columnspacing=0)
-#     axs[1].legend(loc='upper center', ncol=2, shadow=False, fontsize=8.25, labelspacing=0, columnspacing=0)
-    axs[1].legend(bbox_to_anchor=(-1., 1.01, 2., .05), loc='lower left', ncol=2, mode='expand', borderaxespad=0., shadow=False, fontsize=11, labelspacing=0, columnspacing=0)
-    axs[0].set_ylim(-1,len(ref_pta_psrs_ind))
-    axs[1].set_ylim(-1,len(ref_pta_psrs_ind))
-    axs[1].set_xlim(-9.95,9.95)
-    axs[0].set_yticks(NP.arange(len(ref_pta_psrs_ind)))
-    axs[0].set_yticklabels(ref_pta_psrs, fontdict={'fontsize': 8.5, 'ha': 'right', 'va': 'center', 'family': 'serif'})
-    axs[0].tick_params(direction='in', labelleft=True)
-    axs[0].set_ylabel('Pulsar Name')
-    axs[0].set_xlabel('{0}'.format(parm))
-    axs[1].set_xlabel('Normalized Difference in {0}'.format(parm))
-    axs[1].set_yticks(NP.arange(len(ref_pta_psrs_ind)))
-    axs[1].set_yticklabels(ref_pta_psrs, fontdict={'fontsize': 8.5, 'ha': 'left', 'va': 'center', 'family': 'serif'})
-    axs[1].yaxis.tick_right()
-    axs[1].tick_params(direction='in', labelright=True)
-    axs[1].yaxis.set_label_position('right')
-    axs[1].set_ylabel('Pulsar Name')
-    fig.subplots_adjust(hspace=0, wspace=0)
-    fig.subplots_adjust(left=0.16, right=0.84, bottom=0.1, top=0.86)
-
-#     PLT.savefig(figdir + '{0}_diff_info_portrait.pdf'.format(parm), bbox_inches=0)
-    print('Saving figure at: ' + figdir + '{0}_diff_info_portrait.pdf'.format(parm))
+#
+#nsigma_fill = 5
+#nsigma_colors = NP.linspace(0.7, 0.9, nsigma_fill)
+#
+#ptasymbols = ['>', 'd', '^', '*', 'v', '<', 's']
+#ptacolors = ['C0', 'C1', 'C2', 'C3', 'C4', 'C5', 'C6']
+#for parm in psr_parms:
+#    ptas_to_plot = compare_parms[parm]['plot_PTAs']
+#    ind_ptas_to_plot = [ptas.tolist().index(pta_to_plot) for pta_to_plot in ptas_to_plot]
+#
+#    parm_vals = unumpy.nominal_values(pta_psr_parm_uvals[parm]['all'])
+#    parm_err_vals = unumpy.std_devs(pta_psr_parm_uvals[parm]['all'])
+#
+#    parm_diff_vals = unumpy.nominal_values(pta_psr_parm_uvals_diff[parm]['all'])
+#    parm_diff_err_vals = unumpy.std_devs(pta_psr_parm_uvals_diff[parm]['all'])
+#
+#    fig, axs = PLT.subplots(nrows=1, ncols=2, squeeze=True, sharey=True, figsize=(6.5,4.5))
+#
+#    for ptai in ind_ptas_to_plot:
+#        if ptas[ptai] != ref_pta:
+#            axs[0].errorbar(parm_vals[ref_pta_psrs_ind,ptai], NP.arange(len(ref_pta_psrs_ind)), xerr=parm_err_vals[ref_pta_psrs_ind,ptai], ls='none', marker=ptasymbols[ptai], color=ptacolors[ptai], ecolor=ptacolors[ptai], capsize=4, alpha=0.5, label='{0}'.format(ptas[ptai]))
+#    axs[0].errorbar(parm_vals[ref_pta_psrs_ind,ref_pta_ind], NP.arange(len(ref_pta_psrs_ind)), xerr=parm_err_vals[ref_pta_psrs_ind,ref_pta_ind], ls='none', marker='o', mfc='none', mec='black', mew=1, color='black', ecolor='black', capsize=4, alpha=0.5, label=ref_pta)
+#
+#    axs[1].axvline(x=0, ls='-', lw=1, color='gray')
+#    for int_sigma in range(nsigma_fill,0,-1):
+#        axs[1].fill_betweenx(NP.asarray([-10,100]), -int_sigma, int_sigma, color='{0}'.format(nsigma_colors[int_sigma-1]))
+#
+#    for ptai in ind_ptas_to_plot:
+#        if ptas[ptai] != ref_pta:
+#            axs[1].errorbar(parm_diff_vals[ref_pta_psrs_ind,ptai]/parm_err_vals[ref_pta_psrs_ind,ref_pta_ind], NP.arange(len(ref_pta_psrs_ind)), xerr=parm_err_vals[ref_pta_psrs_ind,ptai]/parm_err_vals[ref_pta_psrs_ind,ref_pta_ind], ls='none', marker=ptasymbols[ptai], color=ptacolors[ptai], ecolor=ptacolors[ptai], capsize=4, alpha=0.5, label='{0}'.format(ptas[ptai]))
+#    axs[1].plot(parm_diff_vals[ref_pta_psrs_ind,ref_pta_ind]/parm_err_vals[ref_pta_psrs_ind,ref_pta_ind], NP.arange(len(ref_pta_psrs_ind)), ls='none', marker='o', mfc='none', mec='black', mew=1, label=ref_pta)
+##     axs[1].errorbar(parm_diff_vals[ref_pta_psrs_ind,ref_pta_ind]/parm_err_vals[ref_pta_psrs_ind,ref_pta_ind], NP.arange(len(ref_pta_psrs_ind)), xerr=parm_err_vals[ref_pta_psrs_ind,ref_pta_ind]/parm_err_vals[ref_pta_psrs_ind,ref_pta_ind], ls='none', marker='o', mfc='none', mec='black', mew=1, color='black', ecolor='black', capsize=4, alpha=0.5, label=ref_pta)
+##     axs[0].legend(loc='upper center', ncol=2, shadow=False, fontsize=8.25, labelspacing=0, columnspacing=0)
+##     axs[1].legend(loc='upper center', ncol=2, shadow=False, fontsize=8.25, labelspacing=0, columnspacing=0)
+#    axs[1].legend(bbox_to_anchor=(-1., 1.01, 2., .05), loc='lower left', ncol=2, mode='expand', borderaxespad=0., shadow=False, fontsize=11, labelspacing=0, columnspacing=0)
+#    axs[0].set_ylim(-1,len(ref_pta_psrs_ind))
+#    axs[1].set_ylim(-1,len(ref_pta_psrs_ind))
+#    axs[1].set_xlim(-9.95,9.95)
+#    axs[0].set_yticks(NP.arange(len(ref_pta_psrs_ind)))
+#    axs[0].set_yticklabels(ref_pta_psrs, fontdict={'fontsize': 8.5, 'ha': 'right', 'va': 'center', 'family': 'serif'})
+#    axs[0].tick_params(direction='in', labelleft=True)
+#    axs[0].set_ylabel('Pulsar Name')
+#    axs[0].set_xlabel('{0}'.format(parm))
+#    axs[1].set_xlabel('Normalized Difference in {0}'.format(parm))
+#    axs[1].set_yticks(NP.arange(len(ref_pta_psrs_ind)))
+#    axs[1].set_yticklabels(ref_pta_psrs, fontdict={'fontsize': 8.5, 'ha': 'left', 'va': 'center', 'family': 'serif'})
+#    axs[1].yaxis.tick_right()
+#    axs[1].tick_params(direction='in', labelright=True)
+#    axs[1].yaxis.set_label_position('right')
+#    axs[1].set_ylabel('Pulsar Name')
+#    fig.subplots_adjust(hspace=0, wspace=0)
+#    fig.subplots_adjust(left=0.16, right=0.84, bottom=0.1, top=0.86)
+#
+#    PLT.savefig(figdir + '{0}_diff_info_portrait.pdf'.format(parm), bbox_inches=0)
+#    print('Saving figure at: ' + figdir + '{0}_diff_info_portrait.pdf'.format(parm))
 
 
 # ## Plot derived PSR distances
 
-# In[18]:
+# In[30]:
 
-
-ptas_to_plot = compare_parms['Dpsr']['plot_PTAs']
-ind_ptas_to_plot = [ptas.tolist().index(pta_to_plot) for pta_to_plot in ptas_to_plot]
-
-ptasymbols = ['>', 'd', '^', '*', 'v', '<', 's', 'x']
-ptacolors = ['C0', 'C1', 'C2', 'C3', 'C4', 'C5', 'C6', 'C7']
-
-fig, axs = PLT.subplots(nrows=1, ncols=2, squeeze=True, sharey=True, figsize=(6.5,4.5))
-
-for ptai in ind_ptas_to_plot:
-    axs[0].errorbar(pta_psr_derived_parm_vals['Dpsr_PX'][ref_pta_psrs_ind,ptai,0], NP.arange(len(ref_pta_psrs_ind)), xerr=pta_psr_derived_parm_vals['Dpsr_PX'][ref_pta_psrs_ind,ptai,1:].T, ls='none', marker=ptasymbols[ptai], color=ptacolors[ptai], ecolor=ptacolors[ptai], capsize=4, alpha=0.5, label='{0}'.format(ptas[ptai]))
-    axs[1].errorbar(pta_psr_derived_parm_vals['Dpsr_Pbdot'][ref_pta_psrs_ind,ptai,0], NP.arange(len(ref_pta_psrs_ind)), xerr=pta_psr_derived_parm_vals['Dpsr_Pbdot'][ref_pta_psrs_ind,ptai,1:].T, ls='none', marker=ptasymbols[ptai], color=ptacolors[ptai], ecolor=ptacolors[ptai], capsize=4, alpha=0.5, label='{0}'.format(ptas[ptai]))
-
-axs[1].legend(bbox_to_anchor=(-1., 1.01, 2., .05), loc='lower left', ncol=2, mode='expand', borderaxespad=0., shadow=False, fontsize=11, labelspacing=0, columnspacing=0)
-axs[0].set_ylim(-1,len(ref_pta_psrs_ind))
-axs[1].set_ylim(-1,len(ref_pta_psrs_ind))
-axs[0].set_xlim(0.003,12)
-axs[1].set_xlim(0.003,12)
-axs[0].set_xscale('log')
-axs[1].set_xscale('log')
-axs[0].set_yticks(NP.arange(len(ref_pta_psrs_ind)))
-axs[0].set_yticklabels(ref_pta_psrs, fontdict={'fontsize': 8.5, 'ha': 'right', 'va': 'center', 'family': 'serif'})
-axs[0].tick_params(direction='in', labelleft=True)
-axs[0].set_ylabel('Pulsar Name', fontsize=12)
-axs[0].set_xlabel(r'$D_{\mathrm{PX}}$ [kpc]', fontsize=12)
-axs[1].set_xlabel(r'$D_{\.{P_b}}$ [kpc]', fontsize=12)
-axs[1].set_yticks(NP.arange(len(ref_pta_psrs_ind)))
-axs[1].set_yticklabels(ref_pta_psrs, fontdict={'fontsize': 8.5, 'ha': 'left', 'va': 'center', 'family': 'serif'})
-axs[1].yaxis.tick_right()
-axs[1].tick_params(direction='in', labelright=True)
-axs[1].yaxis.set_label_position('right')
-axs[1].set_ylabel('Pulsar Name', fontsize=12)
-fig.subplots_adjust(hspace=0, wspace=0)
-fig.subplots_adjust(left=0.16, right=0.84, bottom=0.1, top=0.86)
-
-# PLT.savefig(figdir + 'Dpsr_portrait.pdf', bbox_inches=0)
-print('Saving figure at: ' + figdir + 'Dpsr_portrait.pdf')
-
+#
+#ptas_to_plot = compare_parms['Dpsr']['plot_PTAs']
+#ind_ptas_to_plot = [ptas.tolist().index(pta_to_plot) for pta_to_plot in ptas_to_plot]
+#
+#ptasymbols = ['>', 'd', '^', '*', 'v', '<', 's', 'x']
+#ptacolors = ['C0', 'C1', 'C2', 'C3', 'C4', 'C5', 'C6', 'C7']
+#
+#fig, axs = PLT.subplots(nrows=1, ncols=2, squeeze=True, sharey=True, figsize=(6.5,4.5))
+#
+#for ptai in ind_ptas_to_plot:
+#    axs[0].errorbar(pta_psr_derived_parm_vals['Dpsr_PX'][ref_pta_psrs_ind,ptai,0], NP.arange(len(ref_pta_psrs_ind)), xerr=pta_psr_derived_parm_vals['Dpsr_PX'][ref_pta_psrs_ind,ptai,1:].T, ls='none', marker=ptasymbols[ptai], color=ptacolors[ptai], ecolor=ptacolors[ptai], capsize=4, alpha=0.5, label='{0}'.format(ptas[ptai]))
+#    axs[1].errorbar(pta_psr_derived_parm_vals['Dpsr_Pbdot'][ref_pta_psrs_ind,ptai,0], NP.arange(len(ref_pta_psrs_ind)), xerr=pta_psr_derived_parm_vals['Dpsr_Pbdot'][ref_pta_psrs_ind,ptai,1:].T, ls='none', marker=ptasymbols[ptai], color=ptacolors[ptai], ecolor=ptacolors[ptai], capsize=4, alpha=0.5, label='{0}'.format(ptas[ptai]))
+#
+#axs[1].legend(bbox_to_anchor=(-1., 1.01, 2., .05), loc='lower left', ncol=2, mode='expand', borderaxespad=0., shadow=False, fontsize=11, labelspacing=0, columnspacing=0)
+#axs[0].set_ylim(-1,len(ref_pta_psrs_ind))
+#axs[1].set_ylim(-1,len(ref_pta_psrs_ind))
+#axs[0].set_xlim(0.003,12)
+#axs[1].set_xlim(0.003,12)
+#axs[0].set_xscale('log')
+#axs[1].set_xscale('log')
+#axs[0].set_yticks(NP.arange(len(ref_pta_psrs_ind)))
+#axs[0].set_yticklabels(ref_pta_psrs, fontdict={'fontsize': 8.5, 'ha': 'right', 'va': 'center', 'family': 'serif'})
+#axs[0].tick_params(direction='in', labelleft=True)
+#axs[0].set_ylabel('Pulsar Name', fontsize=12)
+#axs[0].set_xlabel(r'$D_{\mathrm{PX}}$ [kpc]', fontsize=12)
+#axs[1].set_xlabel(r'$D_{\dot{P_b}}$ [kpc]', fontsize=12)
+#axs[1].set_yticks(NP.arange(len(ref_pta_psrs_ind)))
+#axs[1].set_yticklabels(ref_pta_psrs, fontdict={'fontsize': 8.5, 'ha': 'left', 'va': 'center', 'family': 'serif'})
+#axs[1].yaxis.tick_right()
+#axs[1].tick_params(direction='in', labelright=True)
+#axs[1].yaxis.set_label_position('right')
+#axs[1].set_ylabel('Pulsar Name', fontsize=12)
+#fig.subplots_adjust(hspace=0, wspace=0)
+#fig.subplots_adjust(left=0.16, right=0.84, bottom=0.1, top=0.86)
+#
+#PLT.savefig(figdir + 'Dpsr_portrait.pdf', bbox_inches=0)
+#print('Saving figure at: ' + figdir + 'Dpsr_portrait.pdf')
+#
 
 # ## Plot derived masses of the binary system
 
-# In[34]:
+# In[35]:
 
 
 ptas_to_plot = compare_parms['psr_mass_parms']['plot_PTAs']
+excl_psrs = compare_parms['psr_mass_parms']['excl_psrs']
 ind_ptas_to_plot = [ptas.tolist().index(pta_to_plot) for pta_to_plot in ptas_to_plot]
 ind_psr_in_ref_pta = NP.where(NP.isfinite(pta_psr_derived_parm_vals['psr_mass_parms']['Mpsr'][:,ref_pta_ind,0]))[0]
+ind_psr_in_ref_pta = NP.asarray([ind for ind in ind_psr_in_ref_pta if psrnames_simple_union[ind] not in excl_psrs])
+
 if len(ind_ptas_to_plot)%2 == 1:
     pta_yoffset = NP.linspace(-0.2, 0.2, len(ind_ptas_to_plot)-1, endpoint=True)
 else:
@@ -460,56 +481,82 @@ else:
 pta_yoffset = NP.insert(pta_yoffset, ind_ptas_to_plot.index(ref_pta_ind), 0.0)
 
 ptasymbols = ['>', 'd', '^', '*', 'v', '<', 's', '+']
-ptasymbols[ref_pta_ind] = '.'
 ptacolors = ['C0', 'C1', 'C2', 'C3', 'C4', 'C5', 'C6', 'C7']
-ptacolors[ref_pta_ind] = 'black'
+ptasymbols[ptas.tolist().index('EPTA-DR1')] = '>'
+ptacolors[ptas.tolist().index('EPTA-DR1')] = 'crimson'
+ptasymbols[ptas.tolist().index('NG-12.5yr-NB')] = '^'
+ptacolors[ptas.tolist().index('NG-12.5yr-NB')] = 'darkorange'
+ptasymbols[ptas.tolist().index('PPTA-DR1')] = 'v'
+ptacolors[ptas.tolist().index('PPTA-DR1')] = 'darkorchid'
+ptasymbols[ref_pta_ind] = '.'
+ptacolors[ref_pta_ind] = 'mediumblue'
 
-fig, axs = PLT.subplots(nrows=1, ncols=2, squeeze=True, sharey=True, figsize=(8,4.5))
+fig, axs = PLT.subplots(nrows=1, ncols=2, squeeze=True, sharey=True, figsize=(10,3.5))
 
 axs[0].axvline(x=1.4, ls='-', lw=1, color='0.75')
+axs[0].errorbar(pta_psr_derived_parm_vals['psr_mass_parms']['Mpsr'][ind_psr_in_ref_pta,ref_pta_ind,0], NP.arange(len(ind_psr_in_ref_pta))[::-1]+pta_yoffset[ind_ptas_to_plot.index(ref_pta_ind)], xerr=NP.abs(pta_psr_derived_parm_vals['psr_mass_parms']['Mpsr'][ind_psr_in_ref_pta,ref_pta_ind,1:].T - pta_psr_derived_parm_vals['psr_mass_parms']['Mpsr'][ind_psr_in_ref_pta,ref_pta_ind,0].reshape(1,-1)), ls='none', marker=ptasymbols[ref_pta_ind], ms=6, mec=ptacolors[ref_pta_ind], mfc=ptacolors[ref_pta_ind], color=ptacolors[ref_pta_ind], ecolor=ptacolors[ref_pta_ind], capsize=2, alpha=0.5, label='{0}'.format(str(ptas[ref_pta_ind])), zorder=10)
+axs[1].errorbar(pta_psr_derived_parm_vals['psr_mass_parms']['M2'][ind_psr_in_ref_pta,ref_pta_ind,0], NP.arange(len(ind_psr_in_ref_pta))[::-1]+pta_yoffset[ind_ptas_to_plot.index(ref_pta_ind)], xerr=NP.abs(pta_psr_derived_parm_vals['psr_mass_parms']['M2'][ind_psr_in_ref_pta,ref_pta_ind,1:].T - pta_psr_derived_parm_vals['psr_mass_parms']['M2'][ind_psr_in_ref_pta,ref_pta_ind,0].reshape(1,-1)), ls='none', marker=ptasymbols[ref_pta_ind], ms=6, mec=ptacolors[ref_pta_ind], mfc=ptacolors[ref_pta_ind], color=ptacolors[ref_pta_ind], ecolor=ptacolors[ref_pta_ind], capsize=2, alpha=0.5, label='{0}'.format(str(ptas[ref_pta_ind])), zorder=10)
 for ptaiind, ptai in enumerate(ind_ptas_to_plot):
-    axs[0].errorbar(pta_psr_derived_parm_vals['psr_mass_parms']['Mpsr'][ind_psr_in_ref_pta,ptai,0], NP.arange(len(ind_psr_in_ref_pta))+pta_yoffset[ptaiind], xerr=pta_psr_derived_parm_vals['psr_mass_parms']['Mpsr'][ind_psr_in_ref_pta,ptai,1:].T, ls='none', marker=ptasymbols[ptai], color=ptacolors[ptai], ecolor=ptacolors[ptai], capsize=4, alpha=0.5, label='{0}'.format(str(ptas[ptai])))
-    axs[1].errorbar(pta_psr_derived_parm_vals['psr_mass_parms']['M2'][ind_psr_in_ref_pta,ptai,0], NP.arange(len(ind_psr_in_ref_pta))+pta_yoffset[ptaiind], xerr=pta_psr_derived_parm_vals['psr_mass_parms']['M2'][ind_psr_in_ref_pta,ptai,1:].T, ls='none', marker=ptasymbols[ptai], color=ptacolors[ptai], ecolor=ptacolors[ptai], capsize=4, alpha=0.5, label='{0}'.format(str(ptas[ptai])))
-#     axs[0].errorbar(pta_psr_derived_parm_vals['psr_mass_parms']['Mpsr'][ref_pta_psrs_ind,ptai,0], NP.arange(len(ref_pta_psrs_ind)), xerr=pta_psr_derived_parm_vals['psr_mass_parms']['Mpsr'][ref_pta_psrs_ind,ptai,1:].T, ls='none', marker=ptasymbols[ptai], color=ptacolors[ptai], ecolor=ptacolors[ptai], capsize=4, alpha=0.5, label='{0}'.format(ptas[ptai]))
-#     axs[1].errorbar(pta_psr_derived_parm_vals['psr_mass_parms']['M2'][ref_pta_psrs_ind,ptai,0], NP.arange(len(ref_pta_psrs_ind)), xerr=pta_psr_derived_parm_vals['psr_mass_parms']['M2'][ref_pta_psrs_ind,ptai,1:].T, ls='none', marker=ptasymbols[ptai], color=ptacolors[ptai], ecolor=ptacolors[ptai], capsize=4, alpha=0.5, label='{0}'.format(ptas[ptai]))
+    if ptai != ref_pta_ind:
+        axs[0].errorbar(pta_psr_derived_parm_vals['psr_mass_parms']['Mpsr'][ind_psr_in_ref_pta,ptai,0], NP.arange(len(ind_psr_in_ref_pta))[::-1]+pta_yoffset[ptaiind], xerr=NP.abs(pta_psr_derived_parm_vals['psr_mass_parms']['Mpsr'][ind_psr_in_ref_pta,ptai,1:].T - pta_psr_derived_parm_vals['psr_mass_parms']['Mpsr'][ind_psr_in_ref_pta,ptai,0].reshape(1,-1)), ls='none', marker=ptasymbols[ptai], mec=ptacolors[ptai], mfc=ptacolors[ptai], color=ptacolors[ptai], ecolor=ptacolors[ptai], capsize=2, alpha=0.5, label='{0}'.format(str(ptas[ptai])), zorder=5)
+        axs[1].errorbar(pta_psr_derived_parm_vals['psr_mass_parms']['M2'][ind_psr_in_ref_pta,ptai,0], NP.arange(len(ind_psr_in_ref_pta))[::-1]+pta_yoffset[ptaiind], xerr=NP.abs(pta_psr_derived_parm_vals['psr_mass_parms']['M2'][ind_psr_in_ref_pta,ptai,1:].T - pta_psr_derived_parm_vals['psr_mass_parms']['M2'][ind_psr_in_ref_pta,ptai,0].reshape(1,-1)), ls='none', marker=ptasymbols[ptai], mec=ptacolors[ptai], mfc=ptacolors[ptai], color=ptacolors[ptai], ecolor=ptacolors[ptai], capsize=2, alpha=0.5, label='{0}'.format(str(ptas[ptai])), zorder=5)
+# axs[0].errorbar(pta_psr_derived_parm_vals['psr_mass_parms']['Mpsr'][ind_psr_in_ref_pta,ref_pta_ind,0], NP.arange(len(ind_psr_in_ref_pta))+pta_yoffset[ind_ptas_to_plot.index(ref_pta_ind)], xerr=NP.abs(pta_psr_derived_parm_vals['psr_mass_parms']['Mpsr'][ind_psr_in_ref_pta,ref_pta_ind,1:].T - pta_psr_derived_parm_vals['psr_mass_parms']['Mpsr'][ind_psr_in_ref_pta,ref_pta_ind,0].reshape(1,-1)), ls='none', marker=ptasymbols[ref_pta_ind], color=ptacolors[ref_pta_ind], ecolor=ptacolors[ref_pta_ind], capsize=4, alpha=0.5)
+# axs[1].errorbar(pta_psr_derived_parm_vals['psr_mass_parms']['M2'][ind_psr_in_ref_pta,ref_pta_ind,0], NP.arange(len(ind_psr_in_ref_pta))+pta_yoffset[ind_ptas_to_plot.index(ref_pta_ind)], xerr=NP.abs(pta_psr_derived_parm_vals['psr_mass_parms']['M2'][ind_psr_in_ref_pta,ref_pta_ind,1:].T - pta_psr_derived_parm_vals['psr_mass_parms']['M2'][ind_psr_in_ref_pta,ref_pta_ind,0].reshape(1,-1)), ls='none', marker=ptasymbols[ref_pta_ind], color=ptacolors[ref_pta_ind], ecolor=ptacolors[ref_pta_ind], capsize=4, alpha=0.5)
 
 axs[0].grid(axis='y', lw=0.2, color='0.75')
 axs[1].grid(axis='y', lw=0.2, color='0.75')
-axs[1].legend(bbox_to_anchor=(-1., 1.01, 2., .05), loc='lower left', ncol=len(ptas_to_plot), mode='expand', borderaxespad=0., shadow=False, fontsize=10, labelspacing=0, columnspacing=0)
+axs[1].legend(bbox_to_anchor=(-1., 1.01, 2., .05), loc='lower left', ncol=len(ptas_to_plot), mode='expand', borderaxespad=0., shadow=False, fontsize=14, labelspacing=0, columnspacing=0)
 axs[0].set_ylim(-1,len(ind_psr_in_ref_pta))
 axs[1].set_ylim(-1,len(ind_psr_in_ref_pta))
-axs[0].set_xlim(0.005,30)
-axs[1].set_xlim(0.0005,11)
-axs[0].set_xscale('log', subsx=[2, 3, 4, 5, 6, 7, 8, 9])
-axs[1].set_xscale('log', subsx=[2, 3, 4, 5, 6, 7, 8, 9])
+# axs[0].set_xlim(0.005,30) # for log plot
+# axs[1].set_xlim(0.0005,11) # for log plot
+# axs[0].set_xscale('log', subsx=[2, 3, 4, 5, 6, 7, 8, 9])
+# axs[1].set_xscale('log', subsx=[2, 3, 4, 5, 6, 7, 8, 9])
+axs[0].set_xlim(0,3.5) # for linear plot
+axs[1].set_xlim(0,1) # for linear plot
 axs[0].set_yticks(NP.arange(len(ind_psr_in_ref_pta)))
-axs[0].set_yticklabels(NP.asarray(psrnames_simple_union)[ind_psr_in_ref_pta], fontdict={'fontsize': 8.5, 'ha': 'right', 'va': 'center', 'family': 'serif'})
+psrnames_plot = NP.asarray(psrnames_simple_union)[ind_psr_in_ref_pta][::-1]
+ref_pta_psrs_plot = [x.replace('-', '$-$') for x in psrnames_plot]
+axs[0].set_yticklabels(ref_pta_psrs_plot, fontdict={'fontsize': 14, 'ha': 'right', 'va': 'center', 'family': 'serif'})
 # axs[0].set_yticks(NP.arange(len(ref_pta_psrs_ind)))
 # axs[0].set_yticklabels(ref_pta_psrs, fontdict={'fontsize': 8.5, 'ha': 'right', 'va': 'center', 'family': 'serif'})
 axs[0].tick_params(which='both', direction='in', labelleft=True)
-axs[0].set_ylabel('Pulsar Name', fontsize=12)
-axs[0].set_xlabel(r'$M_{\mathrm{psr}}\, [M_\odot]$', fontsize=12)
+axs[0].set_ylabel('Pulsar Name', fontsize=14)
+axs[0].set_xlabel(r'$M_{\mathrm{p}}\, (M_\odot)$', fontsize=14)
 # ticklocsmajor = LogLocator(base=10,numticks=4)
 # ticklocsminor = LogLocator(base=10.0,subs=(0.2,0.4,0.6,0.8),numticks=4)
 # axs[0].xaxis.set_major_locator(ticklocsmajor)
 # axs[0].xaxis.set_minor_locator(ticklocsminor)
 # axs[0].xaxis.set_minor_formatter(NullFormatter())
 # axs[0].xaxis.set_minor_formatter(FormatStrFormatter("%.2f"))
-axs[1].set_xlabel(r'$M_2\, [M_\odot]$', fontsize=12)
+axs[1].set_xlabel(r'$M_{\mathrm{c}}\, (M_\odot)$', fontsize=14)
 axs[1].set_yticks(NP.arange(len(ind_psr_in_ref_pta)))
+axs[1].yaxis.tick_right()
 # axs[1].set_yticklabels(NP.asarray(psrnames_simple_union)[ind_psr_in_ref_pta], fontdict={'fontsize': 8.5, 'ha': 'left', 'va': 'center', 'family': 'serif'})
 # axs[1].yaxis.tick_right()
-axs[1].tick_params(which='both', direction='in')
+axs[1].tick_params(direction='in')
+axs[1].yaxis.set_label_position('right')
 # axs[1].yaxis.set_label_position('right')
 # axs[1].set_ylabel('Pulsar Name', fontsize=12)
 fig.subplots_adjust(hspace=0, wspace=0)
-fig.subplots_adjust(left=0.15, right=0.98, bottom=0.12, top=0.92)
+# fig.subplots_adjust(left=0.15, right=0.98, bottom=0.12, top=0.92)
+fig.subplots_adjust(left=0.16, right=0.84, bottom=0.1, top=0.86)
 
-PLT.savefig(figdir + 'mass_portrait_logplot_{0}.pdf'.format(ref_pta), bbox_inches=0)
-print('Saving figure at: ' + figdir + 'mass_portrait_logplot_{0}.pdf'.format(ref_pta))
+PLT.savefig(figdir + 'mass_portrait_linplot_{0}.pdf'.format(ref_pta), bbox_inches = 'tight', pad_inches = 0)
+print('Saving figure at: ' + figdir + 'mass_portrait_linplot_{0}.pdf'.format(ref_pta))
+
+sys.exit()
+# In[67]:
 
 
-# In[161]:
+print(ptas)
+print(NP.asarray(psrnames_simple_union)[ind_psr_in_ref_pta])
+print(pta_psr_derived_parm_vals['psr_mass_parms']['Mpsr'][ind_psr_in_ref_pta,ref_pta_ind,:])
+print(pta_psr_derived_parm_vals['psr_mass_parms']['Mpsr'][ind_psr_in_ref_pta,0,:])
+print(pta_psr_derived_parm_vals['psr_mass_parms']['Mpsr'][ind_psr_in_ref_pta,2,:])
+
+
+# In[ ]:
 
 
 ind_psr_in_all_pta = []
@@ -528,7 +575,7 @@ print(NP.asarray(psrnames_simple_union)[ind_psr_in_rest_pta.tolist()])
 
 # ## Plot: Fractional difference between various PTA estimates for each specified pulsar parameter along with uncertainties
 
-# In[10]:
+# In[ ]:
 
 
 # ptas_to_plot = compare_parms['plot_PTAs']
@@ -573,7 +620,7 @@ print(NP.asarray(psrnames_simple_union)[ind_psr_in_rest_pta.tolist()])
 
 # ## Same plot as above but in portrait mode
 
-# In[11]:
+# In[ ]:
 
 
 # ptas_to_plot = compare_parms['plot_PTAs']
@@ -787,7 +834,7 @@ print(NP.asarray(psrnames_simple_union)[ind_psr_in_rest_pta.tolist()])
 #     print('Saving figure at: ' + figdir + '{0}_fracdiff.pdf'.format(parm))
 
 
-# In[62]:
+# In[ ]:
 
 
 infile = '/fred/oz002/nthyagar/projects/dr2_ephemerides/outputs/PSR_mass_parms.npz'

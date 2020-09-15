@@ -594,7 +594,7 @@ for solBin in ['solitary', 'binary']:
         """
 
         # this is used for J1713  for the ecliptic parameters only
-        parLocJ1713Ecliptic = datadir + '/ppta_dr2_ephemerides/publish_collection_refit/dr2e/ecliptic/J1713+0747.kop_ecliptic.par'
+        parLocJ1713Ecliptic = datadir + '/ppta_dr2_ephemerides/publish_collection_refit/dr2e/ecliptic/J1713+0747.par'
         J1713EclipticParameters=readParFile.read_par(parLocJ1713Ecliptic)
 
 

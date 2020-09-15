@@ -8,7 +8,7 @@ dirstruct   :
                                 # Directory information
 
     projectdir  : '/Users/dreardon/Desktop/PTA_data/'
-                                # Primary project folder for storing 
+                                # Primary project folder for storing
                                 # inputs/outputs
 
     PTA_data_dir: 'PTA_DataReleases/'
@@ -16,11 +16,11 @@ dirstruct   :
                                 # from various PTA
 
     outdir      : 'outputs/'
-                                # Folder for saving figures, and is 
+                                # Folder for saving figures, and is
                                 # relative to the projectdir
-    
-    figdir      : 'figures/'    
-                                # Folder for saving figures, and is 
+
+    figdir      : 'figures/'
+                                # Folder for saving figures, and is
                                 # relative to the outdir
 
     PTA_dirinfo :
@@ -45,7 +45,7 @@ dirstruct   :
                                 # Information about NANOGrav 12.5-yr
                                 # narrowband data
 
-            PSRdir      : '/Users/dreardon/Desktop/PTA_data/PTA_DataReleases//NANOGrav_12yv3/narrowband/par/'
+            PSRdir      : '/Users/dreardon/Desktop/PTA_data/PTA_DataReleases/NANOGrav_12yv3/narrowband/par/'
                                 # Directory containing information about
                                 # the pulsars
 
@@ -70,127 +70,97 @@ dirstruct   :
             PSRdir      : '/Users/dreardon/Dropbox/Git/ppta_dr2_ephemerides/publish_collection_refit/dr2/ecliptic/'
                                 # Directory containing information about
                                 # the pulsars
+
+        PPTA-DR2    :
+                                # Information about PPTA DR2E data
+
+            PSRdir      : '/Users/dreardon/Dropbox/Git/ppta_dr2_ephemerides/final/tempo2/'
+                                # Directory containing information about
+                                # the pulsars
         PPTA-DR2E   :
-                                # Information about PPTA DR2E data refitted
+                                # Information about PPTA DR2E data
 
             PSRdir      : '/Users/dreardon/Dropbox/Git/ppta_dr2_ephemerides/publish_collection_refit/dr2e/ecliptic/'
                                 # Directory containing information about
                                 # the pulsars
 
-        PPTA-DR2    : 
-                                # Information about PPTA DR2 data best results from DR2O and DR2E
-
-            PSRdir      : '../final/tempo2/'
-                                # Directory containing information about
-                                # the pulsars
-
 ############## Comparison parameters ##############
-
 compareParms:
                                 # information relevant for comparison
-
     params      : ['PX', 'PMELAT', 'PMELONG']
                                 # List of parameters for which the
                                 # comparison is to be made
-                                
     derived_params: ['Dpsr_PX', 'Dpsr_Pbdot', 'psr_mass_parms']
                                 # List of derived parameters to plot
-
-    PTA         : ['EPTA-DR1',
-                   'NG-11yr',
-                   'NG-12.5yr-NB',
-                   'NG-12.5yr-WB',
-                   'PPTA-DR1',
-                   'PPTA-DR2O',
-                   'PPTA-DR2E',
-                   'PPTA-DR2'
+    PTA         : ['EPTA_DR1',
+                   'NG_11yr',
+                   'NG_12.5yr_NB',
+                   'NG_12.5yr_WB',
+                   'PPTA_DR1',
+                   'PPTA_DR2O',
+                   'PPTA_DR2E',
+                   'PPTA_DR2'
                   ]
                                 # The PTA's whose data are to be 
                                 # compared
-                                
-    ref_PTA     : 'PPTA-DR2'
+    ref_PTA     : 'PPTA_DR2'
                                 # The reference PTA to which other
                                 # PTA values will be normalized to
-
     'PX'        :
                                 # Parameters relevant for 'PX'
                                 # comparison and plots
-
-        plot_PTAs   : ['EPTA-DR1',
-                       'NG-12.5yr-NB',
-                       'PPTA-DR1',
-                       'PPTA-DR2O',
-                       'PPTA-DR2E',
-                       'PPTA-DR2'
+        plot_PTAs   : ['EPTA_DR1',
+                       'NG_12.5yr_NB',
+                       'PPTA_DR1',
+                       'PPTA_DR2O',
+                       'PPTA_DR2E',
+                       'PPTA_DR2'
                       ]
                                 # The PTA's whose data are to be 
                                 # plotted
-
     'PMELAT'    :
                                 # Parameters relevant for 'PMELAT'
                                 # comparison and plots
-
-        plot_PTAs   : ['EPTA-DR1',
-                       'NG-12.5yr-NB',
-                       'PPTA-DR1',
-                       'PPTA-DR2O',
-                       'PPTA-DR2E',
-                       'PPTA-DR2'
+        plot_PTAs   : ['EPTA_DR1',
+                       'NG_12.5yr_NB',
+                       'PPTA_DR1',
+                       'PPTA_DR2O',
+                       'PPTA_DR2E',
+                       'PPTA_DR2'
                       ]
                                 # The PTA's whose data are to be 
                                 # plotted
-
     'PMELONG'   :
                                 # Parameters relevant for 'PMELONG'
                                 # comparison and plots
-
-        plot_PTAs   : ['EPTA-DR1',
-                       'NG-12.5yr-NB',
-                       'PPTA-DR1',
-                       'PPTA-DR2O',
-                       'PPTA-DR2E',
-                       'PPTA-DR2'
+        plot_PTAs   : ['EPTA_DR1',
+                       'NG_12.5yr_NB',
+                       'PPTA_DR1',
+                       'PPTA_DR2O',
+                       'PPTA_DR2E',
+                       'PPTA_DR2'
                       ]
                                 # The PTA's whose data are to be 
                                 # plotted
-
     'Dpsr'      :
                                 # Parameters relevant for 'Dpsr_PX'
                                 # comparison and plots
-
-        plot_PTAs   : ['EPTA-DR1',
-                       'NG-12.5yr-NB',
-                       'PPTA-DR1',
-                       'PPTA-DR2O',
-                       'PPTA-DR2E',
-                       'PPTA-DR2'
+        plot_PTAs   : ['EPTA_DR1',
+                       'NG_12.5yr_NB',
+                       'PPTA_DR1',
+                       'PPTA_DR2O',
+                       'PPTA_DR2E',
+                       'PPTA_DR2'
                       ]
                                 # The PTA's whose data are to be 
                                 # plotted
-
     'psr_mass_parms':
                                 # Parameters relevant for 'Dpsr_Pbdot'
                                 # comparison and plots
-
-        plot_PTAs   : ['EPTA-DR1',
-                       'NG-12.5yr-NB',
-                       'PPTA-DR1',
-                       'PPTA-DR2'
+        plot_PTAs   : ['EPTA_DR1',
+                       'NG_12.5yr_NB',
+                       'PPTA_DR1',
+                       'PPTA_DR2'
                       ]
                                 # The PTA's whose data are to be 
                                 # plotted
-
-        spcl_psrs   : ['J1017-7156',
-                       'J1022+1001',
-                       'J1600-3053',
-                       'J1713+0747'
-                      ]
-                                # Special pulsar cases whose masses
-                                # are to be estimated using Xdot
-                                # and Omdot parameters
-
-        excl_psrs   : ['J2145-0750',
-                       'J1545-4550',
-                       'J1732-5049'
-                      ]
-                                # Exclude these pulsars from the plot

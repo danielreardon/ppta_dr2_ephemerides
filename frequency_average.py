@@ -51,15 +51,16 @@ def read_par(parfile):
         p_type = None
         sline = line.split()
         if len(sline) == 0 or line[0] == "#" or line[0:1] == "C " \
-           or sline[0] in ignore:
+           or sline[0] in ignore or sline[0][0:3].strip() == 'DMX':
             continue
 
-        param = sline[0]
+        param = sline[0].strip()
         if param == "E":
             param = "ECC"
 
-        if param[0:3] == 'TNE' or param[0:4] == 'JUMP':
-            param = sline[0] + '_' + sline[1] + '_' + sline[2]
+        if param[0:3] == 'TNE' or param[0:4] == 'JUMP' or \
+           param[0:3] == 'T2E' or param[0:3] == 'ECO':
+            param = sline[0] + '+' + sline[1] + '+' + sline[2]
             val = sline[3]
         else:
             val = sline[1]
@@ -218,37 +219,71 @@ def apply_efac_equad(params, errs, flag_vals, outfile=None):
 
         errs_new = sqrt( (TNEF*errs)**2 + TNEQ )
     """
-    # Apply EFACs first
+    # Apply TNEFACs first
     for key in params.keys():
         if "TNEF" in key and not ("ERR" in key or "TYPE" in key):
             efac = Decimal(params[key])  # efac value
-            group = '_'.join(key.split('_')[2:])
+            group = '_'.join(key.split('+')[2:])
 
             if outfile is not None:
                 with open(outfile, "a+") as f:
                     f.write('# Applied TNEF of {0} to {1} \n'.
                             format(round(efac, 3), group))
-            print('Applying EFAC of {0} to {1}'.format(round(efac, 3), group))
+            print('Applying TNEF of {0} to {1}'.format(round(efac, 3), group))
 
             inds = np.argwhere(flag_vals == group)
             errs[inds] *= efac
     print(" ")
 
-    # Now apply EQUADs
+    # Now apply TNEQUADs
     for key in params.keys():
         if "TNEQ" in key and not ("ERR" in key or "TYPE" in key):
             equad = Decimal(10**(params[key] + 6))  # equad value
-            group = '_'.join(key.split('_')[2:])
+            group = '_'.join(key.split('+')[2:])
 
             if outfile is not None:
                 with open(outfile, "a+") as f:
                     f.write('# Applied TNEQ of {0}us to {1}\n'.
                             format(round(equad, 3), group))
-            print('Applying EQUAD of {0}us to {1}'.format(round(equad, 3),
+            print('Applying TNEQ of {0}us to {1}'.format(round(equad, 3),
                   group))
 
             inds = np.argwhere(flag_vals == group)
             errs[inds] = np.sqrt(errs[inds]**2 + equad**2)
+    print(" ")
+
+    # Now apply T2EQUADs
+    for key in params.keys():
+        if "T2EQUAD" in key and not ("ERR" in key or "TYPE" in key):
+            equad = Decimal(params[key])  # equad value
+            group = '_'.join(key.split('+')[2:])
+
+            if outfile is not None:
+                with open(outfile, "a+") as f:
+                    f.write('# Applied T2EQUAD of {0}us to {1}\n'.
+                            format(round(equad, 3), group))
+            print('Applying T2EQUAD of {0}us to {1}'.format(round(equad, 3),
+                  group))
+
+            inds = np.argwhere(flag_vals == group)
+            errs[inds] = np.sqrt(errs[inds]**2 + equad**2)
+    print(" ")
+
+    # Now apply T2EFACs
+    for key in params.keys():
+        if "T2EFAC" in key and not ("ERR" in key or "TYPE" in key):
+            efac = Decimal(params[key])  # efac value
+            group = '_'.join(key.split('+')[2:])
+
+            if outfile is not None:
+                with open(outfile, "a+") as f:
+                    f.write('# Applied T2EFAC of {0} to {1} \n'.
+                            format(round(efac, 3), group))
+            print('Applying T2EFAC of {0} to {1}'.
+                  format(round(efac, 3), group))
+
+            inds = np.argwhere(flag_vals == group)
+            errs[inds] *= efac
     print(" ")
 
     if outfile is not None:
@@ -302,7 +337,6 @@ def apply_fd(params, toas, freqs, ref_freq=1000, plot=True, outfile=None):
         plt.xlabel('Frequency')
         plt.ylabel('FD correction (us)')
         plt.show()
-
     mx = round(max(correction), 3)
     mn = round(min(correction), 3)
     print("Correction ranges from {0}us to {1}us".format(mx, mn))
@@ -487,7 +521,8 @@ def apply_ecorr(params, errs, flag_vals, outfile=None):
     """
 
     for key in params.keys():
-        if "TNECORR" in key and not ("ERR" in key or "TYPE" in key):
+        if ("TNECORR" in key or 'ECORR' in key) and \
+          not ("ERR" in key or "TYPE" in key):
             ecorr = Decimal(params[key])  # equad value
             group = '_'.join(key.split('_')[2:])
 
@@ -541,6 +576,7 @@ def shift_turns(params, toas, files, plot=False):
 
     for file in np.unique(files):
         inds = np.argwhere(files == file).squeeze()
+        print(file)
         if np.size(np.array(inds)) > 1:
             dt = np.diff(toas[inds] - np.median(toas[inds]))
 
@@ -670,12 +706,15 @@ timfiles = [datadir + 'J0437/J0437-4715.dr2e.tim']
 #timfiles = sorted(glob.glob(datadir +
 #                  'final/tempo2/J1909*.tim'))
 
+parfiles = sorted(glob.glob('/Users/dreardon/Desktop/PTA_data/PTA_DataReleases/NANOGrav_12yv3/narrowband/par/*.par'))
+timfiles = sorted(glob.glob('/Users/dreardon/Desktop/PTA_data/PTA_DataReleases/NANOGrav_12yv3/narrowband/tim/*.tim'))
+
 for ii in range(0, len(timfiles)):
     parfile = parfiles[ii]
     timfile = timfiles[ii]
     print(parfile)
     print(timfile)
     average_timfile(parfile=parfile, timfile=timfile, outfile=None,
-                    fd_correct=True, fd_systems=False, white_flag='-group',
-                    fd_flag='-h', dm=None, fit_dm=True, plot=False,
+                    fd_correct=True, fd_systems=False, white_flag='-f',
+                    fd_flag='-h', dm=None, fit_dm=False, plot=False,
                     downweight=False)
