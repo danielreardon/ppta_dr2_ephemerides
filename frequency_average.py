@@ -666,9 +666,9 @@ datadir = '/Users/dreardon/Dropbox/Git/ppta_dr2_ephemerides/'
 #timfiles = [datadir + 'J0437/J0437-4715.tim']
 
 parfiles = sorted(glob.glob(datadir +
-                  'final/tempo2/*.par'))
+                  'final/tempo2/J1909*.par'))
 timfiles = sorted(glob.glob(datadir +
-                  'final/tempo2/*.tim'))
+                  'final/tempo2/J1909*.tim'))
 
 for ii in range(0, len(timfiles)):
     parfile = parfiles[ii]
