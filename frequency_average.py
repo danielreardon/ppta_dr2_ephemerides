@@ -662,13 +662,13 @@ def average_timfile(parfile, timfile, outfile=None, fd_correct=True,
 
 
 datadir = '/Users/dreardon/Dropbox/Git/ppta_dr2_ephemerides/'
-#parfiles = [datadir + 'J0437/new.dr2e.par']
-#timfiles = [datadir + 'J0437/J0437-4715.dr2e.tim']
+parfiles = [datadir + 'J0437/new.dr2.par']
+timfiles = [datadir + 'J0437/J0437-4715.tim']
 
-parfiles = sorted(glob.glob(datadir +
-                  'final/tempo2/*.par'))
-timfiles = sorted(glob.glob(datadir +
-                  'final/tempo2/*.tim'))
+#parfiles = sorted(glob.glob(datadir +
+#                  'final/tempo2/*.par'))
+#timfiles = sorted(glob.glob(datadir +
+#                  'final/tempo2/*.tim'))
 
 for ii in range(0, len(timfiles)):
     parfile = parfiles[ii]
