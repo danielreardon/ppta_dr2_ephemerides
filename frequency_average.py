@@ -129,7 +129,7 @@ def polynomial(params, x, y, w):
     return (y - model) * w
 
 
-def dm_model(params, freqs, toas, files, pars, w):
+def dm_model(params, freqs, toas, errs, files, pars, w):
     """
     Determine the best DM
     """
@@ -145,7 +145,7 @@ def dm_model(params, freqs, toas, files, pars, w):
         else:
             toas[inds] = 0
 
-    toas = shift_turns(pars, toas, files)
+    toas = shift_turns(pars, toas, errs, files)
 
     # convert to float array for lmfit
     toas = np.array([float(t) for t in toas]).squeeze()
@@ -566,9 +566,10 @@ def write_timfile(outfile, tim, files, freqs, toas, errs, flag_vals):
     return
 
 
-def shift_turns(params, toas, files, plot=False):
+def shift_turns(params, toas, errs, files, plot=False):
     """
-    For each group of sub-bands, shift TOAs to the same pulse number
+    For each group of sub-bands, shift TOAs to the same pulse number,
+        shifting towards the mean TOA of the observation
     """
 
     period_us = 10**6/Decimal(params['F0'])
@@ -576,24 +577,32 @@ def shift_turns(params, toas, files, plot=False):
 
     for file in np.unique(files):
         inds = np.argwhere(files == file).squeeze()
-        print(file)
         if np.size(np.array(inds)) > 1:
-            dt = np.diff(toas[inds] - np.median(toas[inds]))
+            toa_diff = toas[inds] - np.average(toas[inds],
+                           weights=1/errs[inds]**2)
+            dt = np.diff(toa_diff)
 
-            while np.any(dt > period_mjd/2):
+            while np.any(np.abs(dt) > period_mjd/2):
                 turns = np.zeros(np.shape(toas[inds]))
                 turns = np.array([Decimal(t) for t in turns]).squeeze()
-                turnind = np.argwhere(dt > period_mjd/2)
-                turns[turnind] += period_mjd
+                #turnind = np.argwhere(dt > period_mjd/4)
+                turnind = np.argmax(np.abs(toa_diff))
+                if toa_diff[turnind] < np.average(toa_diff,
+                                                  weights=1/errs[inds]**2):
+                    turns[turnind] += period_mjd
+                elif toa_diff[turnind] > np.average(toa_diff,
+                                                    weights=1/errs[inds]**2):
+                    turns[turnind] -= period_mjd
+                else:
+                    print("This shouldn't happen...")
+
                 toas[inds] += turns
-                dt = np.diff(toas[inds])
-            while np.any(dt < -period_mjd/2):
-                turns = np.zeros(np.shape(toas[inds]))
-                turns = np.array([Decimal(t) for t in turns]).squeeze()
-                turnind = np.argwhere(dt < -period_mjd/2)
-                turns[turnind] -= period_mjd
-                toas[inds] += turns
-                dt = np.diff(toas[inds])
+
+                toa_diff = toas[inds] - np.average(toas[inds],
+                                                   weights=1/errs[inds]**2)
+                dt = np.diff(toa_diff)
+
+
     return toas
 
 
@@ -647,7 +656,7 @@ def average_timfile(parfile, timfile, outfile=None, fd_correct=True,
         dm_params.add('dm', value=dm, vary=True,
                       min=-np.inf, max=np.inf)
         results = fitter(dm_model, dm_params,
-                         (freqs, toas, files, params, 1/errs), mcmc=False)
+                         (freqs, toas, errs, files, params, 1/errs), mcmc=False)
         dm = results.params['dm'].value
         print("Fitted DM".format(dm))
 
@@ -658,7 +667,7 @@ def average_timfile(parfile, timfile, outfile=None, fd_correct=True,
     # De-disperse
     toas = dedisperse(toas, freqs, params, plot=plot, dm=dm)
     # Shift TOAs by pulse period if needed
-    toas = shift_turns(params, toas, files, plot=plot)
+    toas = shift_turns(params, toas, errs, files, plot=plot)
 
     # Now remove all time-structure by subtracting mean TOA
     if plot:
@@ -701,13 +710,13 @@ datadir = '/Users/dreardon/Dropbox/Git/ppta_dr2_ephemerides/'
 parfiles = [datadir + 'J0437/J0437-4715.dr2e.par']
 timfiles = [datadir + 'J0437/J0437-4715.dr2e.tim']
 
-#parfiles = sorted(glob.glob(datadir +
-#                  'final/tempo2/J1909*.par'))
-#timfiles = sorted(glob.glob(datadir +
-#                  'final/tempo2/J1909*.tim'))
+parfiles = sorted(glob.glob(datadir +
+                  'final/tempo2/*.par'))
+timfiles = sorted(glob.glob(datadir +
+                  'final/tempo2/*.tim'))
 
-parfiles = sorted(glob.glob('/Users/dreardon/Desktop/PTA_data/PTA_DataReleases/NANOGrav_12yv3/narrowband/par/*.par'))
-timfiles = sorted(glob.glob('/Users/dreardon/Desktop/PTA_data/PTA_DataReleases/NANOGrav_12yv3/narrowband/tim/*.tim'))
+#parfiles = sorted(glob.glob('/Users/dreardon/Desktop/PTA_data/PTA_DataReleases/NANOGrav_12yv3/narrowband/par/*.par'))
+#timfiles = sorted(glob.glob('/Users/dreardon/Desktop/PTA_data/PTA_DataReleases/NANOGrav_12yv3/narrowband/tim/*.tim'))
 
 for ii in range(0, len(timfiles)):
     parfile = parfiles[ii]
@@ -716,5 +725,5 @@ for ii in range(0, len(timfiles)):
     print(timfile)
     average_timfile(parfile=parfile, timfile=timfile, outfile=None,
                     fd_correct=True, fd_systems=False, white_flag='-f',
-                    fd_flag='-h', dm=None, fit_dm=False, plot=False,
+                    fd_flag='-h', dm=None, fit_dm=False, plot=True,
                     downweight=False)

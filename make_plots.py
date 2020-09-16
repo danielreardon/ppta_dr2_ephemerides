@@ -438,33 +438,25 @@ alpha=0.8
 #    if '1125' in psr:
 #        plt.savefig('/Users/dreardon/Dropbox/Git/ppta_dr2_ephemerides/J1125_Shapiro.pdf')
 #    plt.show()
-<<<<<<< Updated upstream
 
     #plt.scatter(data_noshap[:, -1], data_noshap[:, 4]*10**6 - data[:, 4]*10**6)
     #plt.show()
-=======
 #
 #    #plt.scatter(data_noshap[:, -1], data_noshap[:, 4]*10**6 - data[:, 4]*10**6)
-#    #plt.show()
->>>>>>> Stashed changes
 
 
 """
 Make residual plots for each pulsar
 """
-#output_files = sorted(glob.glob('/Users/dreardon/Dropbox/Git/ppta_dr2_ephemerides/final/tempo2/*.out'))
-#par_files = sorted(glob.glob('/Users/dreardon/Dropbox/Git/ppta_dr2_ephemerides/final/tempo2/*.par'))
-<<<<<<< Updated upstream
-output_files = sorted(glob.glob('/Users/dreardon/Dropbox/Git/ppta_dr2_ephemerides/J0437/J0437-4715.dr2.fdjump.output'))
-par_files = sorted(glob.glob('/Users/dreardon/Dropbox/Git/ppta_dr2_ephemerides/J0437/new.dr2.par'))
-=======
-output_files = sorted(glob.glob('/Users/dreardon/Dropbox/Git/ppta_dr2_ephemerides/J0437/J0437-4715.dr2e.output'))
-par_files = sorted(glob.glob('/Users/dreardon/Dropbox/Git/ppta_dr2_ephemerides/J0437/new.dr2e.par'))
->>>>>>> Stashed changes
+output_files = sorted(glob.glob('/Users/dreardon/Dropbox/Git/ppta_dr2_ephemerides/final/tempo2/*.out'))
+par_files = sorted(glob.glob('/Users/dreardon/Dropbox/Git/ppta_dr2_ephemerides/final/tempo2/*.par'))
+#output_files = sorted(glob.glob('/Users/dreardon/Dropbox/Git/ppta_dr2_ephemerides/J0437/J0437-4715.dr2.fdjump.output'))
+#par_files = sorted(glob.glob('/Users/dreardon/Dropbox/Git/ppta_dr2_ephemerides/J0437/new.dr2.par'))
+
 
 dot_size = []
 dot_names = []
-for ii in range(0, len(output_files)):
+for ii in range(0, len(par_files)):
     outfile = output_files[ii]
     parfile = par_files[ii]
     # No Shapiro data for plotting
@@ -474,7 +466,7 @@ for ii in range(0, len(output_files)):
     except:
         continue
 
-    plt.subplots(3, 1, sharex=True, figsize=(12, 12))
+    plt.subplots(4, 1, sharex=True, figsize=(12, 16))
 
     psrname = outfile.split('/')[-1].split('.')[0].split('_')[0]
 
@@ -499,8 +491,40 @@ for ii in range(0, len(output_files)):
 
     zorder = np.array([0, 1, 2])
 
+
     xdata, ydata, new_errs, new_freqs = average_subbands(yrs, posttn, errs, freqs, files, parfile=parfile)
-    plt.subplot(3, 1, 3)
+    plt.subplot(4, 1, 4)
+    indicies_10 = np.argwhere(new_freqs > 2000)
+    wrms_10 = wrms(ydata[indicies_10], 1/new_errs[indicies_10]**2)
+    ad_10, dum, dum2 = stats.anderson(np.divide(ydata[indicies_10], new_errs[indicies_10]).squeeze())
+    indicies_20 = np.argwhere((new_freqs > 1000)*(new_freqs < 2000))
+    wrms_20 = wrms(ydata[indicies_20], 1/new_errs[indicies_20]**2)
+    ad_20, dum, dum2 = stats.anderson(np.divide(ydata[indicies_20], new_errs[indicies_20]).squeeze())
+    indicies_40 = np.argwhere(new_freqs < 1000)
+    wrms_40 = wrms(ydata[indicies_40], 1/new_errs[indicies_40]**2)
+    ad_40, dum, dum2 = stats.anderson(np.divide(ydata[indicies_40], new_errs[indicies_40]).squeeze())
+
+    zsort = np.argsort([-wrms_10, -wrms_20, -wrms_40])
+
+    plt.scatter(xdata[indicies_10], ydata[indicies_10]/new_errs[indicies_10], marker='.', alpha=alpha, zorder=np.argwhere(zsort==0), color='mediumblue')
+    plt.scatter(xdata[indicies_20], ydata[indicies_20]/new_errs[indicies_20], marker='.', alpha=alpha, zorder=np.argwhere(zsort==1), color='darkcyan')
+    plt.scatter(xdata[indicies_40], ydata[indicies_40]/new_errs[indicies_40], marker='.', alpha=alpha, zorder=np.argwhere(zsort==2), color='crimson')
+    yl = plt.ylim()
+    #plt.plot([0, 1], [0, 0], 'k')
+    leg_string = np.array([r'ADS\,$={0}$'.format(str(round_sig(ad_10))), r'ADS\,$={0}$'.format(str(round_sig(ad_20))),r'ADS\,$={0}$'.format(str(round_sig(ad_40)))])
+    plt.legend(leg_string, loc='upper left', framealpha=0.4, prop={'size': 17})
+    my = np.max(np.abs(yl))
+    plt.ylim((-my, my))
+    #plt.ylabel(r'Whitened,\\ \\ normalised residual ($\mu$\,s)')
+    plt.ylabel(r'Whitened,\\ \\ normalised residual')
+    plt.xlim((1993.8, 2018.7))
+    plt.xticks(ticks=[1994, 1996, 1998, 2000, 2002, 2004, 2006,2008,2010,2012,2014,2016,2018])
+    plt.xlabel(r'Year')
+    plt.grid()
+
+
+    xdata, ydata, new_errs, new_freqs = average_subbands(yrs, posttn, errs, freqs, files, parfile=parfile)
+    plt.subplot(4, 1, 3)
     indicies_10 = np.argwhere(new_freqs > 2000)
     wrms_10 = wrms(ydata[indicies_10], 1/new_errs[indicies_10]**2)
     indicies_20 = np.argwhere((new_freqs > 1000)*(new_freqs < 2000))
@@ -519,13 +543,15 @@ for ii in range(0, len(output_files)):
     plt.legend(leg_string, loc='upper left', framealpha=0.4, prop={'size': 17})
     plt.ylim(yl)
     plt.ylabel(r'Whitened residual ($\mu$\,s)')
+    #plt.ylabel(r'Whitened residual')
+    plt.tick_params(axis='x', which='both', labelbottom=False)
     plt.xlim((1993.8, 2018.7))
     plt.xticks(ticks=[1994, 1996, 1998, 2000, 2002, 2004, 2006,2008,2010,2012,2014,2016,2018])
-    plt.xlabel(r'Year')
+    #plt.xlabel(r'Year')
     plt.grid()
 
     xdata, ydata, new_errs, new_freqs = average_subbands(yrs, post, errs, freqs, files, parfile=parfile)
-    plt.subplot(3, 1, 1)
+    plt.subplot(4, 1, 1)
     indicies_10 = np.argwhere(new_freqs > 2000)
     wrms_10 = wrms(ydata[indicies_10], 1/new_errs[indicies_10]**2)
     indicies_20 = np.argwhere((new_freqs > 1000)*(new_freqs < 2000))
@@ -545,13 +571,14 @@ for ii in range(0, len(output_files)):
     plt.xlim((1993.8, 2018.7))
     plt.xticks(ticks=[1994, 1996, 1998, 2000, 2002, 2004, 2006,2008,2010,2012,2014,2016,2018])
     plt.ylabel(r'Post-fit residual ($\mu$\,s)')
+    #plt.ylabel(r'Post-fit residual')
     plt.tick_params(axis='x', which='both', labelbottom=False)
     leg_string = np.array([str(round_sig(wrms_10)) + r'$\,\mu\,$s', str(round_sig(wrms_20)) + r'$\,\mu\,$s',str(round_sig(wrms_40)) + r'$\,\mu\,$s'])
     plt.legend(leg_string, loc='upper left', framealpha=0.4, prop={'size': 17})
     plt.grid()
 
     xdata, ydata, new_errs, new_freqs = average_subbands(yrs, post-tndm-tnchrom - np.average(post-tndm-tnchrom, weights=1/errs**2), errs, freqs, files, parfile=parfile)
-    plt.subplot(3, 1, 2)
+    plt.subplot(4, 1, 2)
     indicies_10 = np.argwhere(new_freqs > 2000)
     wrms_10 = wrms(ydata[indicies_10], 1/new_errs[indicies_10]**2)
     indicies_20 = np.argwhere((new_freqs > 1000)*(new_freqs < 2000))
@@ -573,6 +600,7 @@ for ii in range(0, len(output_files)):
     plt.xlim((1993.8, 2018.7))
     plt.xticks(ticks=[1994, 1996, 1998, 2000, 2002, 2004, 2006,2008,2010,2012,2014,2016,2018])
     plt.ylabel(r'Post-fit residual\\ \\ $-$DM$(t)$ $-$CN$(t)$  ($\mu$\,s)')
+    #plt.ylabel(r'Post-fit residual\\ \\ $-$DM$(t)$ $-$CN$(t)$')
     #plt.xlabel('Orbital phase')
     plt.tick_params(axis='x', which='both', labelbottom=False)
     leg_string = np.array([str(round_sig(wrms_10)) + r'$\,\mu\,$s', str(round_sig(wrms_20)) + r'$\,\mu\,$s',str(round_sig(wrms_40)) + r'$\,\mu\,$s'])
@@ -580,6 +608,7 @@ for ii in range(0, len(output_files)):
     plt.grid()
 
     plt.tight_layout()
+    plt.subplots_adjust(hspace=0.05)
     plt.savefig('/Users/dreardon/Dropbox/Git/ppta_dr2_ephemerides/final/tempo2/output/' + psrname + '_res.pdf')
     plt.show()
 
