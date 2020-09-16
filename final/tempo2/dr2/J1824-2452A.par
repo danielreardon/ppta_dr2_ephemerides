@@ -22,7 +22,6 @@ TRES           28.344
 EPHVER         5                           
 NE_SW          8.4093772895745202934     1  0.62598242065123643751   
 CLK            TT(BIPM2018)
-CLK_CORR_CHAIN    pks2gps.dr2e.clk gps2utc.clk utc2tai.clk tai2tt_bipm2018.clk
 MODE 1
 UNITS          TCB
 TIMEEPH        IF99
