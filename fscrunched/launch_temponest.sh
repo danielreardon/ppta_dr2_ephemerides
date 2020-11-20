@@ -17,7 +17,7 @@ export LD_LIBRARY_PATH=/fred/oz002/rshannon/lib:$LD_LIBRARY_PATH
 export TEMPO2=/fred/oz002/rshannon/tempo2
 export TEMPO2_CLOCK_DIR=/home/dreardon/tempo2/clock
 
-srun /fred/oz002/rshannon/bin/tempo2 -gr temponest -f J1600-3053.par J1600-3053.selected.tim -cfile White-Red-DM.cfile
+srun /fred/oz002/rshannon/bin/tempo2 -gr temponest -f J1600-3053.averaged.par J1600-3053.averaged.tim -cfile White-Red-DM.cfile
 
 # White noise and Red noise and interesting model parameters
 # srun tempo2 -gr temponest -f data/dr2e/J0437-4715.dr2e.par data/dr2e/J0437-4715.dr2e.tim -cfile configs/White-Band-Group-DM-Model.cfile -nobs 35000

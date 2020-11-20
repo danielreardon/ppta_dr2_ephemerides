@@ -29,9 +29,11 @@ TZRFRQ         1312.1457503700000871
 TZRSITE        pks   
 KOM            219.33609565558757265     1  2.97239384597133060595   
 KIN            86.447346873965835397     1  0.00284417212330553013   
+DM_S1YR        0 1 
+DM_C1YR        0 1
 TRES           0.397        
 EPHVER         5                           
-NE_SW          4                           
+NE_SW          4       1                    
 CLK            TT(BIPM2018)
 CLK_CORR_CHAIN            pks2gps.dr2e.clk gps2utc.clk utc2tai.clk tai2tt_bipm2018.clk
 MODE 1
@@ -97,13 +99,13 @@ JUMP -f MULTI_cpsr2n 1.9598833598463e-06 1
 JUMP -f MULTI_cpsr2m 1.9233934430036e-06 1
 JUMP -f H-OH_cpsr2n 1.4436781223552e-06 1
 JUMP -f H-OH_cpsr2m 1.7412153979801e-06 1
-TNDMAmp -12.064
-TNDMGam 1.46852
-TNDMC 96
-TNRedAmp -14.7362
-TNRedGam 4.04806
-TNRedC 96
-TNBandNoise 0 1000 -13.4161 0.644725 96
-TNsubtractRed 1
-TNsubtractDM 1
+#TNDMAmp -12.064
+#TNDMGam 1.46852
+#TNDMC 96
+#TNRedAmp -14.7362
+#TNRedGam 4.04806
+#TNRedC 96
+#TNBandNoise 0 1000 -13.4161 0.644725 96
+#TNsubtractRed 1
+#TNsubtractDM 1
 DM_SERIES TAYLOR

@@ -1,0 +1,3030 @@
+/home/dreardon/.cshrc_tempo2_rms: line 1: setenv: command not found
+/home/dreardon/.cshrc_tempo2_rms: line 2: /apps/users/pulsar/skylake/scripts/uparrow.csh: No such file or directory
+/apps/skylake/software/core/anaconda3/5.1.0/etc/profile.d/conda.csh: line 1: setenv: command not found
+/apps/skylake/software/core/anaconda3/5.1.0/etc/profile.d/conda.csh: line 2: setenv: command not found
+/apps/skylake/software/core/anaconda3/5.1.0/etc/profile.d/conda.csh: line 30: syntax error near unexpected token `$1'
+/apps/skylake/software/core/anaconda3/5.1.0/etc/profile.d/conda.csh: line 30: `    switch ( $1 )'
+
+CommandNotFoundError: Your shell has not been properly configured to use 'conda activate'.
+If your shell is Bash or a Bourne variant, enable conda for the current user with
+
+    $ echo ". /apps/skylake/software/core/anaconda3/5.1.0/etc/profile.d/conda.sh" >> ~/.bashrc
+
+or, for all users, enable conda with
+
+    $ sudo ln -s /apps/skylake/software/core/anaconda3/5.1.0/etc/profile.d/conda.sh /etc/profile.d/conda.sh
+
+The options above will permanently enable the 'conda' command, but they do NOT
+put conda's base (root) environment on PATH.  To do so, run
+
+    $ conda activate
+
+in your terminal, or to put the base environment on PATH permanently, run
+
+    $ echo "conda activate" >> ~/.bashrc
+
+Previous to conda 4.4, the recommended way to activate conda was to modify PATH in
+your ~/.bashrc file.  You should manually remove the line that looks like
+
+    export PATH="/apps/skylake/software/core/anaconda3/5.1.0/bin:$PATH"
+
+^^^ The above line should NO LONGER be in your ~/.bashrc file! ^^^
+
+
+/fred/oz002/psrhome/scripts/psrhome_2019.csh: line 10: setenv: command not found
+/fred/oz002/psrhome/scripts/psrhome_2019.csh: line 11: setenv: command not found
+
+The following have been reloaded with a version change:
+  1) astropy/3.1.2-python-3.6.4 => astropy/2.0.3-python-2.7.14
+  2) numpy/1.16.3-python-3.6.4 => numpy/1.14.1-python-2.7.14
+  3) python/3.6.4 => python/2.7.14
+  4) scipy/1.3.0-python-3.6.4 => scipy/1.0.0-python-2.7.14
+  5) tempo2/cf86df0 => tempo2/b381f57
+
+/fred/oz002/psrhome/scripts/psrhome_2019.csh: line 21: setenv: command not found
+/fred/oz002/psrhome/scripts/psrhome_2019.csh: line 22: setenv: command not found
+/fred/oz002/psrhome/scripts/psrhome_2019.csh: line 23: setenv: command not found
+/fred/oz002/psrhome/scripts/psrhome_2019.csh: line 24: setenv: command not found
+/fred/oz002/psrhome/scripts/psrhome_2019.csh: line 25: setenv: command not found
+/fred/oz002/psrhome/scripts/psrhome_2019.csh: line 26: setenv: command not found
+/fred/oz002/psrhome/scripts/psrhome_2019.csh: line 31: alias: zz: not found
+/fred/oz002/psrhome/scripts/psrhome_2019.csh: line 31: alias: source /fred/oz002/psrhome/scripts/uparrow.csh: not found
+/fred/oz002/psrhome/scripts/psrhome_2019.csh: line 32: zz: command not found
+/fred/oz002/psrhome/scripts/psrhome_2019.csh: line 36: setenv: command not found
+/home/dreardon/.cshrc_tempo2_rms: line 8: alias: fred: not found
+/home/dreardon/.cshrc_tempo2_rms: line 8: alias: cd /fred/oz002/dreardon: not found
+/home/dreardon/.cshrc_tempo2_rms: line 9: alias: dr2: not found
+/home/dreardon/.cshrc_tempo2_rms: line 9: alias: cd /fred/oz002/dreardon/dr2_subband/enterprise: not found
+
+The following have been reloaded with a version change:
+  1) tempo2/b381f57 => tempo2/cf86df0
+
+
+The following have been reloaded with a version change:
+  1) numpy/1.14.1-python-2.7.14 => numpy/1.16.3-python-3.6.4
+  2) python/2.7.14 => python/3.6.4
+
+/home/dreardon/.cshrc_tempo2_rms: line 14: setenv: command not found
+/home/dreardon/.cshrc_tempo2_rms: line 15: setenv: command not found
+
+The following have been reloaded with a version change:
+  1) scipy/1.0.0-python-2.7.14 => scipy/1.3.0-python-3.6.4
+
+/home/dreardon/.cshrc_tempo2_rms: line 22: setenv: command not found
+
+The following have been reloaded with a version change:
+  1) astropy/2.0.3-python-2.7.14 => astropy/3.1.2-python-3.6.4
+
+/home/dreardon/.cshrc_tempo2_rms: line 25: setenv: command not found
+/home/dreardon/.cshrc_tempo2_rms: line 26: setenv: command not found
+/home/dreardon/.cshrc_tempo2_rms: line 27: setenv: command not found
+/home/dreardon/.cshrc_tempo2_rms: line 28: setenv: command not found
+/home/dreardon/.cshrc_tempo2_rms: line 29: alias: tempo2-rms: not found
+/home/dreardon/.cshrc_tempo2_rms: line 29: alias: /fred/oz002/rshannon/bin/tempo2: not found
+/home/dreardon/.cshrc_tempo2_rms: line 30: alias: tempo2: not found
+/home/dreardon/.cshrc_tempo2_rms: line 30: alias: tempo2-rms: not found
+/home/dreardon/.cshrc_tempo2_rms: line 31: alias: pipi: not found
+/home/dreardon/.cshrc_tempo2_rms: line 31: alias: `pip install --target': invalid alias name
+/home/dreardon/.cshrc_tempo2_rms: line 32: alias: nicer: not found
+/home/dreardon/.cshrc_tempo2_rms: line 32: alias: cd /fred/oz002/dreardon/Nicer_J0437: not found
+This program comes with ABSOLUTELY NO WARRANTY.
+This is free software, and you are welcome to redistribute it
+under conditions of GPL license.
+
+Looking for /fred/oz002/rshannon/tempo2/plugins//temponest_linux_64_plug.t2
+This program comes with ABSOLUTELY NO WARRANTY.
+This is free software, and you are welcome to redistribute it
+under conditions of GPL license.
+
+The start date/time is: Mon Oct  5 12:28:11 2020
+Using config filename: J1643-1224.cfile 
+[clkcorr.C:157] Note, using '/home/dreardon/tempo2/clock' to look for extra clock files
+[clkcorr.C:179] Loaded extra clock correction ao2gps.clk : UTC(AO) -> UTC(GPS) badness 1
+[clkcorr.C:179] Loaded extra clock correction ao2nist.clk : UTC(AO) -> UTC(NIST) badness 100
+[clkcorr.C:179] Loaded extra clock correction aus2utc.clk : UTC(AUS) -> UTC badness 1
+[clkcorr.C:179] Loaded extra clock correction ced2gps.clk : UTC(ced) -> UTC(GPS) badness 1
+[clkcorr.C:179] Loaded extra clock correction eff2gps.clk : UTC(EFF) -> UTC(GPS) badness 1
+[clkcorr.C:179] Loaded extra clock correction effix2gps.clk : UTC(EFFIX) -> UTC(GPS) badness 1
+[clkcorr.C:179] Loaded extra clock correction gb1402nist.clk : UTC(GB140) -> UTC(NIST) badness 1
+[clkcorr.C:179] Loaded extra clock correction gb8532nist.clk : UTC(GB853) -> UTC(NIST) badness 1
+[clkcorr.C:179] Loaded extra clock correction gbt2gps.clk : UTC(GBT) -> UTC(GPS) badness 1
+[clkcorr.C:179] Loaded extra clock correction gps2utc.clk : UTC(GPS) -> UTC badness 1
+[clkcorr.C:179] Loaded extra clock correction hob2gps.clk : UTC(hob) -> UTC(GPS) badness 1
+[clkcorr.C:179] Loaded extra clock correction jb2gps.clk : UTC(JBROACH) -> UTC(GPS) badness 1
+[clkcorr.C:179] Loaded extra clock correction jb422jb.clk : UTC(JB42) -> UTC(JBROACH) badness 1
+[clkcorr.C:179] Loaded extra clock correction jb422jbafb.clk : UTC(JB42) -> UTC(JBAFB) badness 1
+[clkcorr.C:179] Loaded extra clock correction jbafb2gps.clk : UTC(JBAFB) -> UTC(GPS) badness 1
+[clkcorr.C:179] Loaded extra clock correction jbafb2utc.clk : UTC(JBAFB) -> UTC badness 1
+[clkcorr.C:179] Loaded extra clock correction jbdfb2gps.clk : UTC(JBDFB) -> UTC(GPS) badness 1
+[clkcorr.C:179] Loaded extra clock correction jbdfb2jb.clk : UTC(JBDFB) -> UTC(JB) badness 1
+[clkcorr.C:179] Loaded extra clock correction jbm42gps.clk : UTC(JBM4) -> UTC(GPS) badness 1
+[clkcorr.C:179] Loaded extra clock correction jbmk22jb.clk : UTC(JBMK2) -> UTC(JB) badness 1
+[clkcorr.C:179] Loaded extra clock correction jbmk2dfb2jbdfb.clk : UTC(JBMK2DFB) -> UTC(JBDFB) badness 1
+[clkcorr.C:179] Loaded extra clock correction jbmk2roach2jbroach.clk : UTC(JBMK2ROACH) -> UTC(JBROACH) badness 1
+[clkcorr.C:179] Loaded extra clock correction jbroach2gps.clk : UTC(JBROACH) -> UTC(GPS) badness 1
+[clkcorr.C:179] Loaded extra clock correction jbroach2jb.clk : UTC(JBROACH) -> UTC(JB) badness 1
+[clkcorr.C:179] Loaded extra clock correction mk2utc.clk : UTC(meerkat) -> UTC badness 1
+[clkcorr.C:179] Loaded extra clock correction mk2utc_2019.clk : UTC(meerkat) -> UTC badness 1
+[clkcorr.C:179] Loaded extra clock correction mk_dummy.clk : UTC(meerkat) -> UTC badness 1e+03
+[clkcorr.C:179] Loaded extra clock correction mo2gps.clk : UTC(mo) -> UTC(GPS) badness 1
+[clkcorr.C:179] Loaded extra clock correction ncy2gps.clk : UTC(NCY) -> UTC(GPS) badness 1
+[clkcorr.C:179] Loaded extra clock correction ncy2obspm.clk : UTC(NCY) -> UTC(OP) badness 1
+[clkcorr.C:179] Loaded extra clock correction ncyobs2obspm.clk : UTC(NCYOBS) -> UTC(OP) badness 1
+[clkcorr.C:179] Loaded extra clock correction nist2tai.clk : TA(NIST) -> TAI badness 1
+[clkcorr.C:179] Loaded extra clock correction nist2tt_nist.clk : UTC(NIST) -> TT(UTC(NIST)) badness 1
+[clkcorr.C:179] Loaded extra clock correction nist2utc.clk : UTC(NIST) -> UTC badness 1
+[clkcorr.C:179] Loaded extra clock correction obspm2gps.clk : UTC(OP) -> UTC(GPS) badness 1
+[clkcorr.C:179] Loaded extra clock correction obspm2utc.clk : UTC(OP) -> UTC badness 1
+[clkcorr.C:179] Loaded extra clock correction pks2aus.clk : UTC(PKS) -> UTC(AUS) badness 100
+This program comes with ABSOLUTELY NO WARRANTY.
+This is free software, and you are welcome to redistribute it
+under conditions of GPL license.
+
+Looking for /fred/oz002/rshannon/tempo2/plugins//temponest_linux_64_plug.t2
+This program comes with ABSOLUTELY NO WARRANTY.
+This is free software, and you are welcome to redistribute it
+under conditions of GPL license.
+
+The start date/time is: Mon Oct  5 12:28:11 2020
+Using config filename: J1643-1224.cfile 
+[clkcorr.C:157] Note, using '/home/dreardon/tempo2/clock' to look for extra clock files
+[clkcorr.C:179] Loaded extra clock correction ao2gps.clk : UTC(AO) -> UTC(GPS) badness 1
+[clkcorr.C:179] Loaded extra clock correction ao2nist.clk : UTC(AO) -> UTC(NIST) badness 100
+[clkcorr.C:179] Loaded extra clock correction aus2utc.clk : UTC(AUS) -> UTC badness 1
+[clkcorr.C:179] Loaded extra clock correction ced2gps.clk : UTC(ced) -> UTC(GPS) badness 1
+[clkcorr.C:179] Loaded extra clock correction eff2gps.clk : UTC(EFF) -> UTC(GPS) badness 1
+[clkcorr.C:179] Loaded extra clock correction effix2gps.clk : UTC(EFFIX) -> UTC(GPS) badness 1
+[clkcorr.C:179] Loaded extra clock correction gb1402nist.clk : UTC(GB140) -> UTC(NIST) badness 1
+[clkcorr.C:179] Loaded extra clock correction gb8532nist.clk : UTC(GB853) -> UTC(NIST) badness 1
+[clkcorr.C:179] Loaded extra clock correction gbt2gps.clk : UTC(GBT) -> UTC(GPS) badness 1
+[clkcorr.C:179] Loaded extra clock correction gps2utc.clk : UTC(GPS) -> UTC badness 1
+[clkcorr.C:179] Loaded extra clock correction hob2gps.clk : UTC(hob) -> UTC(GPS) badness 1
+[clkcorr.C:179] Loaded extra clock correction jb2gps.clk : UTC(JBROACH) -> UTC(GPS) badness 1
+[clkcorr.C:179] Loaded extra clock correction jb422jb.clk : UTC(JB42) -> UTC(JBROACH) badness 1
+[clkcorr.C:179] Loaded extra clock correction jb422jbafb.clk : UTC(JB42) -> UTC(JBAFB) badness 1
+[clkcorr.C:179] Loaded extra clock correction jbafb2gps.clk : UTC(JBAFB) -> UTC(GPS) badness 1
+[clkcorr.C:179] Loaded extra clock correction jbafb2utc.clk : UTC(JBAFB) -> UTC badness 1
+[clkcorr.C:179] Loaded extra clock correction jbdfb2gps.clk : UTC(JBDFB) -> UTC(GPS) badness 1
+[clkcorr.C:179] Loaded extra clock correction jbdfb2jb.clk : UTC(JBDFB) -> UTC(JB) badness 1
+[clkcorr.C:179] Loaded extra clock correction jbm42gps.clk : UTC(JBM4) -> UTC(GPS) badness 1
+[clkcorr.C:179] Loaded extra clock correction jbmk22jb.clk : UTC(JBMK2) -> UTC(JB) badness 1
+[clkcorr.C:179] Loaded extra clock correction jbmk2dfb2jbdfb.clk : UTC(JBMK2DFB) -> UTC(JBDFB) badness 1
+[clkcorr.C:179] Loaded extra clock correction jbmk2roach2jbroach.clk : UTC(JBMK2ROACH) -> UTC(JBROACH) badness 1
+[clkcorr.C:179] Loaded extra clock correction jbroach2gps.clk : UTC(JBROACH) -> UTC(GPS) badness 1
+[clkcorr.C:179] Loaded extra clock correction jbroach2jb.clk : UTC(JBROACH) -> UTC(JB) badness 1
+[clkcorr.C:179] Loaded extra clock correction mk2utc.clk : UTC(meerkat) -> UTC badness 1
+[clkcorr.C:179] Loaded extra clock correction mk2utc_2019.clk : UTC(meerkat) -> UTC badness 1
+[clkcorr.C:179] Loaded extra clock correction mk_dummy.clk : UTC(meerkat) -> UTC badness 1e+03
+[clkcorr.C:179] Loaded extra clock correction mo2gps.clk : UTC(mo) -> UTC(GPS) badness 1
+[clkcorr.C:179] Loaded extra clock correction ncy2gps.clk : UTC(NCY) -> UTC(GPS) badness 1
+[clkcorr.C:179] Loaded extra clock correction ncy2obspm.clk : UTC(NCY) -> UTC(OP) badness 1
+[clkcorr.C:179] Loaded extra clock correction ncyobs2obspm.clk : UTC(NCYOBS) -> UTC(OP) badness 1
+[clkcorr.C:179] Loaded extra clock correction nist2tai.clk : TA(NIST) -> TAI badness 1
+[clkcorr.C:179] Loaded extra clock correction nist2tt_nist.clk : UTC(NIST) -> TT(UTC(NIST)) badness 1
+[clkcorr.C:179] Loaded extra clock correction nist2utc.clk : UTC(NIST) -> UTC badness 1
+[clkcorr.C:179] Loaded extra clock correction obspm2gps.clk : UTC(OP) -> UTC(GPS) badness 1
+[clkcorr.C:179] Loaded extra clock correction obspm2utc.clk : UTC(OP) -> UTC badness 1
+[clkcorr.C:179] Loaded extra clock correction pks2aus.clk : UTC(PKS) -> UTC(AUS) badness 100
+This program comes with ABSOLUTELY NO WARRANTY.
+This is free software, and you are welcome to redistribute it
+under conditions of GPL license.
+
+Looking for /fred/oz002/rshannon/tempo2/plugins//temponest_linux_64_plug.t2
+This program comes with ABSOLUTELY NO WARRANTY.
+This is free software, and you are welcome to redistribute it
+under conditions of GPL license.
+
+The start date/time is: Mon Oct  5 12:28:11 2020
+Using config filename: J1643-1224.cfile 
+[clkcorr.C:157] Note, using '/home/dreardon/tempo2/clock' to look for extra clock files
+[clkcorr.C:179] Loaded extra clock correction ao2gps.clk : UTC(AO) -> UTC(GPS) badness 1
+[clkcorr.C:179] Loaded extra clock correction ao2nist.clk : UTC(AO) -> UTC(NIST) badness 100
+[clkcorr.C:179] Loaded extra clock correction aus2utc.clk : UTC(AUS) -> UTC badness 1
+[clkcorr.C:179] Loaded extra clock correction ced2gps.clk : UTC(ced) -> UTC(GPS) badness 1
+[clkcorr.C:179] Loaded extra clock correction eff2gps.clk : UTC(EFF) -> UTC(GPS) badness 1
+[clkcorr.C:179] Loaded extra clock correction effix2gps.clk : UTC(EFFIX) -> UTC(GPS) badness 1
+[clkcorr.C:179] Loaded extra clock correction gb1402nist.clk : UTC(GB140) -> UTC(NIST) badness 1
+[clkcorr.C:179] Loaded extra clock correction gb8532nist.clk : UTC(GB853) -> UTC(NIST) badness 1
+[clkcorr.C:179] Loaded extra clock correction gbt2gps.clk : UTC(GBT) -> UTC(GPS) badness 1
+[clkcorr.C:179] Loaded extra clock correction gps2utc.clk : UTC(GPS) -> UTC badness 1
+[clkcorr.C:179] Loaded extra clock correction hob2gps.clk : UTC(hob) -> UTC(GPS) badness 1
+[clkcorr.C:179] Loaded extra clock correction jb2gps.clk : UTC(JBROACH) -> UTC(GPS) badness 1
+[clkcorr.C:179] Loaded extra clock correction jb422jb.clk : UTC(JB42) -> UTC(JBROACH) badness 1
+[clkcorr.C:179] Loaded extra clock correction jb422jbafb.clk : UTC(JB42) -> UTC(JBAFB) badness 1
+[clkcorr.C:179] Loaded extra clock correction jbafb2gps.clk : UTC(JBAFB) -> UTC(GPS) badness 1
+[clkcorr.C:179] Loaded extra clock correction jbafb2utc.clk : UTC(JBAFB) -> UTC badness 1
+[clkcorr.C:179] Loaded extra clock correction jbdfb2gps.clk : UTC(JBDFB) -> UTC(GPS) badness 1
+[clkcorr.C:179] Loaded extra clock correction jbdfb2jb.clk : UTC(JBDFB) -> UTC(JB) badness 1
+[clkcorr.C:179] Loaded extra clock correction jbm42gps.clk : UTC(JBM4) -> UTC(GPS) badness 1
+[clkcorr.C:179] Loaded extra clock correction jbmk22jb.clk : UTC(JBMK2) -> UTC(JB) badness 1
+[clkcorr.C:179] Loaded extra clock correction jbmk2dfb2jbdfb.clk : UTC(JBMK2DFB) -> UTC(JBDFB) badness 1
+[clkcorr.C:179] Loaded extra clock correction jbmk2roach2jbroach.clk : UTC(JBMK2ROACH) -> UTC(JBROACH) badness 1
+[clkcorr.C:179] Loaded extra clock correction jbroach2gps.clk : UTC(JBROACH) -> UTC(GPS) badness 1
+[clkcorr.C:179] Loaded extra clock correction jbroach2jb.clk : UTC(JBROACH) -> UTC(JB) badness 1
+[clkcorr.C:179] Loaded extra clock correction mk2utc.clk : UTC(meerkat) -> UTC badness 1
+[clkcorr.C:179] Loaded extra clock correction mk2utc_2019.clk : UTC(meerkat) -> UTC badness 1
+[clkcorr.C:179] Loaded extra clock correction mk_dummy.clk : UTC(meerkat) -> UTC badness 1e+03
+[clkcorr.C:179] Loaded extra clock correction mo2gps.clk : UTC(mo) -> UTC(GPS) badness 1
+[clkcorr.C:179] Loaded extra clock correction ncy2gps.clk : UTC(NCY) -> UTC(GPS) badness 1
+[clkcorr.C:179] Loaded extra clock correction ncy2obspm.clk : UTC(NCY) -> UTC(OP) badness 1
+[clkcorr.C:179] Loaded extra clock correction ncyobs2obspm.clk : UTC(NCYOBS) -> UTC(OP) badness 1
+[clkcorr.C:179] Loaded extra clock correction nist2tai.clk : TA(NIST) -> TAI badness 1
+[clkcorr.C:179] Loaded extra clock correction nist2tt_nist.clk : UTC(NIST) -> TT(UTC(NIST)) badness 1
+[clkcorr.C:179] Loaded extra clock correction nist2utc.clk : UTC(NIST) -> UTC badness 1
+[clkcorr.C:179] Loaded extra clock correction obspm2gps.clk : UTC(OP) -> UTC(GPS) badness 1
+[clkcorr.C:179] Loaded extra clock correction obspm2utc.clk : UTC(OP) -> UTC badness 1
+[clkcorr.C:179] Loaded extra clock correction pks2aus.clk : UTC(PKS) -> UTC(AUS) badness 100
+This program comes with ABSOLUTELY NO WARRANTY.
+This is free software, and you are welcome to redistribute it
+under conditions of GPL license.
+
+Looking for /fred/oz002/rshannon/tempo2/plugins//temponest_linux_64_plug.t2
+This program comes with ABSOLUTELY NO WARRANTY.
+This is free software, and you are welcome to redistribute it
+under conditions of GPL license.
+
+The start date/time is: Mon Oct  5 12:28:11 2020
+Using config filename: J1643-1224.cfile 
+[clkcorr.C:157] Note, using '/home/dreardon/tempo2/clock' to look for extra clock files
+[clkcorr.C:179] Loaded extra clock correction ao2gps.clk : UTC(AO) -> UTC(GPS) badness 1
+[clkcorr.C:179] Loaded extra clock correction ao2nist.clk : UTC(AO) -> UTC(NIST) badness 100
+[clkcorr.C:179] Loaded extra clock correction aus2utc.clk : UTC(AUS) -> UTC badness 1
+[clkcorr.C:179] Loaded extra clock correction ced2gps.clk : UTC(ced) -> UTC(GPS) badness 1
+[clkcorr.C:179] Loaded extra clock correction eff2gps.clk : UTC(EFF) -> UTC(GPS) badness 1
+[clkcorr.C:179] Loaded extra clock correction effix2gps.clk : UTC(EFFIX) -> UTC(GPS) badness 1
+[clkcorr.C:179] Loaded extra clock correction gb1402nist.clk : UTC(GB140) -> UTC(NIST) badness 1
+[clkcorr.C:179] Loaded extra clock correction gb8532nist.clk : UTC(GB853) -> UTC(NIST) badness 1
+[clkcorr.C:179] Loaded extra clock correction gbt2gps.clk : UTC(GBT) -> UTC(GPS) badness 1
+[clkcorr.C:179] Loaded extra clock correction gps2utc.clk : UTC(GPS) -> UTC badness 1
+[clkcorr.C:179] Loaded extra clock correction hob2gps.clk : UTC(hob) -> UTC(GPS) badness 1
+[clkcorr.C:179] Loaded extra clock correction jb2gps.clk : UTC(JBROACH) -> UTC(GPS) badness 1
+[clkcorr.C:179] Loaded extra clock correction jb422jb.clk : UTC(JB42) -> UTC(JBROACH) badness 1
+[clkcorr.C:179] Loaded extra clock correction jb422jbafb.clk : UTC(JB42) -> UTC(JBAFB) badness 1
+[clkcorr.C:179] Loaded extra clock correction jbafb2gps.clk : UTC(JBAFB) -> UTC(GPS) badness 1
+[clkcorr.C:179] Loaded extra clock correction jbafb2utc.clk : UTC(JBAFB) -> UTC badness 1
+[clkcorr.C:179] Loaded extra clock correction jbdfb2gps.clk : UTC(JBDFB) -> UTC(GPS) badness 1
+[clkcorr.C:179] Loaded extra clock correction jbdfb2jb.clk : UTC(JBDFB) -> UTC(JB) badness 1
+[clkcorr.C:179] Loaded extra clock correction jbm42gps.clk : UTC(JBM4) -> UTC(GPS) badness 1
+[clkcorr.C:179] Loaded extra clock correction jbmk22jb.clk : UTC(JBMK2) -> UTC(JB) badness 1
+[clkcorr.C:179] Loaded extra clock correction jbmk2dfb2jbdfb.clk : UTC(JBMK2DFB) -> UTC(JBDFB) badness 1
+[clkcorr.C:179] Loaded extra clock correction jbmk2roach2jbroach.clk : UTC(JBMK2ROACH) -> UTC(JBROACH) badness 1
+[clkcorr.C:179] Loaded extra clock correction jbroach2gps.clk : UTC(JBROACH) -> UTC(GPS) badness 1
+[clkcorr.C:179] Loaded extra clock correction jbroach2jb.clk : UTC(JBROACH) -> UTC(JB) badness 1
+[clkcorr.C:179] Loaded extra clock correction mk2utc.clk : UTC(meerkat) -> UTC badness 1
+[clkcorr.C:179] Loaded extra clock correction mk2utc_2019.clk : UTC(meerkat) -> UTC badness 1
+[clkcorr.C:179] Loaded extra clock correction mk_dummy.clk : UTC(meerkat) -> UTC badness 1e+03
+[clkcorr.C:179] Loaded extra clock correction mo2gps.clk : UTC(mo) -> UTC(GPS) badness 1
+[clkcorr.C:179] Loaded extra clock correction ncy2gps.clk : UTC(NCY) -> UTC(GPS) badness 1
+[clkcorr.C:179] Loaded extra clock correction ncy2obspm.clk : UTC(NCY) -> UTC(OP) badness 1
+[clkcorr.C:179] Loaded extra clock correction ncyobs2obspm.clk : UTC(NCYOBS) -> UTC(OP) badness 1
+[clkcorr.C:179] Loaded extra clock correction nist2tai.clk : TA(NIST) -> TAI badness 1
+[clkcorr.C:179] Loaded extra clock correction nist2tt_nist.clk : UTC(NIST) -> TT(UTC(NIST)) badness 1
+[clkcorr.C:179] Loaded extra clock correction nist2utc.clk : UTC(NIST) -> UTC badness 1
+[clkcorr.C:179] Loaded extra clock correction obspm2gps.clk : UTC(OP) -> UTC(GPS) badness 1
+[clkcorr.C:179] Loaded extra clock correction obspm2utc.clk : UTC(OP) -> UTC badness 1
+[clkcorr.C:179] Loaded extra clock correction pks2aus.clk : UTC(PKS) -> UTC(AUS) badness 100
+[clkcorr.C:179] Loaded extra clock correction pks2gps.clk : UTC(PKS) -> UTC(GPS) badness 1
+[clkcorr.C:179] Loaded extra clock correction pks2gps.dr2e.clk : UTC(PKS) -> UTC(GPS) badness 1e+03
+[clkcorr.C:179] Loaded extra clock correction pks2tid.clk : UTC(PKS) -> UTC(TID) badness 1
+[clkcorr.C:179] Loaded extra clock correction pks2tt_toasim.clk : UTC(PKS) -> TT(TOASIM) badness 1e+03
+[clkcorr.C:179] Loaded extra clock correction ptb2tai.clk : TA(PTB) -> TAI badness 1
+[clkcorr.C:179] Loaded extra clock correction tai2tt_bipm01.clk : TAI -> TT(BIPM01) badness 1
+[clkcorr.C:179] Loaded extra clock correction tai2tt_bipm05.clk : TAI -> TT(BIPM2005) badness 1
+[clkcorr.C:179] Loaded extra clock correction tai2tt_bipm06.clk : TAI -> TT(BIPM2006) badness 1
+[clkcorr.C:179] Loaded extra clock correction tai2tt_bipm2003.clk : TAI -> TT(BIPM2003) badness 1
+[clkcorr.C:179] Loaded extra clock correction tai2tt_bipm2004.clk : TAI -> TT(BIPM2004) badness 1
+[clkcorr.C:179] Loaded extra clock correction tai2tt_bipm2004ext.clk : TAI -> TT(BIPM2004ext) badness 1
+[clkcorr.C:179] Loaded extra clock correction tai2tt_bipm2010.clk : TAI -> TT(BIPM2010) badness 1
+[clkcorr.C:179] Loaded extra clock correction tai2tt_bipm2011.clk : TAI -> TT(BIPM2011) badness 1
+[clkcorr.C:179] Loaded extra clock correction tai2tt_bipm2012.clk : TAI -> TT(BIPM2012) badness 1
+[clkcorr.C:179] Loaded extra clock correction tai2tt_bipm2013.clk : TAI -> TT(BIPM2013) badness 1
+[clkcorr.C:179] Loaded extra clock correction tai2tt_bipm2014.clk : TAI -> TT(BIPM2014) badness 1
+[clkcorr.C:179] Loaded extra clock correction tai2tt_bipm2015.clk : TAI -> TT(BIPM2015) badness 1
+[clkcorr.C:179] Loaded extra clock correction tai2tt_bipm2016.clk : TAI -> TT(BIPM2016) badness 1
+[clkcorr.C:179] Loaded extra clock correction tai2tt_bipm2017.clk : TAI -> TT(BIPM2017) badness 1
+[clkcorr.C:179] Loaded extra clock correction tai2tt_bipm92.clk : TAI -> TT(BIPM92) badness 1
+[clkcorr.C:179] Loaded extra clock correction tai2tt_tai.clk : TAI -> TT(TAI) badness 1
+[clkcorr.C:179] Loaded extra clock correction tid2nist.clk : UTC(TID) -> UTC(NIST) badness 1
+[clkcorr.C:179] Loaded extra clock correction utc2tai.clk : UTC -> TAI badness 1
+[clkcorr.C:179] Loaded extra clock correction utc2ut1.clk : UTC -> UT1 badness 1
+[clkcorr.C:179] Loaded extra clock correction vla2nist.clk : UTC(VLA) -> UTC(NIST) badness 1
+[clkcorr.C:179] Loaded extra clock correction wsrt2gps.clk : UTC(wsrt) -> UTC(GPS) badness 1
+[tempo2Util.C:396] Warning: [TIM1] Please place MODE flags in the parameter file 
+Updating TOA errors using TN parameters.
+PEP 1 
+Fitting for 0 group noise terms, and for 0 groups, 0 Times 
+Fitting for 1 band noise terms 
+[tempo2Util.C:397] [TROP2] Assume standard atmospheric pressure (no data) for site pks at MJD 53042.8
+[tempo2Util.C:397] [TROP1] Assume zero zenith wet delay (no data) for site pks  at MJD 53042.8
+[tempo2Util.C:401] Warning: [DUP1] duplicated warnings have been suppressed.
+making freqs 0 1
+making freqs 1 2
+making freqs 2 3
+making freqs 3 4
+making freqs 4 5
+making freqs 5 6
+making freqs 6 7
+making freqs 7 8
+making freqs 8 9
+making freqs 9 10
+making freqs 10 11
+making freqs 11 12
+making freqs 12 13
+making freqs 13 14
+making freqs 14 15
+making freqs 15 16
+making freqs 16 17
+making freqs 17 18
+making freqs 18 19
+making freqs 19 20
+making freqs 20 21
+making freqs 21 22
+making freqs 22 23
+making freqs 23 24
+making freqs 24 25
+making freqs 25 26
+making freqs 26 27
+making freqs 27 28
+making freqs 28 29
+making freqs 29 30
+making freqs 30 31
+making freqs 31 32
+making freqs 32 33
+making freqs 33 34
+making freqs 34 35
+making freqs 35 36
+making freqs 36 37
+making freqs 37 38
+making freqs 38 39
+making freqs 39 40
+making freqs 40 41
+making freqs 41 42
+making freqs 42 43
+making freqs 43 44
+making freqs 44 45
+making freqs 45 46
+making freqs 46 47
+making freqs 47 48
+making freqs 48 49
+making freqs 49 50
+making freqs 50 51
+making freqs 51 52
+making freqs 52 53
+making freqs 53 54
+making freqs 54 55
+making freqs 55 56
+making freqs 56 57
+making freqs 57 58
+making freqs 58 59
+making freqs 59 60
+making freqs 60 61
+making freqs 61 62
+making freqs 62 63
+making freqs 63 64
+making freqs 64 65
+[clkcorr.C:179] Loaded extra clock correction pks2gps.clk : UTC(PKS) -> UTC(GPS) badness 1
+[clkcorr.C:179] Loaded extra clock correction pks2gps.dr2e.clk : UTC(PKS) -> UTC(GPS) badness 1e+03
+[clkcorr.C:179] Loaded extra clock correction pks2tid.clk : UTC(PKS) -> UTC(TID) badness 1
+[clkcorr.C:179] Loaded extra clock correction pks2tt_toasim.clk : UTC(PKS) -> TT(TOASIM) badness 1e+03
+[clkcorr.C:179] Loaded extra clock correction ptb2tai.clk : TA(PTB) -> TAI badness 1
+[clkcorr.C:179] Loaded extra clock correction tai2tt_bipm01.clk : TAI -> TT(BIPM01) badness 1
+[clkcorr.C:179] Loaded extra clock correction tai2tt_bipm05.clk : TAI -> TT(BIPM2005) badness 1
+[clkcorr.C:179] Loaded extra clock correction tai2tt_bipm06.clk : TAI -> TT(BIPM2006) badness 1
+[clkcorr.C:179] Loaded extra clock correction tai2tt_bipm2003.clk : TAI -> TT(BIPM2003) badness 1
+[clkcorr.C:179] Loaded extra clock correction tai2tt_bipm2004.clk : TAI -> TT(BIPM2004) badness 1
+[clkcorr.C:179] Loaded extra clock correction tai2tt_bipm2004ext.clk : TAI -> TT(BIPM2004ext) badness 1
+[clkcorr.C:179] Loaded extra clock correction tai2tt_bipm2010.clk : TAI -> TT(BIPM2010) badness 1
+[clkcorr.C:179] Loaded extra clock correction tai2tt_bipm2011.clk : TAI -> TT(BIPM2011) badness 1
+[clkcorr.C:179] Loaded extra clock correction tai2tt_bipm2012.clk : TAI -> TT(BIPM2012) badness 1
+[clkcorr.C:179] Loaded extra clock correction tai2tt_bipm2013.clk : TAI -> TT(BIPM2013) badness 1
+[clkcorr.C:179] Loaded extra clock correction tai2tt_bipm2014.clk : TAI -> TT(BIPM2014) badness 1
+[clkcorr.C:179] Loaded extra clock correction tai2tt_bipm2015.clk : TAI -> TT(BIPM2015) badness 1
+[clkcorr.C:179] Loaded extra clock correction tai2tt_bipm2016.clk : TAI -> TT(BIPM2016) badness 1
+[clkcorr.C:179] Loaded extra clock correction tai2tt_bipm2017.clk : TAI -> TT(BIPM2017) badness 1
+[clkcorr.C:179] Loaded extra clock correction tai2tt_bipm92.clk : TAI -> TT(BIPM92) badness 1
+[clkcorr.C:179] Loaded extra clock correction tai2tt_tai.clk : TAI -> TT(TAI) badness 1
+[clkcorr.C:179] Loaded extra clock correction tid2nist.clk : UTC(TID) -> UTC(NIST) badness 1
+[clkcorr.C:179] Loaded extra clock correction utc2tai.clk : UTC -> TAI badness 1
+[clkcorr.C:179] Loaded extra clock correction utc2ut1.clk : UTC -> UT1 badness 1
+[clkcorr.C:179] Loaded extra clock correction vla2nist.clk : UTC(VLA) -> UTC(NIST) badness 1
+[clkcorr.C:179] Loaded extra clock correction wsrt2gps.clk : UTC(wsrt) -> UTC(GPS) badness 1
+[tempo2Util.C:396] Warning: [TIM1] Please place MODE flags in the parameter file 
+Updating TOA errors using TN parameters.
+PEP 1 
+Fitting for 0 group noise terms, and for 0 groups, 0 Times 
+Fitting for 1 band noise terms 
+[tempo2Util.C:397] [TROP2] Assume standard atmospheric pressure (no data) for site pks at MJD 53042.8
+[tempo2Util.C:397] [TROP1] Assume zero zenith wet delay (no data) for site pks  at MJD 53042.8
+[tempo2Util.C:401] Warning: [DUP1] duplicated warnings have been suppressed.
+making freqs 0 1
+making freqs 1 2
+making freqs 2 3
+making freqs 3 4
+making freqs 4 5
+making freqs 5 6
+making freqs 6 7
+making freqs 7 8
+making freqs 8 9
+making freqs 9 10
+making freqs 10 11
+making freqs 11 12
+making freqs 12 13
+making freqs 13 14
+making freqs 14 15
+making freqs 15 16
+making freqs 16 17
+making freqs 17 18
+making freqs 18 19
+making freqs 19 20
+making freqs 20 21
+making freqs 21 22
+making freqs 22 23
+making freqs 23 24
+making freqs 24 25
+making freqs 25 26
+making freqs 26 27
+making freqs 27 28
+making freqs 28 29
+making freqs 29 30
+making freqs 30 31
+making freqs 31 32
+making freqs 32 33
+making freqs 33 34
+making freqs 34 35
+making freqs 35 36
+making freqs 36 37
+making freqs 37 38
+making freqs 38 39
+making freqs 39 40
+making freqs 40 41
+making freqs 41 42
+making freqs 42 43
+making freqs 43 44
+making freqs 44 45
+making freqs 45 46
+making freqs 46 47
+making freqs 47 48
+making freqs 48 49
+making freqs 49 50
+making freqs 50 51
+making freqs 51 52
+making freqs 52 53
+making freqs 53 54
+making freqs 54 55
+making freqs 55 56
+making freqs 56 57
+making freqs 57 58
+making freqs 58 59
+making freqs 59 60
+making freqs 60 61
+making freqs 61 62
+making freqs 62 63
+making freqs 63 64
+making freqs 64 65
+[clkcorr.C:179] Loaded extra clock correction pks2gps.clk : UTC(PKS) -> UTC(GPS) badness 1
+[clkcorr.C:179] Loaded extra clock correction pks2gps.dr2e.clk : UTC(PKS) -> UTC(GPS) badness 1e+03
+[clkcorr.C:179] Loaded extra clock correction pks2tid.clk : UTC(PKS) -> UTC(TID) badness 1
+[clkcorr.C:179] Loaded extra clock correction pks2tt_toasim.clk : UTC(PKS) -> TT(TOASIM) badness 1e+03
+[clkcorr.C:179] Loaded extra clock correction ptb2tai.clk : TA(PTB) -> TAI badness 1
+[clkcorr.C:179] Loaded extra clock correction tai2tt_bipm01.clk : TAI -> TT(BIPM01) badness 1
+[clkcorr.C:179] Loaded extra clock correction tai2tt_bipm05.clk : TAI -> TT(BIPM2005) badness 1
+[clkcorr.C:179] Loaded extra clock correction tai2tt_bipm06.clk : TAI -> TT(BIPM2006) badness 1
+[clkcorr.C:179] Loaded extra clock correction tai2tt_bipm2003.clk : TAI -> TT(BIPM2003) badness 1
+[clkcorr.C:179] Loaded extra clock correction tai2tt_bipm2004.clk : TAI -> TT(BIPM2004) badness 1
+[clkcorr.C:179] Loaded extra clock correction tai2tt_bipm2004ext.clk : TAI -> TT(BIPM2004ext) badness 1
+[clkcorr.C:179] Loaded extra clock correction tai2tt_bipm2010.clk : TAI -> TT(BIPM2010) badness 1
+[clkcorr.C:179] Loaded extra clock correction tai2tt_bipm2011.clk : TAI -> TT(BIPM2011) badness 1
+[clkcorr.C:179] Loaded extra clock correction tai2tt_bipm2012.clk : TAI -> TT(BIPM2012) badness 1
+[clkcorr.C:179] Loaded extra clock correction tai2tt_bipm2013.clk : TAI -> TT(BIPM2013) badness 1
+[clkcorr.C:179] Loaded extra clock correction tai2tt_bipm2014.clk : TAI -> TT(BIPM2014) badness 1
+[clkcorr.C:179] Loaded extra clock correction tai2tt_bipm2015.clk : TAI -> TT(BIPM2015) badness 1
+[clkcorr.C:179] Loaded extra clock correction tai2tt_bipm2016.clk : TAI -> TT(BIPM2016) badness 1
+[clkcorr.C:179] Loaded extra clock correction tai2tt_bipm2017.clk : TAI -> TT(BIPM2017) badness 1
+[clkcorr.C:179] Loaded extra clock correction tai2tt_bipm92.clk : TAI -> TT(BIPM92) badness 1
+[clkcorr.C:179] Loaded extra clock correction tai2tt_tai.clk : TAI -> TT(TAI) badness 1
+[clkcorr.C:179] Loaded extra clock correction tid2nist.clk : UTC(TID) -> UTC(NIST) badness 1
+[clkcorr.C:179] Loaded extra clock correction utc2tai.clk : UTC -> TAI badness 1
+[clkcorr.C:179] Loaded extra clock correction utc2ut1.clk : UTC -> UT1 badness 1
+[clkcorr.C:179] Loaded extra clock correction vla2nist.clk : UTC(VLA) -> UTC(NIST) badness 1
+[clkcorr.C:179] Loaded extra clock correction wsrt2gps.clk : UTC(wsrt) -> UTC(GPS) badness 1
+[tempo2Util.C:396] Warning: [TIM1] Please place MODE flags in the parameter file 
+Updating TOA errors using TN parameters.
+PEP 1 
+Fitting for 0 group noise terms, and for 0 groups, 0 Times 
+Fitting for 1 band noise terms 
+[tempo2Util.C:397] [TROP2] Assume standard atmospheric pressure (no data) for site pks at MJD 53042.8
+[tempo2Util.C:397] [TROP1] Assume zero zenith wet delay (no data) for site pks  at MJD 53042.8
+[tempo2Util.C:401] Warning: [DUP1] duplicated warnings have been suppressed.
+making freqs 0 1
+making freqs 1 2
+making freqs 2 3
+making freqs 3 4
+making freqs 4 5
+making freqs 5 6
+making freqs 6 7
+making freqs 7 8
+making freqs 8 9
+making freqs 9 10
+making freqs 10 11
+making freqs 11 12
+making freqs 12 13
+making freqs 13 14
+making freqs 14 15
+making freqs 15 16
+making freqs 16 17
+making freqs 17 18
+making freqs 18 19
+making freqs 19 20
+making freqs 20 21
+making freqs 21 22
+making freqs 22 23
+making freqs 23 24
+making freqs 24 25
+making freqs 25 26
+making freqs 26 27
+making freqs 27 28
+making freqs 28 29
+making freqs 29 30
+making freqs 30 31
+making freqs 31 32
+making freqs 32 33
+making freqs 33 34
+making freqs 34 35
+making freqs 35 36
+making freqs 36 37
+making freqs 37 38
+making freqs 38 39
+making freqs 39 40
+making freqs 40 41
+making freqs 41 42
+making freqs 42 43
+making freqs 43 44
+making freqs 44 45
+making freqs 45 46
+making freqs 46 47
+making freqs 47 48
+making freqs 48 49
+making freqs 49 50
+making freqs 50 51
+making freqs 51 52
+making freqs 52 53
+making freqs 53 54
+making freqs 54 55
+making freqs 55 56
+making freqs 56 57
+making freqs 57 58
+making freqs 58 59
+making freqs 59 60
+making freqs 60 61
+making freqs 61 62
+making freqs 62 63
+making freqs 63 64
+making freqs 64 65
+[clkcorr.C:179] Loaded extra clock correction pks2gps.clk : UTC(PKS) -> UTC(GPS) badness 1
+[clkcorr.C:179] Loaded extra clock correction pks2gps.dr2e.clk : UTC(PKS) -> UTC(GPS) badness 1e+03
+[clkcorr.C:179] Loaded extra clock correction pks2tid.clk : UTC(PKS) -> UTC(TID) badness 1
+[clkcorr.C:179] Loaded extra clock correction pks2tt_toasim.clk : UTC(PKS) -> TT(TOASIM) badness 1e+03
+[clkcorr.C:179] Loaded extra clock correction ptb2tai.clk : TA(PTB) -> TAI badness 1
+[clkcorr.C:179] Loaded extra clock correction tai2tt_bipm01.clk : TAI -> TT(BIPM01) badness 1
+[clkcorr.C:179] Loaded extra clock correction tai2tt_bipm05.clk : TAI -> TT(BIPM2005) badness 1
+[clkcorr.C:179] Loaded extra clock correction tai2tt_bipm06.clk : TAI -> TT(BIPM2006) badness 1
+[clkcorr.C:179] Loaded extra clock correction tai2tt_bipm2003.clk : TAI -> TT(BIPM2003) badness 1
+[clkcorr.C:179] Loaded extra clock correction tai2tt_bipm2004.clk : TAI -> TT(BIPM2004) badness 1
+[clkcorr.C:179] Loaded extra clock correction tai2tt_bipm2004ext.clk : TAI -> TT(BIPM2004ext) badness 1
+[clkcorr.C:179] Loaded extra clock correction tai2tt_bipm2010.clk : TAI -> TT(BIPM2010) badness 1
+[clkcorr.C:179] Loaded extra clock correction tai2tt_bipm2011.clk : TAI -> TT(BIPM2011) badness 1
+[clkcorr.C:179] Loaded extra clock correction tai2tt_bipm2012.clk : TAI -> TT(BIPM2012) badness 1
+[clkcorr.C:179] Loaded extra clock correction tai2tt_bipm2013.clk : TAI -> TT(BIPM2013) badness 1
+[clkcorr.C:179] Loaded extra clock correction tai2tt_bipm2014.clk : TAI -> TT(BIPM2014) badness 1
+[clkcorr.C:179] Loaded extra clock correction tai2tt_bipm2015.clk : TAI -> TT(BIPM2015) badness 1
+[clkcorr.C:179] Loaded extra clock correction tai2tt_bipm2016.clk : TAI -> TT(BIPM2016) badness 1
+[clkcorr.C:179] Loaded extra clock correction tai2tt_bipm2017.clk : TAI -> TT(BIPM2017) badness 1
+[clkcorr.C:179] Loaded extra clock correction tai2tt_bipm92.clk : TAI -> TT(BIPM92) badness 1
+[clkcorr.C:179] Loaded extra clock correction tai2tt_tai.clk : TAI -> TT(TAI) badness 1
+[clkcorr.C:179] Loaded extra clock correction tid2nist.clk : UTC(TID) -> UTC(NIST) badness 1
+[clkcorr.C:179] Loaded extra clock correction utc2tai.clk : UTC -> TAI badness 1
+[clkcorr.C:179] Loaded extra clock correction utc2ut1.clk : UTC -> UT1 badness 1
+[clkcorr.C:179] Loaded extra clock correction vla2nist.clk : UTC(VLA) -> UTC(NIST) badness 1
+[clkcorr.C:179] Loaded extra clock correction wsrt2gps.clk : UTC(wsrt) -> UTC(GPS) badness 1
+[tempo2Util.C:396] Warning: [TIM1] Please place MODE flags in the parameter file 
+Updating TOA errors using TN parameters.
+PEP 1 
+Fitting for 0 group noise terms, and for 0 groups, 0 Times 
+Fitting for 1 band noise terms 
+[tempo2Util.C:397] [TROP2] Assume standard atmospheric pressure (no data) for site pks at MJD 53042.8
+[tempo2Util.C:397] [TROP1] Assume zero zenith wet delay (no data) for site pks  at MJD 53042.8
+[tempo2Util.C:401] Warning: [DUP1] duplicated warnings have been suppressed.
+making freqs 0 1
+making freqs 1 2
+making freqs 2 3
+making freqs 3 4
+making freqs 4 5
+making freqs 5 6
+making freqs 6 7
+making freqs 7 8
+making freqs 8 9
+making freqs 9 10
+making freqs 10 11
+making freqs 11 12
+making freqs 12 13
+making freqs 13 14
+making freqs 14 15
+making freqs 15 16
+making freqs 16 17
+making freqs 17 18
+making freqs 18 19
+making freqs 19 20
+making freqs 20 21
+making freqs 21 22
+making freqs 22 23
+making freqs 23 24
+making freqs 24 25
+making freqs 25 26
+making freqs 26 27
+making freqs 27 28
+making freqs 28 29
+making freqs 29 30
+making freqs 30 31
+making freqs 31 32
+making freqs 32 33
+making freqs 33 34
+making freqs 34 35
+making freqs 35 36
+making freqs 36 37
+making freqs 37 38
+making freqs 38 39
+making freqs 39 40
+making freqs 40 41
+making freqs 41 42
+making freqs 42 43
+making freqs 43 44
+making freqs 44 45
+making freqs 45 46
+making freqs 46 47
+making freqs 47 48
+making freqs 48 49
+making freqs 49 50
+making freqs 50 51
+making freqs 51 52
+making freqs 52 53
+making freqs 53 54
+making freqs 54 55
+making freqs 55 56
+making freqs 56 57
+making freqs 57 58
+making freqs 58 59
+making freqs 59 60
+making freqs 60 61
+making freqs 61 62
+making freqs 62 63
+making freqs 63 64
+making freqs 64 65
+making freqs 65 66
+making freqs 66 67
+making freqs 67 68
+making freqs 68 69
+making freqs 69 70
+making freqs 70 71
+making freqs 71 72
+making freqs 72 73
+making freqs 73 74
+making freqs 74 75
+making freqs 75 76
+making freqs 76 77
+making freqs 77 78
+making freqs 78 79
+making freqs 79 80
+making freqs 80 81
+making freqs 81 82
+making freqs 82 83
+making freqs 83 84
+making freqs 84 85
+making freqs 85 86
+making freqs 86 87
+making freqs 87 88
+making freqs 88 89
+making freqs 89 90
+making freqs 90 91
+making freqs 91 92
+making freqs 92 93
+making freqs 93 94
+making freqs 94 95
+making freqs 95 96
+making freqs 96 97
+making freqs 97 98
+making freqs 98 99
+making freqs 99 100
+making freqs 100 101
+making freqs 101 102
+making freqs 102 103
+making freqs 103 104
+making freqs 104 105
+making freqs 105 106
+making freqs 106 107
+making freqs 107 108
+making freqs 108 109
+making freqs 109 110
+making freqs 110 111
+making freqs 111 112
+making freqs 112 113
+making freqs 113 114
+making freqs 114 115
+making freqs 115 116
+making freqs 116 117
+making freqs 117 118
+making freqs 118 119
+making freqs 119 120
+making freqs 120 121
+making freqs 121 122
+making freqs 122 123
+making freqs 123 124
+making freqs 124 125
+making freqs 125 126
+making freqs 126 127
+making freqs 127 128
+making freqs 128 129
+making freqs 129 130
+making freqs 130 131
+making freqs 131 132
+making freqs 132 133
+making freqs 133 134
+making freqs 134 135
+making freqs 135 136
+making freqs 136 137
+making freqs 137 138
+making freqs 138 139
+making freqs 139 140
+making freqs 140 141
+making freqs 141 142
+making freqs 142 143
+making freqs 143 144
+making freqs 144 145
+making freqs 145 146
+Num T2 its 1 
+[t2fit.C:1166] Warning: Refusing to fit for bad JUMP ' -f H-OH_cpsr2n -0.0011274684340721 1' which had no data points in range
+[t2fit.C:1166] Warning: Refusing to fit for bad JUMP ' -f H-OH_cpsr2m -0.0011245973262076 1' which had no data points in range
+making freqs 65 66
+making freqs 66 67
+making freqs 67 68
+making freqs 68 69
+making freqs 69 70
+making freqs 70 71
+making freqs 71 72
+making freqs 72 73
+making freqs 73 74
+making freqs 74 75
+making freqs 75 76
+making freqs 76 77
+making freqs 77 78
+making freqs 78 79
+making freqs 79 80
+making freqs 80 81
+making freqs 81 82
+making freqs 82 83
+making freqs 83 84
+making freqs 84 85
+making freqs 85 86
+making freqs 86 87
+making freqs 87 88
+making freqs 88 89
+making freqs 89 90
+making freqs 90 91
+making freqs 91 92
+making freqs 92 93
+making freqs 93 94
+making freqs 94 95
+making freqs 95 96
+making freqs 96 97
+making freqs 97 98
+making freqs 98 99
+making freqs 99 100
+making freqs 100 101
+making freqs 101 102
+making freqs 102 103
+making freqs 103 104
+making freqs 104 105
+making freqs 105 106
+making freqs 106 107
+making freqs 107 108
+making freqs 108 109
+making freqs 109 110
+making freqs 110 111
+making freqs 111 112
+making freqs 112 113
+making freqs 113 114
+making freqs 114 115
+making freqs 115 116
+making freqs 116 117
+making freqs 117 118
+making freqs 118 119
+making freqs 119 120
+making freqs 120 121
+making freqs 121 122
+making freqs 122 123
+making freqs 123 124
+making freqs 124 125
+making freqs 125 126
+making freqs 126 127
+making freqs 127 128
+making freqs 128 129
+making freqs 129 130
+making freqs 130 131
+making freqs 131 132
+making freqs 132 133
+making freqs 133 134
+making freqs 134 135
+making freqs 135 136
+making freqs 136 137
+making freqs 137 138
+making freqs 138 139
+making freqs 139 140
+making freqs 140 141
+making freqs 141 142
+making freqs 142 143
+making freqs 143 144
+making freqs 144 145
+making freqs 145 146
+Num T2 its 1 
+[t2fit.C:1166] Warning: Refusing to fit for bad JUMP ' -f H-OH_cpsr2n -0.0011274684340721 1' which had no data points in range
+[t2fit.C:1166] Warning: Refusing to fit for bad JUMP ' -f H-OH_cpsr2m -0.0011245973262076 1' which had no data points in range
+making freqs 65 66
+making freqs 66 67
+making freqs 67 68
+making freqs 68 69
+making freqs 69 70
+making freqs 70 71
+making freqs 71 72
+making freqs 72 73
+making freqs 73 74
+making freqs 74 75
+making freqs 75 76
+making freqs 76 77
+making freqs 77 78
+making freqs 78 79
+making freqs 79 80
+making freqs 80 81
+making freqs 81 82
+making freqs 82 83
+making freqs 83 84
+making freqs 84 85
+making freqs 85 86
+making freqs 86 87
+making freqs 87 88
+making freqs 88 89
+making freqs 89 90
+making freqs 90 91
+making freqs 91 92
+making freqs 92 93
+making freqs 93 94
+making freqs 94 95
+making freqs 95 96
+making freqs 96 97
+making freqs 97 98
+making freqs 98 99
+making freqs 99 100
+making freqs 100 101
+making freqs 101 102
+making freqs 102 103
+making freqs 103 104
+making freqs 104 105
+making freqs 105 106
+making freqs 106 107
+making freqs 107 108
+making freqs 108 109
+making freqs 109 110
+making freqs 110 111
+making freqs 111 112
+making freqs 112 113
+making freqs 113 114
+making freqs 114 115
+making freqs 115 116
+making freqs 116 117
+making freqs 117 118
+making freqs 118 119
+making freqs 119 120
+making freqs 120 121
+making freqs 121 122
+making freqs 122 123
+making freqs 123 124
+making freqs 124 125
+making freqs 125 126
+making freqs 126 127
+making freqs 127 128
+making freqs 128 129
+making freqs 129 130
+making freqs 130 131
+making freqs 131 132
+making freqs 132 133
+making freqs 133 134
+making freqs 134 135
+making freqs 135 136
+making freqs 136 137
+making freqs 137 138
+making freqs 138 139
+making freqs 139 140
+making freqs 140 141
+making freqs 141 142
+making freqs 142 143
+making freqs 143 144
+making freqs 144 145
+making freqs 145 146
+Num T2 its 1 
+[t2fit.C:1166] Warning: Refusing to fit for bad JUMP ' -f H-OH_cpsr2n -0.0011274684340721 1' which had no data points in range
+[t2fit.C:1166] Warning: Refusing to fit for bad JUMP ' -f H-OH_cpsr2m -0.0011245973262076 1' which had no data points in range
+making freqs 65 66
+making freqs 66 67
+making freqs 67 68
+making freqs 68 69
+making freqs 69 70
+making freqs 70 71
+making freqs 71 72
+making freqs 72 73
+making freqs 73 74
+making freqs 74 75
+making freqs 75 76
+making freqs 76 77
+making freqs 77 78
+making freqs 78 79
+making freqs 79 80
+making freqs 80 81
+making freqs 81 82
+making freqs 82 83
+making freqs 83 84
+making freqs 84 85
+making freqs 85 86
+making freqs 86 87
+making freqs 87 88
+making freqs 88 89
+making freqs 89 90
+making freqs 90 91
+making freqs 91 92
+making freqs 92 93
+making freqs 93 94
+making freqs 94 95
+making freqs 95 96
+making freqs 96 97
+making freqs 97 98
+making freqs 98 99
+making freqs 99 100
+making freqs 100 101
+making freqs 101 102
+making freqs 102 103
+making freqs 103 104
+making freqs 104 105
+making freqs 105 106
+making freqs 106 107
+making freqs 107 108
+making freqs 108 109
+making freqs 109 110
+making freqs 110 111
+making freqs 111 112
+making freqs 112 113
+making freqs 113 114
+making freqs 114 115
+making freqs 115 116
+making freqs 116 117
+making freqs 117 118
+making freqs 118 119
+making freqs 119 120
+making freqs 120 121
+making freqs 121 122
+making freqs 122 123
+making freqs 123 124
+making freqs 124 125
+making freqs 125 126
+making freqs 126 127
+making freqs 127 128
+making freqs 128 129
+making freqs 129 130
+making freqs 130 131
+making freqs 131 132
+making freqs 132 133
+making freqs 133 134
+making freqs 134 135
+making freqs 135 136
+making freqs 136 137
+making freqs 137 138
+making freqs 138 139
+making freqs 139 140
+making freqs 140 141
+making freqs 141 142
+making freqs 142 143
+making freqs 143 144
+making freqs 144 145
+making freqs 145 146
+Num T2 its 1 
+[t2fit.C:1166] Warning: Refusing to fit for bad JUMP ' -f H-OH_cpsr2n -0.0011274684340721 1' which had no data points in range
+[t2fit.C:1166] Warning: Refusing to fit for bad JUMP ' -f H-OH_cpsr2m -0.0011245973262076 1' which had no data points in range
+[TKfit.C:345] SVD nparams=48 nconst=0 ndata=6070
+[TKfit.C:345] SVD nparams=48 nconst=0 ndata=6070
+[TKfit.C:345] SVD nparams=48 nconst=0 ndata=6070
+[TKfit.C:345] SVD nparams=48 nconst=0 ndata=6070
+Complete return
+
+
+Results for PSR J1643-1224
+
+
+RMS pre-fit residual = 26.445 (us), RMS post-fit residual = 33.279 (us)
+Fit Chisq = 1.157e+04	Chisqr/nfree = 11571.22/6022 = 1.92149	pre/post = 0.794632
+Number of fit parameters: 48
+Number of points in fit = 6070
+Offset: -5.14258e-06 1.48413e-06 offset_e*sqrt(n) = 0.000115629 n = 6070
+
+
+PARAMETER       Pre-fit                   Post-fit                  Uncertainty   Difference   Fit
+---------------------------------------------------------------------------------------------------
+ELONG           251.087221465818          251.08722154224           1.3752e-08    7.6422e-08    Y
+ELAT            9.77833276085841          9.77833280533218          7.9606e-08    4.4474e-08    Y
+F0 (s^-1)       216.373337095063          216.373337095062          5.1297e-13    -1.7053e-12   Y
+F1 (s^-2)       -8.64391912521634e-16     -8.64385462709737e-16     5.0008e-21    6.4498e-21    Y
+PEPOCH (MJD)    55637                     55637                     0             0             N
+POSEPOCH (MJD)  55637                     55637                     0             0             N
+DMEPOCH (MJD)   58891                     58891                     0             0             N
+DM (cm^-3 pc)   62.418                    62.418                    0             0             N
+DM1 (cm^-3 pc y -0.00119451156863112      -0.000812587242523709     4.5185e-05    0.00038192    Y
+DM2 (cm^-3 pc y -4.7451042910068e-05      4.59115730044091e-05      5.4171e-06    9.3363e-05    Y
+PMELONG         5.40151069936135          5.45171869635401          0.0082617     0.050208      Y
+PMELAT          4.62536190658712          4.50574178007618          0.047         -0.11962      Y
+PX (mas)        0.822032751238287         1.08470248001675          0.14673       0.26267       Y
+PB (d)          147.017397802761          147.017396852073          3.2476e-07    -9.5069e-07   Y
+T0 (MJD)        49577.9682031643          49577.9688697758          0.00026385    0.00066661    Y
+A1 (lt-s)       25.0726139112192          25.0726145162354          3.3809e-07    6.0502e-07    Y
+OM (deg)        321.848134472039          321.849767483663          0.00064607    0.001633      Y
+ECC             0.000505740284429978      0.000505746390693607      5.6575e-09    6.1063e-09    Y
+EXPEP_1         57082.1601966             57082.1601966             0             0             N
+EXPPH_1         9.54803669726e-06         9.54803669726e-06         0             0             N
+EXPTAU_1        128.016431056             128.016431056             0             0             N
+EXPINDEX_1      0.999216741979            0.999216741979            0             0             N
+START (MJD)     49421.8452165064          49421.8452165064          0             0             N
+FINISH (MJD)    58232.702000884           58232.702000884           0             0             N
+TZRMJD          53832.8164350586          53832.8164350586          0             4.3656e-11    N
+TZRFRQ (MHz)    1352.75                   1352.75                   0             0             N
+TZRSITE         pks                      
+FD1             0.000182197571939197      0.000189784082180243      2.9986e-06    7.5865e-06    Y
+FD2             -0.000185032990886252     -0.000189578200341451     5.0598e-06    -4.5452e-06   Y
+FD3             5.82880971252775e-05      5.92493497282689e-05      2.4373e-06    9.6125e-07    Y
+KOM             80                        161.30053643027           11.151        81.301        Y
+KIN             25                        71.729638888522           10.077        46.73         Y
+TRES            7.25                      33.279499426118           0             26.029        N
+EPHVER          TEMPO2                    TEMPO2                    0             0             N
+DM_S1YR (cm^-3  0                         -2.72081726825861e-05     3.8659e-05    -2.7208e-05   Y
+DM_C1YR (cm^-3  0                         -0.000410079042907633     3.3201e-05    -0.00041008   Y
+Complete return
+
+
+Results for PSR J1643-1224
+
+
+RMS pre-fit residual = 26.445 (us), RMS post-fit residual = 33.279 (us)
+Fit Chisq = 1.157e+04	Chisqr/nfree = 11571.22/6022 = 1.92149	pre/post = 0.794632
+Number of fit parameters: 48
+Number of points in fit = 6070
+Offset: -5.14258e-06 1.48413e-06 offset_e*sqrt(n) = 0.000115629 n = 6070
+
+
+PARAMETER       Pre-fit                   Post-fit                  Uncertainty   Difference   Fit
+---------------------------------------------------------------------------------------------------
+ELONG           251.087221465818          251.08722154224           1.3752e-08    7.6422e-08    Y
+ELAT            9.77833276085841          9.77833280533218          7.9606e-08    4.4474e-08    Y
+F0 (s^-1)       216.373337095063          216.373337095062          5.1297e-13    -1.7053e-12   Y
+F1 (s^-2)       -8.64391912521634e-16     -8.64385462709737e-16     5.0008e-21    6.4498e-21    Y
+PEPOCH (MJD)    55637                     55637                     0             0             N
+POSEPOCH (MJD)  55637                     55637                     0             0             N
+DMEPOCH (MJD)   58891                     58891                     0             0             N
+DM (cm^-3 pc)   62.418                    62.418                    0             0             N
+DM1 (cm^-3 pc y -0.00119451156863112      -0.000812587242523709     4.5185e-05    0.00038192    Y
+DM2 (cm^-3 pc y -4.7451042910068e-05      4.59115730044091e-05      5.4171e-06    9.3363e-05    Y
+PMELONG         5.40151069936135          5.45171869635401          0.0082617     0.050208      Y
+PMELAT          4.62536190658712          4.50574178007618          0.047         -0.11962      Y
+PX (mas)        0.822032751238287         1.08470248001675          0.14673       0.26267       Y
+PB (d)          147.017397802761          147.017396852073          3.2476e-07    -9.5069e-07   Y
+T0 (MJD)        49577.9682031643          49577.9688697758          0.00026385    0.00066661    Y
+A1 (lt-s)       25.0726139112192          25.0726145162354          3.3809e-07    6.0502e-07    Y
+OM (deg)        321.848134472039          321.849767483663          0.00064607    0.001633      Y
+ECC             0.000505740284429978      0.000505746390693607      5.6575e-09    6.1063e-09    Y
+EXPEP_1         57082.1601966             57082.1601966             0             0             N
+EXPPH_1         9.54803669726e-06         9.54803669726e-06         0             0             N
+EXPTAU_1        128.016431056             128.016431056             0             0             N
+EXPINDEX_1      0.999216741979            0.999216741979            0             0             N
+START (MJD)     49421.8452165064          49421.8452165064          0             0             N
+FINISH (MJD)    58232.702000884           58232.702000884           0             0             N
+TZRMJD          53832.8164350586          53832.8164350586          0             4.3656e-11    N
+TZRFRQ (MHz)    1352.75                   1352.75                   0             0             N
+TZRSITE         pks                      
+FD1             0.000182197571939197      0.000189784082180243      2.9986e-06    7.5865e-06    Y
+FD2             -0.000185032990886252     -0.000189578200341451     5.0598e-06    -4.5452e-06   Y
+FD3             5.82880971252775e-05      5.92493497282689e-05      2.4373e-06    9.6125e-07    Y
+KOM             80                        161.30053643027           11.151        81.301        Y
+KIN             25                        71.729638888522           10.077        46.73         Y
+TRES            7.25                      33.279499426118           0             26.029        N
+EPHVER          TEMPO2                    TEMPO2                    0             0             N
+DM_S1YR (cm^-3  0                         -2.72081726825861e-05     3.8659e-05    -2.7208e-05   Y
+DM_C1YR (cm^-3  0                         -0.000410079042907633     3.3201e-05    -0.00041008   Y
+NE_SW (cm^-3)   4                         8.57880375762621          1.3325        4.5788        Y
+DM_SERIES       TAYLOR                   
+---------------------------------------------------------------------------------------------------
+[textOutput.C:296] Notice: Parameter uncertainties multiplied by sqrt(red. chisq)
+
+Jump 1 ( -h 20CM_H-OH_CPSR2m 1.2205320630069e-06 1): 2.8397344255881e-06 1.6422800746003e-06 Y
+Jump 2 ( -h 20CM_H-OH_CPSR2n 2.6679198694439e-06 1): 3.8466827123698e-06 1.6424357405325e-06 Y
+Jump 3 ( -h 20CM_MULTI_CPSR2m 3.2655977990605e-06 1): 4.0261704550307e-06 1.2765744387569e-06 Y
+Jump 4 ( -h 20CM_MULTI_CPSR2n 3.5041530067549e-06 1): 4.0940156185881e-06 1.2487891858758e-06 Y
+Jump 5 ( -g 50CM_CPSR2 1.2463416920296e-05 1): 7.2238097522452e-06 2.1185307257867e-06 Y
+Jump 6 ( -h 20CM_H-OH_PDFB1 2.8527165519466e-06 1): -3.0834360290655e-07 1.1708019146305e-06 Y
+Jump 7 ( -h 20CM_MULTI_PDFB1 3.2582816001805e-06 1): 1.6501385801958e-06 1.1801155900176e-06 Y
+Jump 8 ( -g 10CM_PDFB1 2.6843067711734e-07 1): -1.1200247832502e-06 9.6227586451886e-07 Y
+Jump 9 ( -g 20CM_PDFB2 3.8177608420823e-06 1): 2.0903011096278e-06 1.1511263150323e-06 Y
+Jump 10 ( -g 10CM_PDFB2 3.3705790949452e-08 1): -9.1985994277991e-07 6.0984778124828e-07 Y
+Jump 11 ( -g 20CM_PDFB3 2.4639553292282e-06 1): 2.9330729685169e-06 1.2684635014365e-06 Y
+Jump 12 ( -g 40CM_PDFB3 -5.56314076676e-06 1): -7.7277596966955e-06 1.8012016334116e-06 Y
+Jump 13 ( -g 40CM_CASPSR -6.9932758730191e-06 1): -4.0388864258604e-06 1.7772234478489e-06 Y
+Jump 14 ( -g 20CM_PDFB4 2.1320757150466e-06 1): 2.0658778272274e-06 1.1452898792502e-06 Y
+Jump 15 ( -g 10CM_WBCORR 3.8281740969908e-07 1): -6.4384905029799e-07 1.070339223757e-06 Y
+Jump 16 ( -h 20CM_H-OH_PDFB4 -6.3635864158396e-07 1): -8.5392816981784e-07 2.4055774546721e-07 Y
+Jump 17 ( -cpsr2_50cm 1 -2.36e-06 0): -2.36e-06 0 N
+Jump 18 ( -cpsr2m_1341 1 -1.72e-06 0): -1.72e-06 0 N
+Jump 19 ( -cpsr2n_1405 1 -1.8e-06 0): -1.8e-06 0 N
+Jump 20 ( -dfb3_J0437_55319_56160 1 2.2e-07 0): 2.2e-07 0 N
+Jump 21 ( -dfb3_J0437_56160_60000 1 4.5e-07 0): 4.5e-07 0 N
+Jump 22 ( -pdfb1_512_ch 1 -1.22813e-05 0): -1.22813e-05 0 N
+Jump 23 ( -pdfb1_post_2006 1 -1.3e-07 0): -1.3e-07 0 N
+Jump 24 ( -pdfb1_pre_2006 1 -1.13e-06 0): -1.13e-06 0 N
+Jump 25 ( -pdfb2_1024_MHz 1 -5.435e-06 0): -5.435e-06 0 N
+Jump 26 ( -pdfb2_256MHz_1024_ch 1 -1.1395e-05 0): -1.1395e-05 0 N
+Jump 27 ( -pdfb2_256MHz_2048_ch 1 -1.435e-05 0): -1.435e-05 0 N
+Jump 28 ( -pdfb3_1024_MHz 1 1.03e-06 0): 1.03e-06 0 N
+Jump 29 ( -pdfb3_256MHz_2048ch 1 8.32e-06 0): 8.32e-06 0 N
+Jump 30 ( -pdfb3_64MHz_1024ch 1 1.494e-05 0): 1.494e-05 0 N
+Jump 31 ( -pdfb4.*_1024_[1,2]... 1 2.23e-06 0): 2.23e-06 0 N
+Jump 32 ( -pdfb4_256MHz_1024ch 1 5.05e-06 0): 5.05e-06 0 N
+Jump 33 ( -pdfb4_256MHz_2048ch 1 9.22e-06 0): 9.22e-06 0 N
+Jump 34 ( -pdfb4_55319_56055_cals 1 9.27e-07 0): 9.27e-07 0 N
+Jump 35 ( -pdfb4_56055_56110_cals 1 3.82e-07 0): 3.82e-07 0 N
+Jump 36 ( -pdfb4_56110_56160_cals 1 5.41e-07 0): 5.41e-07 0 N
+Jump 37 ( -caspsr_55500_57575_cals 1 -1.31e-06 0): -1.31e-06 0 N
+Jump 38 ( -pdfb4_57575_65000_cals 1 1.71e-07 0): 1.71e-07 0 N
+Jump 39 ( -pdfb4_56160_57575_cals 1 4.25e-07 0): 4.25e-07 0 N
+Jump 40 ( -caspsr_57575_65000_cals 1 -1.533e-06 0): -1.533e-06 0 N
+Jump 41 ( -j 10CM_55319_PDFB4 5.5616928521941e-07 1): 8.3601787208291e-07 4.8442913967462e-07 Y
+Jump 42 ( -j 20CM_55319_PDFB4 1.3243509050829e-06 1): 8.9222161856068e-07 2.59715797841e-07 Y
+Jump 43 ( -j 20CM_55319_PDFB3 2.2958063274365e-07 1): -2.8876979674424e-06 6.8118456545736e-07 Y
+Jump 44 ( -j 40CM_55319_PDFB3 -2.9763039981814e-06 1): 5.2522984176407e-07 5.2207076663096e-07 Y
+Jump 45 ( -f MULTI_cpsr2n -0.0011060245584582 1): -0.0011031630064298 5.326654513064e-06 Y
+Jump 46 ( -f MULTI_cpsr2m -0.0011050878378518 1): -0.0011011433064673 3.475796252241e-06 Y
+Jump 47 ( -f H-OH_cpsr2n -0.0011274684340721 1): -0.0011274684340721 0 Y
+Jump 48 ( -f H-OH_cpsr2m -0.0011245973262076 1): -0.0011245973262076 0 Y
+Jump 49 ( -f MULTI_fptm -0.0011011621008547 1): -0.0010748445158296 2.8466473591806e-06 Y
+Jump 50 ( -f H-OH_fptm -0.0011007160395903 1): -0.0010787883136331 2.7415538063291e-06 Y
+NE_SW (cm^-3)   4                         8.57880375762621          1.3325        4.5788        Y
+DM_SERIES       TAYLOR                   
+---------------------------------------------------------------------------------------------------
+[textOutput.C:296] Notice: Parameter uncertainties multiplied by sqrt(red. chisq)
+
+Jump 1 ( -h 20CM_H-OH_CPSR2m 1.2205320630069e-06 1): 2.8397344255881e-06 1.6422800746003e-06 Y
+Jump 2 ( -h 20CM_H-OH_CPSR2n 2.6679198694439e-06 1): 3.8466827123698e-06 1.6424357405325e-06 Y
+Jump 3 ( -h 20CM_MULTI_CPSR2m 3.2655977990605e-06 1): 4.0261704550307e-06 1.2765744387569e-06 Y
+Jump 4 ( -h 20CM_MULTI_CPSR2n 3.5041530067549e-06 1): 4.0940156185881e-06 1.2487891858758e-06 Y
+Jump 5 ( -g 50CM_CPSR2 1.2463416920296e-05 1): 7.2238097522452e-06 2.1185307257867e-06 Y
+Jump 6 ( -h 20CM_H-OH_PDFB1 2.8527165519466e-06 1): -3.0834360290655e-07 1.1708019146305e-06 Y
+Jump 7 ( -h 20CM_MULTI_PDFB1 3.2582816001805e-06 1): 1.6501385801958e-06 1.1801155900176e-06 Y
+Jump 8 ( -g 10CM_PDFB1 2.6843067711734e-07 1): -1.1200247832502e-06 9.6227586451886e-07 Y
+Jump 9 ( -g 20CM_PDFB2 3.8177608420823e-06 1): 2.0903011096278e-06 1.1511263150323e-06 Y
+Jump 10 ( -g 10CM_PDFB2 3.3705790949452e-08 1): -9.1985994277991e-07 6.0984778124828e-07 Y
+Jump 11 ( -g 20CM_PDFB3 2.4639553292282e-06 1): 2.9330729685169e-06 1.2684635014365e-06 Y
+Jump 12 ( -g 40CM_PDFB3 -5.56314076676e-06 1): -7.7277596966955e-06 1.8012016334116e-06 Y
+Jump 13 ( -g 40CM_CASPSR -6.9932758730191e-06 1): -4.0388864258604e-06 1.7772234478489e-06 Y
+Jump 14 ( -g 20CM_PDFB4 2.1320757150466e-06 1): 2.0658778272274e-06 1.1452898792502e-06 Y
+Jump 15 ( -g 10CM_WBCORR 3.8281740969908e-07 1): -6.4384905029799e-07 1.070339223757e-06 Y
+Jump 16 ( -h 20CM_H-OH_PDFB4 -6.3635864158396e-07 1): -8.5392816981784e-07 2.4055774546721e-07 Y
+Jump 17 ( -cpsr2_50cm 1 -2.36e-06 0): -2.36e-06 0 N
+Jump 18 ( -cpsr2m_1341 1 -1.72e-06 0): -1.72e-06 0 N
+Jump 19 ( -cpsr2n_1405 1 -1.8e-06 0): -1.8e-06 0 N
+Jump 20 ( -dfb3_J0437_55319_56160 1 2.2e-07 0): 2.2e-07 0 N
+Jump 21 ( -dfb3_J0437_56160_60000 1 4.5e-07 0): 4.5e-07 0 N
+Jump 22 ( -pdfb1_512_ch 1 -1.22813e-05 0): -1.22813e-05 0 N
+Jump 23 ( -pdfb1_post_2006 1 -1.3e-07 0): -1.3e-07 0 N
+Jump 24 ( -pdfb1_pre_2006 1 -1.13e-06 0): -1.13e-06 0 N
+Jump 25 ( -pdfb2_1024_MHz 1 -5.435e-06 0): -5.435e-06 0 N
+Jump 26 ( -pdfb2_256MHz_1024_ch 1 -1.1395e-05 0): -1.1395e-05 0 N
+Jump 27 ( -pdfb2_256MHz_2048_ch 1 -1.435e-05 0): -1.435e-05 0 N
+Jump 28 ( -pdfb3_1024_MHz 1 1.03e-06 0): 1.03e-06 0 N
+Jump 29 ( -pdfb3_256MHz_2048ch 1 8.32e-06 0): 8.32e-06 0 N
+Jump 30 ( -pdfb3_64MHz_1024ch 1 1.494e-05 0): 1.494e-05 0 N
+Jump 31 ( -pdfb4.*_1024_[1,2]... 1 2.23e-06 0): 2.23e-06 0 N
+Jump 32 ( -pdfb4_256MHz_1024ch 1 5.05e-06 0): 5.05e-06 0 N
+Jump 33 ( -pdfb4_256MHz_2048ch 1 9.22e-06 0): 9.22e-06 0 N
+Jump 34 ( -pdfb4_55319_56055_cals 1 9.27e-07 0): 9.27e-07 0 N
+Jump 35 ( -pdfb4_56055_56110_cals 1 3.82e-07 0): 3.82e-07 0 N
+Jump 36 ( -pdfb4_56110_56160_cals 1 5.41e-07 0): 5.41e-07 0 N
+Jump 37 ( -caspsr_55500_57575_cals 1 -1.31e-06 0): -1.31e-06 0 N
+Jump 38 ( -pdfb4_57575_65000_cals 1 1.71e-07 0): 1.71e-07 0 N
+Jump 39 ( -pdfb4_56160_57575_cals 1 4.25e-07 0): 4.25e-07 0 N
+Jump 40 ( -caspsr_57575_65000_cals 1 -1.533e-06 0): -1.533e-06 0 N
+Jump 41 ( -j 10CM_55319_PDFB4 5.5616928521941e-07 1): 8.3601787208291e-07 4.8442913967462e-07 Y
+Jump 42 ( -j 20CM_55319_PDFB4 1.3243509050829e-06 1): 8.9222161856068e-07 2.59715797841e-07 Y
+Jump 43 ( -j 20CM_55319_PDFB3 2.2958063274365e-07 1): -2.8876979674424e-06 6.8118456545736e-07 Y
+Jump 44 ( -j 40CM_55319_PDFB3 -2.9763039981814e-06 1): 5.2522984176407e-07 5.2207076663096e-07 Y
+Jump 45 ( -f MULTI_cpsr2n -0.0011060245584582 1): -0.0011031630064298 5.326654513064e-06 Y
+Jump 46 ( -f MULTI_cpsr2m -0.0011050878378518 1): -0.0011011433064673 3.475796252241e-06 Y
+Jump 47 ( -f H-OH_cpsr2n -0.0011274684340721 1): -0.0011274684340721 0 Y
+Jump 48 ( -f H-OH_cpsr2m -0.0011245973262076 1): -0.0011245973262076 0 Y
+Jump 49 ( -f MULTI_fptm -0.0011011621008547 1): -0.0010748445158296 2.8466473591806e-06 Y
+Jump 50 ( -f H-OH_fptm -0.0011007160395903 1): -0.0010787883136331 2.7415538063291e-06 Y
+Complete return
+
+
+Results for PSR J1643-1224
+
+
+RMS pre-fit residual = 26.445 (us), RMS post-fit residual = 33.279 (us)
+Fit Chisq = 1.157e+04	Chisqr/nfree = 11571.22/6022 = 1.92149	pre/post = 0.794632
+Number of fit parameters: 48
+Number of points in fit = 6070
+Offset: -5.14258e-06 1.48413e-06 offset_e*sqrt(n) = 0.000115629 n = 6070
+
+
+PARAMETER       Pre-fit                   Post-fit                  Uncertainty   Difference   Fit
+---------------------------------------------------------------------------------------------------
+ELONG           251.087221465818          251.08722154224           1.3752e-08    7.6422e-08    Y
+ELAT            9.77833276085841          9.77833280533218          7.9606e-08    4.4474e-08    Y
+F0 (s^-1)       216.373337095063          216.373337095062          5.1297e-13    -1.7053e-12   Y
+F1 (s^-2)       -8.64391912521634e-16     -8.64385462709737e-16     5.0008e-21    6.4498e-21    Y
+PEPOCH (MJD)    55637                     55637                     0             0             N
+POSEPOCH (MJD)  55637                     55637                     0             0             N
+DMEPOCH (MJD)   58891                     58891                     0             0             N
+DM (cm^-3 pc)   62.418                    62.418                    0             0             N
+DM1 (cm^-3 pc y -0.00119451156863112      -0.000812587242523709     4.5185e-05    0.00038192    Y
+DM2 (cm^-3 pc y -4.7451042910068e-05      4.59115730044091e-05      5.4171e-06    9.3363e-05    Y
+PMELONG         5.40151069936135          5.45171869635401          0.0082617     0.050208      Y
+PMELAT          4.62536190658712          4.50574178007618          0.047         -0.11962      Y
+PX (mas)        0.822032751238287         1.08470248001675          0.14673       0.26267       Y
+PB (d)          147.017397802761          147.017396852073          3.2476e-07    -9.5069e-07   Y
+T0 (MJD)        49577.9682031643          49577.9688697758          0.00026385    0.00066661    Y
+A1 (lt-s)       25.0726139112192          25.0726145162354          3.3809e-07    6.0502e-07    Y
+OM (deg)        321.848134472039          321.849767483663          0.00064607    0.001633      Y
+ECC             0.000505740284429978      0.000505746390693607      5.6575e-09    6.1063e-09    Y
+EXPEP_1         57082.1601966             57082.1601966             0             0             N
+EXPPH_1         9.54803669726e-06         9.54803669726e-06         0             0             N
+EXPTAU_1        128.016431056             128.016431056             0             0             N
+EXPINDEX_1      0.999216741979            0.999216741979            0             0             N
+START (MJD)     49421.8452165064          49421.8452165064          0             0             N
+FINISH (MJD)    58232.702000884           58232.702000884           0             0             N
+TZRMJD          53832.8164350586          53832.8164350586          0             4.3656e-11    N
+TZRFRQ (MHz)    1352.75                   1352.75                   0             0             N
+TZRSITE         pks                      
+FD1             0.000182197571939197      0.000189784082180243      2.9986e-06    7.5865e-06    Y
+FD2             -0.000185032990886252     -0.000189578200341451     5.0598e-06    -4.5452e-06   Y
+FD3             5.82880971252775e-05      5.92493497282689e-05      2.4373e-06    9.6125e-07    Y
+KOM             80                        161.30053643027           11.151        81.301        Y
+KIN             25                        71.729638888522           10.077        46.73         Y
+TRES            7.25                      33.279499426118           0             26.029        N
+EPHVER          TEMPO2                    TEMPO2                    0             0             N
+DM_S1YR (cm^-3  0                         -2.72081726825861e-05     3.8659e-05    -2.7208e-05   Y
+DM_C1YR (cm^-3  0                         -0.000410079042907633     3.3201e-05    -0.00041008   Y
+NE_SW (cm^-3)   4                         8.57880375762621          1.3325        4.5788        Y
+DM_SERIES       TAYLOR                   
+---------------------------------------------------------------------------------------------------
+[textOutput.C:296] Notice: Parameter uncertainties multiplied by sqrt(red. chisq)
+
+Jump 1 ( -h 20CM_H-OH_CPSR2m 1.2205320630069e-06 1): 2.8397344255881e-06 1.6422800746003e-06 Y
+Jump 2 ( -h 20CM_H-OH_CPSR2n 2.6679198694439e-06 1): 3.8466827123698e-06 1.6424357405325e-06 Y
+Jump 3 ( -h 20CM_MULTI_CPSR2m 3.2655977990605e-06 1): 4.0261704550307e-06 1.2765744387569e-06 Y
+Jump 4 ( -h 20CM_MULTI_CPSR2n 3.5041530067549e-06 1): 4.0940156185881e-06 1.2487891858758e-06 Y
+Jump 5 ( -g 50CM_CPSR2 1.2463416920296e-05 1): 7.2238097522452e-06 2.1185307257867e-06 Y
+Jump 6 ( -h 20CM_H-OH_PDFB1 2.8527165519466e-06 1): -3.0834360290655e-07 1.1708019146305e-06 Y
+Jump 7 ( -h 20CM_MULTI_PDFB1 3.2582816001805e-06 1): 1.6501385801958e-06 1.1801155900176e-06 Y
+Jump 8 ( -g 10CM_PDFB1 2.6843067711734e-07 1): -1.1200247832502e-06 9.6227586451886e-07 Y
+Jump 9 ( -g 20CM_PDFB2 3.8177608420823e-06 1): 2.0903011096278e-06 1.1511263150323e-06 Y
+Jump 10 ( -g 10CM_PDFB2 3.3705790949452e-08 1): -9.1985994277991e-07 6.0984778124828e-07 Y
+Jump 11 ( -g 20CM_PDFB3 2.4639553292282e-06 1): 2.9330729685169e-06 1.2684635014365e-06 Y
+Jump 12 ( -g 40CM_PDFB3 -5.56314076676e-06 1): -7.7277596966955e-06 1.8012016334116e-06 Y
+Jump 13 ( -g 40CM_CASPSR -6.9932758730191e-06 1): -4.0388864258604e-06 1.7772234478489e-06 Y
+Jump 14 ( -g 20CM_PDFB4 2.1320757150466e-06 1): 2.0658778272274e-06 1.1452898792502e-06 Y
+Jump 15 ( -g 10CM_WBCORR 3.8281740969908e-07 1): -6.4384905029799e-07 1.070339223757e-06 Y
+Jump 16 ( -h 20CM_H-OH_PDFB4 -6.3635864158396e-07 1): -8.5392816981784e-07 2.4055774546721e-07 Y
+Jump 17 ( -cpsr2_50cm 1 -2.36e-06 0): -2.36e-06 0 N
+Jump 18 ( -cpsr2m_1341 1 -1.72e-06 0): -1.72e-06 0 N
+Jump 19 ( -cpsr2n_1405 1 -1.8e-06 0): -1.8e-06 0 N
+Jump 20 ( -dfb3_J0437_55319_56160 1 2.2e-07 0): 2.2e-07 0 N
+Jump 21 ( -dfb3_J0437_56160_60000 1 4.5e-07 0): 4.5e-07 0 N
+Jump 22 ( -pdfb1_512_ch 1 -1.22813e-05 0): -1.22813e-05 0 N
+Jump 23 ( -pdfb1_post_2006 1 -1.3e-07 0): -1.3e-07 0 N
+Jump 24 ( -pdfb1_pre_2006 1 -1.13e-06 0): -1.13e-06 0 N
+Jump 25 ( -pdfb2_1024_MHz 1 -5.435e-06 0): -5.435e-06 0 N
+Jump 26 ( -pdfb2_256MHz_1024_ch 1 -1.1395e-05 0): -1.1395e-05 0 N
+Jump 27 ( -pdfb2_256MHz_2048_ch 1 -1.435e-05 0): -1.435e-05 0 N
+Jump 28 ( -pdfb3_1024_MHz 1 1.03e-06 0): 1.03e-06 0 N
+Jump 29 ( -pdfb3_256MHz_2048ch 1 8.32e-06 0): 8.32e-06 0 N
+Jump 30 ( -pdfb3_64MHz_1024ch 1 1.494e-05 0): 1.494e-05 0 N
+Jump 31 ( -pdfb4.*_1024_[1,2]... 1 2.23e-06 0): 2.23e-06 0 N
+Jump 32 ( -pdfb4_256MHz_1024ch 1 5.05e-06 0): 5.05e-06 0 N
+Jump 33 ( -pdfb4_256MHz_2048ch 1 9.22e-06 0): 9.22e-06 0 N
+Jump 34 ( -pdfb4_55319_56055_cals 1 9.27e-07 0): 9.27e-07 0 N
+Jump 35 ( -pdfb4_56055_56110_cals 1 3.82e-07 0): 3.82e-07 0 N
+Jump 36 ( -pdfb4_56110_56160_cals 1 5.41e-07 0): 5.41e-07 0 N
+Jump 37 ( -caspsr_55500_57575_cals 1 -1.31e-06 0): -1.31e-06 0 N
+Jump 38 ( -pdfb4_57575_65000_cals 1 1.71e-07 0): 1.71e-07 0 N
+Jump 39 ( -pdfb4_56160_57575_cals 1 4.25e-07 0): 4.25e-07 0 N
+Jump 40 ( -caspsr_57575_65000_cals 1 -1.533e-06 0): -1.533e-06 0 N
+Jump 41 ( -j 10CM_55319_PDFB4 5.5616928521941e-07 1): 8.3601787208291e-07 4.8442913967462e-07 Y
+Jump 42 ( -j 20CM_55319_PDFB4 1.3243509050829e-06 1): 8.9222161856068e-07 2.59715797841e-07 Y
+Jump 43 ( -j 20CM_55319_PDFB3 2.2958063274365e-07 1): -2.8876979674424e-06 6.8118456545736e-07 Y
+Jump 44 ( -j 40CM_55319_PDFB3 -2.9763039981814e-06 1): 5.2522984176407e-07 5.2207076663096e-07 Y
+Jump 45 ( -f MULTI_cpsr2n -0.0011060245584582 1): -0.0011031630064298 5.326654513064e-06 Y
+Jump 46 ( -f MULTI_cpsr2m -0.0011050878378518 1): -0.0011011433064673 3.475796252241e-06 Y
+Jump 47 ( -f H-OH_cpsr2n -0.0011274684340721 1): -0.0011274684340721 0 Y
+Jump 48 ( -f H-OH_cpsr2m -0.0011245973262076 1): -0.0011245973262076 0 Y
+Jump 49 ( -f MULTI_fptm -0.0011011621008547 1): -0.0010748445158296 2.8466473591806e-06 Y
+Jump 50 ( -f H-OH_fptm -0.0011007160395903 1): -0.0010787883136331 2.7415538063291e-06 Y
+Complete return
+
+
+Results for PSR J1643-1224
+
+
+RMS pre-fit residual = 26.445 (us), RMS post-fit residual = 33.279 (us)
+Fit Chisq = 1.157e+04	Chisqr/nfree = 11571.22/6022 = 1.92149	pre/post = 0.794632
+Number of fit parameters: 48
+Number of points in fit = 6070
+Offset: -5.14258e-06 1.48413e-06 offset_e*sqrt(n) = 0.000115629 n = 6070
+
+
+PARAMETER       Pre-fit                   Post-fit                  Uncertainty   Difference   Fit
+---------------------------------------------------------------------------------------------------
+ELONG           251.087221465818          251.08722154224           1.3752e-08    7.6422e-08    Y
+ELAT            9.77833276085841          9.77833280533218          7.9606e-08    4.4474e-08    Y
+F0 (s^-1)       216.373337095063          216.373337095062          5.1297e-13    -1.7053e-12   Y
+F1 (s^-2)       -8.64391912521634e-16     -8.64385462709737e-16     5.0008e-21    6.4498e-21    Y
+PEPOCH (MJD)    55637                     55637                     0             0             N
+POSEPOCH (MJD)  55637                     55637                     0             0             N
+DMEPOCH (MJD)   58891                     58891                     0             0             N
+DM (cm^-3 pc)   62.418                    62.418                    0             0             N
+DM1 (cm^-3 pc y -0.00119451156863112      -0.000812587242523709     4.5185e-05    0.00038192    Y
+DM2 (cm^-3 pc y -4.7451042910068e-05      4.59115730044091e-05      5.4171e-06    9.3363e-05    Y
+PMELONG         5.40151069936135          5.45171869635401          0.0082617     0.050208      Y
+PMELAT          4.62536190658712          4.50574178007618          0.047         -0.11962      Y
+PX (mas)        0.822032751238287         1.08470248001675          0.14673       0.26267       Y
+PB (d)          147.017397802761          147.017396852073          3.2476e-07    -9.5069e-07   Y
+T0 (MJD)        49577.9682031643          49577.9688697758          0.00026385    0.00066661    Y
+A1 (lt-s)       25.0726139112192          25.0726145162354          3.3809e-07    6.0502e-07    Y
+OM (deg)        321.848134472039          321.849767483663          0.00064607    0.001633      Y
+ECC             0.000505740284429978      0.000505746390693607      5.6575e-09    6.1063e-09    Y
+EXPEP_1         57082.1601966             57082.1601966             0             0             N
+EXPPH_1         9.54803669726e-06         9.54803669726e-06         0             0             N
+EXPTAU_1        128.016431056             128.016431056             0             0             N
+EXPINDEX_1      0.999216741979            0.999216741979            0             0             N
+START (MJD)     49421.8452165064          49421.8452165064          0             0             N
+FINISH (MJD)    58232.702000884           58232.702000884           0             0             N
+TZRMJD          53832.8164350586          53832.8164350586          0             4.3656e-11    N
+TZRFRQ (MHz)    1352.75                   1352.75                   0             0             N
+TZRSITE         pks                      
+FD1             0.000182197571939197      0.000189784082180243      2.9986e-06    7.5865e-06    Y
+FD2             -0.000185032990886252     -0.000189578200341451     5.0598e-06    -4.5452e-06   Y
+FD3             5.82880971252775e-05      5.92493497282689e-05      2.4373e-06    9.6125e-07    Y
+KOM             80                        161.30053643027           11.151        81.301        Y
+KIN             25                        71.729638888522           10.077        46.73         Y
+TRES            7.25                      33.279499426118           0             26.029        N
+EPHVER          TEMPO2                    TEMPO2                    0             0             N
+DM_S1YR (cm^-3  0                         -2.72081726825861e-05     3.8659e-05    -2.7208e-05   Y
+DM_C1YR (cm^-3  0                         -0.000410079042907633     3.3201e-05    -0.00041008   Y
+NE_SW (cm^-3)   4                         8.57880375762621          1.3325        4.5788        Y
+DM_SERIES       TAYLOR                   
+---------------------------------------------------------------------------------------------------
+[textOutput.C:296] Notice: Parameter uncertainties multiplied by sqrt(red. chisq)
+
+Jump 1 ( -h 20CM_H-OH_CPSR2m 1.2205320630069e-06 1): 2.8397344255881e-06 1.6422800746003e-06 Y
+Jump 2 ( -h 20CM_H-OH_CPSR2n 2.6679198694439e-06 1): 3.8466827123698e-06 1.6424357405325e-06 Y
+Jump 3 ( -h 20CM_MULTI_CPSR2m 3.2655977990605e-06 1): 4.0261704550307e-06 1.2765744387569e-06 Y
+Jump 4 ( -h 20CM_MULTI_CPSR2n 3.5041530067549e-06 1): 4.0940156185881e-06 1.2487891858758e-06 Y
+Jump 5 ( -g 50CM_CPSR2 1.2463416920296e-05 1): 7.2238097522452e-06 2.1185307257867e-06 Y
+Jump 6 ( -h 20CM_H-OH_PDFB1 2.8527165519466e-06 1): -3.0834360290655e-07 1.1708019146305e-06 Y
+Jump 7 ( -h 20CM_MULTI_PDFB1 3.2582816001805e-06 1): 1.6501385801958e-06 1.1801155900176e-06 Y
+Jump 8 ( -g 10CM_PDFB1 2.6843067711734e-07 1): -1.1200247832502e-06 9.6227586451886e-07 Y
+Jump 9 ( -g 20CM_PDFB2 3.8177608420823e-06 1): 2.0903011096278e-06 1.1511263150323e-06 Y
+Jump 10 ( -g 10CM_PDFB2 3.3705790949452e-08 1): -9.1985994277991e-07 6.0984778124828e-07 Y
+Jump 11 ( -g 20CM_PDFB3 2.4639553292282e-06 1): 2.9330729685169e-06 1.2684635014365e-06 Y
+Jump 12 ( -g 40CM_PDFB3 -5.56314076676e-06 1): -7.7277596966955e-06 1.8012016334116e-06 Y
+Jump 13 ( -g 40CM_CASPSR -6.9932758730191e-06 1): -4.0388864258604e-06 1.7772234478489e-06 Y
+Jump 14 ( -g 20CM_PDFB4 2.1320757150466e-06 1): 2.0658778272274e-06 1.1452898792502e-06 Y
+Jump 15 ( -g 10CM_WBCORR 3.8281740969908e-07 1): -6.4384905029799e-07 1.070339223757e-06 Y
+Jump 16 ( -h 20CM_H-OH_PDFB4 -6.3635864158396e-07 1): -8.5392816981784e-07 2.4055774546721e-07 Y
+Jump 17 ( -cpsr2_50cm 1 -2.36e-06 0): -2.36e-06 0 N
+Jump 18 ( -cpsr2m_1341 1 -1.72e-06 0): -1.72e-06 0 N
+Jump 19 ( -cpsr2n_1405 1 -1.8e-06 0): -1.8e-06 0 N
+Jump 20 ( -dfb3_J0437_55319_56160 1 2.2e-07 0): 2.2e-07 0 N
+Jump 21 ( -dfb3_J0437_56160_60000 1 4.5e-07 0): 4.5e-07 0 N
+Jump 22 ( -pdfb1_512_ch 1 -1.22813e-05 0): -1.22813e-05 0 N
+Jump 23 ( -pdfb1_post_2006 1 -1.3e-07 0): -1.3e-07 0 N
+Jump 24 ( -pdfb1_pre_2006 1 -1.13e-06 0): -1.13e-06 0 N
+Jump 25 ( -pdfb2_1024_MHz 1 -5.435e-06 0): -5.435e-06 0 N
+Jump 26 ( -pdfb2_256MHz_1024_ch 1 -1.1395e-05 0): -1.1395e-05 0 N
+Jump 27 ( -pdfb2_256MHz_2048_ch 1 -1.435e-05 0): -1.435e-05 0 N
+Jump 28 ( -pdfb3_1024_MHz 1 1.03e-06 0): 1.03e-06 0 N
+Jump 29 ( -pdfb3_256MHz_2048ch 1 8.32e-06 0): 8.32e-06 0 N
+Jump 30 ( -pdfb3_64MHz_1024ch 1 1.494e-05 0): 1.494e-05 0 N
+Jump 31 ( -pdfb4.*_1024_[1,2]... 1 2.23e-06 0): 2.23e-06 0 N
+Jump 32 ( -pdfb4_256MHz_1024ch 1 5.05e-06 0): 5.05e-06 0 N
+Jump 33 ( -pdfb4_256MHz_2048ch 1 9.22e-06 0): 9.22e-06 0 N
+Jump 34 ( -pdfb4_55319_56055_cals 1 9.27e-07 0): 9.27e-07 0 N
+Jump 35 ( -pdfb4_56055_56110_cals 1 3.82e-07 0): 3.82e-07 0 N
+Jump 36 ( -pdfb4_56110_56160_cals 1 5.41e-07 0): 5.41e-07 0 N
+Jump 37 ( -caspsr_55500_57575_cals 1 -1.31e-06 0): -1.31e-06 0 N
+Jump 38 ( -pdfb4_57575_65000_cals 1 1.71e-07 0): 1.71e-07 0 N
+Jump 39 ( -pdfb4_56160_57575_cals 1 4.25e-07 0): 4.25e-07 0 N
+Jump 40 ( -caspsr_57575_65000_cals 1 -1.533e-06 0): -1.533e-06 0 N
+Jump 41 ( -j 10CM_55319_PDFB4 5.5616928521941e-07 1): 8.3601787208291e-07 4.8442913967462e-07 Y
+Jump 42 ( -j 20CM_55319_PDFB4 1.3243509050829e-06 1): 8.9222161856068e-07 2.59715797841e-07 Y
+Jump 43 ( -j 20CM_55319_PDFB3 2.2958063274365e-07 1): -2.8876979674424e-06 6.8118456545736e-07 Y
+Jump 44 ( -j 40CM_55319_PDFB3 -2.9763039981814e-06 1): 5.2522984176407e-07 5.2207076663096e-07 Y
+Jump 45 ( -f MULTI_cpsr2n -0.0011060245584582 1): -0.0011031630064298 5.326654513064e-06 Y
+Jump 46 ( -f MULTI_cpsr2m -0.0011050878378518 1): -0.0011011433064673 3.475796252241e-06 Y
+Jump 47 ( -f H-OH_cpsr2n -0.0011274684340721 1): -0.0011274684340721 0 Y
+Jump 48 ( -f H-OH_cpsr2m -0.0011245973262076 1): -0.0011245973262076 0 Y
+Jump 49 ( -f MULTI_fptm -0.0011011621008547 1): -0.0010748445158296 2.8466473591806e-06 Y
+Jump 50 ( -f H-OH_fptm -0.0011007160395903 1): -0.0010787883136331 2.7415538063291e-06 Y
+Jump 51 ( -f MULTI_AFB -0.0011441928836478 1): -0.0011324794891302 1.7825856216562e-06 Y
+
+Derived parameters:
+
+P0 (s)      = 0.00462164152674994       1.0957e-17   
+P1          = 1.84629021450234e-20      1.0682e-25   
+tau_c (Myr) = 3968.8
+bs (G)      = 2.956e+08
+
+Binary model: T2
+Mass function                  = 0.000782968229  +- 0.000000000023 solar masses 
+Minimum, median and maximum companion mass: 0.1191 < 0.1388 < 0.2946 solar masses
+
+Parallax distance is 921.912 (+/- 124.711) pc.
+Total proper motion = 7.0727 +/- 0.030612 mas/yr
+Total time span = 8810.857 days = 24.123 years
+
+Tempo2 usage
+Units:                 TCB (tempo2)
+Time ephemeris:        IF99 (tempo2)
+Troposphere corr.?     Yes (tempo2)
+Dilate freq?           Yes (tempo2)
+Electron density (1AU) 8.5788
+Solar system ephem     DE436
+Time scale             TT(BIPM2018)
+Binary model           T2
+
+[textOutput.C:1641] Warning: There are output parameters with very high covariance
+                  OM                   T0 +1.00000
+                 KOM                   PB -0.99867
+                 KIN                   PB -0.99971
+                 KIN                  KOM +0.99835
+Notice: There were 5 warnings. Summaries are shown below, check logs for full details.
+Warning #1: [TIM1] Please place MODE flags in the parameter file 
+Warning #2: [DUP1] duplicated warnings have been suppressed.
+Warning #3: Refusing to fit for bad JUMP ' -f H-OH_cpsr2n -0.0011274684340721 1' which had no data points in range
+Warning #4: Refusing to fit for bad JUMP ' -f H-OH_cpsr2m -0.0011245973262076 1' which had no data points in range
+Warning #5: There are output parameters with very high covariance
+Graphical Interface: TempoNest
+Author:              L. Lentati
+Version:             1.0
+----------------------------------------------------------------
+This program comes with ABSOLUTELY NO WARRANTY.
+This is free software, and you are welcome to redistribute it
+under conditions of GPL license.
+
+----------------------------------------------------------------
+
+
+
+
+*****************************************************
+Starting TempoNest
+*****************************************************
+
+
+
+Details of the fit:
+file root set to results/J1643-DM_annual-J1643-1224- 
+Including Red Noise: Power Law Model to 146 Coefficients 
+Including DM: 1 Component Power Law Model to 146 Coefficients 
+Including Band Noise for 1 bands
+fitting for: Arbitrary Phase 
+fitting for: RAJ 
+fitting for: DECJ 
+fitting for: F0 
+fitting for: F1 
+fitting for: DM1 
+fitting for: DM2 
+fitting for: PMRA 
+fitting for: PMDEC 
+fitting for: PX 
+fitting for: PB 
+fitting for: T0 
+fitting for: A1 
+fitting for: OM 
+fitting for: ECC 
+fitting for: FD1 
+fitting for: FD2 
+fitting for: FD3 
+fitting for: KOM 
+fitting for: KIN 
+fitting for: DM_S1YR 
+fitting for: DM_C1YR 
+fitting for: NE_SW 
+Found 27 jumps to fit 
+total Timing Model params to fit:  50 
+There are 51 jumps 
+Not an MJD PreJump: 0 0 
+Not an MJD PreJump: 1 1.22053e-06 
+Not an MJD PreJump: 2 2.66792e-06 
+Not an MJD PreJump: 3 3.2656e-06 
+Not an MJD PreJump: 4 3.50415e-06 
+Not an MJD PreJump: 5 1.24634e-05 
+Not an MJD PreJump: 6 2.85272e-06 
+Not an MJD PreJump: 7 3.25828e-06 
+Not an MJD PreJump: 8 2.68431e-07 
+Not an MJD PreJump: 9 3.81776e-06 
+Not an MJD PreJump: 10 3.37058e-08 
+Not an MJD PreJump: 11 2.46396e-06 
+Not an MJD PreJump: 12 -5.56314e-06 
+Not an MJD PreJump: 13 -6.99328e-06 
+Not an MJD PreJump: 14 2.13208e-06 
+Not an MJD PreJump: 15 3.82817e-07 
+Not an MJD PreJump: 16 -6.36359e-07 
+Not an MJD PreJump: 17 -2.36e-06 
+Not an MJD PreJump: 18 -1.72e-06 
+Not an MJD PreJump: 19 -1.8e-06 
+Not an MJD PreJump: 20 2.2e-07 
+Not an MJD PreJump: 21 4.5e-07 
+Not an MJD PreJump: 22 -1.22813e-05 
+Not an MJD PreJump: 23 -1.3e-07 
+Not an MJD PreJump: 24 -1.13e-06 
+Not an MJD PreJump: 25 -5.435e-06 
+Not an MJD PreJump: 26 -1.1395e-05 
+Not an MJD PreJump: 27 -1.435e-05 
+Not an MJD PreJump: 28 1.03e-06 
+Not an MJD PreJump: 29 8.32e-06 
+Not an MJD PreJump: 30 1.494e-05 
+Not an MJD PreJump: 31 2.23e-06 
+Not an MJD PreJump: 32 5.05e-06 
+Not an MJD PreJump: 33 9.22e-06 
+Not an MJD PreJump: 34 9.27e-07 
+Not an MJD PreJump: 35 3.82e-07 
+Jump 51 ( -f MULTI_AFB -0.0011441928836478 1): -0.0011324794891302 1.7825856216562e-06 Y
+
+Derived parameters:
+
+P0 (s)      = 0.00462164152674994       1.0957e-17   
+P1          = 1.84629021450234e-20      1.0682e-25   
+tau_c (Myr) = 3968.8
+bs (G)      = 2.956e+08
+
+Binary model: T2
+Mass function                  = 0.000782968229  +- 0.000000000023 solar masses 
+Minimum, median and maximum companion mass: 0.1191 < 0.1388 < 0.2946 solar masses
+
+Parallax distance is 921.912 (+/- 124.711) pc.
+Total proper motion = 7.0727 +/- 0.030612 mas/yr
+Total time span = 8810.857 days = 24.123 years
+
+Tempo2 usage
+Units:                 TCB (tempo2)
+Time ephemeris:        IF99 (tempo2)
+Troposphere corr.?     Yes (tempo2)
+Dilate freq?           Yes (tempo2)
+Electron density (1AU) 8.5788
+Solar system ephem     DE436
+Time scale             TT(BIPM2018)
+Binary model           T2
+
+[textOutput.C:1641] Warning: There are output parameters with very high covariance
+                  OM                   T0 +1.00000
+                 KOM                   PB -0.99867
+                 KIN                   PB -0.99971
+                 KIN                  KOM +0.99835
+Notice: There were 5 warnings. Summaries are shown below, check logs for full details.
+Warning #1: [TIM1] Please place MODE flags in the parameter file 
+Warning #2: [DUP1] duplicated warnings have been suppressed.
+Warning #3: Refusing to fit for bad JUMP ' -f H-OH_cpsr2n -0.0011274684340721 1' which had no data points in range
+Warning #4: Refusing to fit for bad JUMP ' -f H-OH_cpsr2m -0.0011245973262076 1' which had no data points in range
+Warning #5: There are output parameters with very high covariance
+Graphical Interface: TempoNest
+Author:              L. Lentati
+Version:             1.0
+----------------------------------------------------------------
+This program comes with ABSOLUTELY NO WARRANTY.
+This is free software, and you are welcome to redistribute it
+under conditions of GPL license.
+
+----------------------------------------------------------------
+
+
+
+
+*****************************************************
+Starting TempoNest
+*****************************************************
+
+
+
+Details of the fit:
+file root set to results/J1643-DM_annual-J1643-1224- 
+Including Red Noise: Power Law Model to 146 Coefficients 
+Including DM: 1 Component Power Law Model to 146 Coefficients 
+Including Band Noise for 1 bands
+fitting for: Arbitrary Phase 
+fitting for: RAJ 
+fitting for: DECJ 
+fitting for: F0 
+fitting for: F1 
+fitting for: DM1 
+fitting for: DM2 
+fitting for: PMRA 
+fitting for: PMDEC 
+fitting for: PX 
+fitting for: PB 
+fitting for: T0 
+fitting for: A1 
+fitting for: OM 
+fitting for: ECC 
+fitting for: FD1 
+fitting for: FD2 
+fitting for: FD3 
+fitting for: KOM 
+fitting for: KIN 
+fitting for: DM_S1YR 
+fitting for: DM_C1YR 
+fitting for: NE_SW 
+Found 27 jumps to fit 
+total Timing Model params to fit:  50 
+There are 51 jumps 
+Not an MJD PreJump: 0 0 
+Not an MJD PreJump: 1 1.22053e-06 
+Not an MJD PreJump: 2 2.66792e-06 
+Not an MJD PreJump: 3 3.2656e-06 
+Not an MJD PreJump: 4 3.50415e-06 
+Not an MJD PreJump: 5 1.24634e-05 
+Not an MJD PreJump: 6 2.85272e-06 
+Not an MJD PreJump: 7 3.25828e-06 
+Not an MJD PreJump: 8 2.68431e-07 
+Not an MJD PreJump: 9 3.81776e-06 
+Not an MJD PreJump: 10 3.37058e-08 
+Not an MJD PreJump: 11 2.46396e-06 
+Not an MJD PreJump: 12 -5.56314e-06 
+Not an MJD PreJump: 13 -6.99328e-06 
+Not an MJD PreJump: 14 2.13208e-06 
+Not an MJD PreJump: 15 3.82817e-07 
+Not an MJD PreJump: 16 -6.36359e-07 
+Not an MJD PreJump: 17 -2.36e-06 
+Not an MJD PreJump: 18 -1.72e-06 
+Not an MJD PreJump: 19 -1.8e-06 
+Not an MJD PreJump: 20 2.2e-07 
+Not an MJD PreJump: 21 4.5e-07 
+Not an MJD PreJump: 22 -1.22813e-05 
+Not an MJD PreJump: 23 -1.3e-07 
+Not an MJD PreJump: 24 -1.13e-06 
+Not an MJD PreJump: 25 -5.435e-06 
+Not an MJD PreJump: 26 -1.1395e-05 
+Not an MJD PreJump: 27 -1.435e-05 
+Not an MJD PreJump: 28 1.03e-06 
+Not an MJD PreJump: 29 8.32e-06 
+Not an MJD PreJump: 30 1.494e-05 
+Not an MJD PreJump: 31 2.23e-06 
+Not an MJD PreJump: 32 5.05e-06 
+Not an MJD PreJump: 33 9.22e-06 
+Not an MJD PreJump: 34 9.27e-07 
+Not an MJD PreJump: 35 3.82e-07 
+Jump 51 ( -f MULTI_AFB -0.0011441928836478 1): -0.0011324794891302 1.7825856216562e-06 Y
+
+Derived parameters:
+
+P0 (s)      = 0.00462164152674994       1.0957e-17   
+P1          = 1.84629021450234e-20      1.0682e-25   
+tau_c (Myr) = 3968.8
+bs (G)      = 2.956e+08
+
+Binary model: T2
+Mass function                  = 0.000782968229  +- 0.000000000023 solar masses 
+Minimum, median and maximum companion mass: 0.1191 < 0.1388 < 0.2946 solar masses
+
+Parallax distance is 921.912 (+/- 124.711) pc.
+Total proper motion = 7.0727 +/- 0.030612 mas/yr
+Total time span = 8810.857 days = 24.123 years
+
+Tempo2 usage
+Units:                 TCB (tempo2)
+Time ephemeris:        IF99 (tempo2)
+Troposphere corr.?     Yes (tempo2)
+Dilate freq?           Yes (tempo2)
+Electron density (1AU) 8.5788
+Solar system ephem     DE436
+Time scale             TT(BIPM2018)
+Binary model           T2
+
+[textOutput.C:1641] Warning: There are output parameters with very high covariance
+                  OM                   T0 +1.00000
+                 KOM                   PB -0.99867
+                 KIN                   PB -0.99971
+                 KIN                  KOM +0.99835
+Notice: There were 5 warnings. Summaries are shown below, check logs for full details.
+Warning #1: [TIM1] Please place MODE flags in the parameter file 
+Warning #2: [DUP1] duplicated warnings have been suppressed.
+Warning #3: Refusing to fit for bad JUMP ' -f H-OH_cpsr2n -0.0011274684340721 1' which had no data points in range
+Warning #4: Refusing to fit for bad JUMP ' -f H-OH_cpsr2m -0.0011245973262076 1' which had no data points in range
+Warning #5: There are output parameters with very high covariance
+Graphical Interface: TempoNest
+Author:              L. Lentati
+Version:             1.0
+----------------------------------------------------------------
+This program comes with ABSOLUTELY NO WARRANTY.
+This is free software, and you are welcome to redistribute it
+under conditions of GPL license.
+
+----------------------------------------------------------------
+
+
+
+
+*****************************************************
+Starting TempoNest
+*****************************************************
+
+
+
+Details of the fit:
+file root set to results/J1643-DM_annual-J1643-1224- 
+Including Red Noise: Power Law Model to 146 Coefficients 
+Including DM: 1 Component Power Law Model to 146 Coefficients 
+Including Band Noise for 1 bands
+fitting for: Arbitrary Phase 
+fitting for: RAJ 
+fitting for: DECJ 
+fitting for: F0 
+fitting for: F1 
+fitting for: DM1 
+fitting for: DM2 
+fitting for: PMRA 
+fitting for: PMDEC 
+fitting for: PX 
+fitting for: PB 
+fitting for: T0 
+fitting for: A1 
+fitting for: OM 
+fitting for: ECC 
+fitting for: FD1 
+fitting for: FD2 
+fitting for: FD3 
+fitting for: KOM 
+fitting for: KIN 
+fitting for: DM_S1YR 
+fitting for: DM_C1YR 
+fitting for: NE_SW 
+Found 27 jumps to fit 
+total Timing Model params to fit:  50 
+There are 51 jumps 
+Not an MJD PreJump: 0 0 
+Not an MJD PreJump: 1 1.22053e-06 
+Not an MJD PreJump: 2 2.66792e-06 
+Not an MJD PreJump: 3 3.2656e-06 
+Not an MJD PreJump: 4 3.50415e-06 
+Not an MJD PreJump: 5 1.24634e-05 
+Not an MJD PreJump: 6 2.85272e-06 
+Not an MJD PreJump: 7 3.25828e-06 
+Not an MJD PreJump: 8 2.68431e-07 
+Not an MJD PreJump: 9 3.81776e-06 
+Not an MJD PreJump: 10 3.37058e-08 
+Not an MJD PreJump: 11 2.46396e-06 
+Not an MJD PreJump: 12 -5.56314e-06 
+Not an MJD PreJump: 13 -6.99328e-06 
+Not an MJD PreJump: 14 2.13208e-06 
+Not an MJD PreJump: 15 3.82817e-07 
+Not an MJD PreJump: 16 -6.36359e-07 
+Not an MJD PreJump: 17 -2.36e-06 
+Not an MJD PreJump: 18 -1.72e-06 
+Not an MJD PreJump: 19 -1.8e-06 
+Not an MJD PreJump: 20 2.2e-07 
+Not an MJD PreJump: 21 4.5e-07 
+Not an MJD PreJump: 22 -1.22813e-05 
+Not an MJD PreJump: 23 -1.3e-07 
+Not an MJD PreJump: 24 -1.13e-06 
+Not an MJD PreJump: 25 -5.435e-06 
+Not an MJD PreJump: 26 -1.1395e-05 
+Not an MJD PreJump: 27 -1.435e-05 
+Not an MJD PreJump: 28 1.03e-06 
+Not an MJD PreJump: 29 8.32e-06 
+Not an MJD PreJump: 30 1.494e-05 
+Not an MJD PreJump: 31 2.23e-06 
+Not an MJD PreJump: 32 5.05e-06 
+Not an MJD PreJump: 33 9.22e-06 
+Not an MJD PreJump: 34 9.27e-07 
+Not an MJD PreJump: 35 3.82e-07 
+Jump 51 ( -f MULTI_AFB -0.0011441928836478 1): -0.0011324794891302 1.7825856216562e-06 Y
+
+Derived parameters:
+
+P0 (s)      = 0.00462164152674994       1.0957e-17   
+P1          = 1.84629021450234e-20      1.0682e-25   
+tau_c (Myr) = 3968.8
+bs (G)      = 2.956e+08
+
+Binary model: T2
+Mass function                  = 0.000782968229  +- 0.000000000023 solar masses 
+Minimum, median and maximum companion mass: 0.1191 < 0.1388 < 0.2946 solar masses
+
+Parallax distance is 921.912 (+/- 124.711) pc.
+Total proper motion = 7.0727 +/- 0.030612 mas/yr
+Total time span = 8810.857 days = 24.123 years
+
+Tempo2 usage
+Units:                 TCB (tempo2)
+Time ephemeris:        IF99 (tempo2)
+Troposphere corr.?     Yes (tempo2)
+Dilate freq?           Yes (tempo2)
+Electron density (1AU) 8.5788
+Solar system ephem     DE436
+Time scale             TT(BIPM2018)
+Binary model           T2
+
+[textOutput.C:1641] Warning: There are output parameters with very high covariance
+                  OM                   T0 +1.00000
+                 KOM                   PB -0.99867
+                 KIN                   PB -0.99971
+                 KIN                  KOM +0.99835
+Notice: There were 5 warnings. Summaries are shown below, check logs for full details.
+Warning #1: [TIM1] Please place MODE flags in the parameter file 
+Warning #2: [DUP1] duplicated warnings have been suppressed.
+Warning #3: Refusing to fit for bad JUMP ' -f H-OH_cpsr2n -0.0011274684340721 1' which had no data points in range
+Warning #4: Refusing to fit for bad JUMP ' -f H-OH_cpsr2m -0.0011245973262076 1' which had no data points in range
+Warning #5: There are output parameters with very high covariance
+Graphical Interface: TempoNest
+Author:              L. Lentati
+Version:             1.0
+----------------------------------------------------------------
+This program comes with ABSOLUTELY NO WARRANTY.
+This is free software, and you are welcome to redistribute it
+under conditions of GPL license.
+
+----------------------------------------------------------------
+
+
+
+
+*****************************************************
+Starting TempoNest
+*****************************************************
+
+
+
+Details of the fit:
+file root set to results/J1643-DM_annual-J1643-1224- 
+Including Red Noise: Power Law Model to 146 Coefficients 
+Including DM: 1 Component Power Law Model to 146 Coefficients 
+Including Band Noise for 1 bands
+fitting for: Arbitrary Phase 
+fitting for: RAJ 
+fitting for: DECJ 
+fitting for: F0 
+fitting for: F1 
+fitting for: DM1 
+fitting for: DM2 
+fitting for: PMRA 
+fitting for: PMDEC 
+fitting for: PX 
+fitting for: PB 
+fitting for: T0 
+fitting for: A1 
+fitting for: OM 
+fitting for: ECC 
+fitting for: FD1 
+fitting for: FD2 
+fitting for: FD3 
+fitting for: KOM 
+fitting for: KIN 
+fitting for: DM_S1YR 
+fitting for: DM_C1YR 
+fitting for: NE_SW 
+Found 27 jumps to fit 
+total Timing Model params to fit:  50 
+There are 51 jumps 
+Not an MJD PreJump: 0 0 
+Not an MJD PreJump: 1 1.22053e-06 
+Not an MJD PreJump: 2 2.66792e-06 
+Not an MJD PreJump: 3 3.2656e-06 
+Not an MJD PreJump: 4 3.50415e-06 
+Not an MJD PreJump: 5 1.24634e-05 
+Not an MJD PreJump: 6 2.85272e-06 
+Not an MJD PreJump: 7 3.25828e-06 
+Not an MJD PreJump: 8 2.68431e-07 
+Not an MJD PreJump: 9 3.81776e-06 
+Not an MJD PreJump: 10 3.37058e-08 
+Not an MJD PreJump: 11 2.46396e-06 
+Not an MJD PreJump: 12 -5.56314e-06 
+Not an MJD PreJump: 13 -6.99328e-06 
+Not an MJD PreJump: 14 2.13208e-06 
+Not an MJD PreJump: 15 3.82817e-07 
+Not an MJD PreJump: 16 -6.36359e-07 
+Not an MJD PreJump: 17 -2.36e-06 
+Not an MJD PreJump: 18 -1.72e-06 
+Not an MJD PreJump: 19 -1.8e-06 
+Not an MJD PreJump: 20 2.2e-07 
+Not an MJD PreJump: 21 4.5e-07 
+Not an MJD PreJump: 22 -1.22813e-05 
+Not an MJD PreJump: 23 -1.3e-07 
+Not an MJD PreJump: 24 -1.13e-06 
+Not an MJD PreJump: 25 -5.435e-06 
+Not an MJD PreJump: 26 -1.1395e-05 
+Not an MJD PreJump: 27 -1.435e-05 
+Not an MJD PreJump: 28 1.03e-06 
+Not an MJD PreJump: 29 8.32e-06 
+Not an MJD PreJump: 30 1.494e-05 
+Not an MJD PreJump: 31 2.23e-06 
+Not an MJD PreJump: 32 5.05e-06 
+Not an MJD PreJump: 33 9.22e-06 
+Not an MJD PreJump: 34 9.27e-07 
+Not an MJD PreJump: 35 3.82e-07 
+Not an MJD PreJump: 36 5.41e-07 
+Not an MJD PreJump: 37 -1.31e-06 
+Not an MJD PreJump: 38 1.71e-07 
+Not an MJD PreJump: 39 4.25e-07 
+Not an MJD PreJump: 40 -1.533e-06 
+Not an MJD PreJump: 41 5.56169e-07 
+Not an MJD PreJump: 42 1.32435e-06 
+Not an MJD PreJump: 43 2.29581e-07 
+Not an MJD PreJump: 44 -2.9763e-06 
+Not an MJD PreJump: 45 -0.00110602 
+Not an MJD PreJump: 46 -0.00110509 
+Not an MJD PreJump: 47 -0.00112747 
+Not an MJD PreJump: 48 -0.0011246 
+Not an MJD PreJump: 49 -0.00110116 
+Not an MJD PreJump: 50 -0.00110072 
+Not an MJD PreJump: 51 -0.00114419 
+about to do priors for band noise 54 56
+priors for band noise 0 54 56
+marginalising over timing param: 0 
+marginalising over timing param: 1 
+marginalising over timing param: 2 
+marginalising over timing param: 3 
+marginalising over timing param: 4 
+marginalising over timing param: 5 
+marginalising over timing param: 6 
+marginalising over timing param: 7 
+marginalising over timing param: 8 
+marginalising over timing param: 9 
+marginalising over timing param: 10 
+marginalising over timing param: 11 
+marginalising over timing param: 12 
+marginalising over timing param: 13 
+marginalising over timing param: 14 
+marginalising over timing param: 15 
+marginalising over timing param: 16 
+marginalising over timing param: 17 
+marginalising over timing param: 20 
+marginalising over timing param: 21 
+marginalising over timing param: 22 
+marginalising over timing param: 23 
+marginalising over timing param: 24 
+marginalising over timing param: 25 
+marginalising over timing param: 26 
+marginalising over timing param: 27 
+marginalising over timing param: 28 
+marginalising over timing param: 29 
+marginalising over timing param: 30 
+marginalising over timing param: 31 
+marginalising over timing param: 32 
+marginalising over timing param: 33 
+marginalising over timing param: 34 
+marginalising over timing param: 35 
+marginalising over timing param: 36 
+marginalising over timing param: 37 
+marginalising over timing param: 38 
+marginalising over timing param: 39 
+marginalising over timing param: 40 
+marginalising over timing param: 41 
+marginalising over timing param: 42 
+marginalising over timing param: 43 
+marginalising over timing param: 44 
+marginalising over timing param: 45 
+marginalising over timing param: 46 
+marginalising over timing param: 47 
+marginalising over timing param: 48 
+marginalising over timing param: 49 
+Set to use custom priors, updating from setPriors function 
+
+Priors:
+Prior on KOM : 0 -> 360
+Prior on KIN : 0 -> 180
+Prior on Red Noise Log Amplitude : -20 -> -10
+Prior on Red Noise Slope : 0 -> 6
+Prior on DM Log Amplitude : -20 -> -10
+Prior on DM Slope : 0 -> 6
+Prior on 0 - 1000 Noise Log Amplitude : -20 -> -10
+Prior on 0 - 1000 Noise Slope : 0 -> 6
+
+
+Pre-Computing Matrices: totalsize = 924
+param 0 in, 0 1 
+param 1 in, 0 1 
+param 2 in, -20 -10 
+param 3 in, 0 6 
+param 4 in, -20 -10 
+param 5 in, 0 6 
+param 6 in, -20 -10 
+param 7 in, 0 6 
+Not an MJD PreJump: 36 5.41e-07 
+Not an MJD PreJump: 37 -1.31e-06 
+Not an MJD PreJump: 38 1.71e-07 
+Not an MJD PreJump: 39 4.25e-07 
+Not an MJD PreJump: 40 -1.533e-06 
+Not an MJD PreJump: 41 5.56169e-07 
+Not an MJD PreJump: 42 1.32435e-06 
+Not an MJD PreJump: 43 2.29581e-07 
+Not an MJD PreJump: 44 -2.9763e-06 
+Not an MJD PreJump: 45 -0.00110602 
+Not an MJD PreJump: 46 -0.00110509 
+Not an MJD PreJump: 47 -0.00112747 
+Not an MJD PreJump: 48 -0.0011246 
+Not an MJD PreJump: 49 -0.00110116 
+Not an MJD PreJump: 50 -0.00110072 
+Not an MJD PreJump: 51 -0.00114419 
+about to do priors for band noise 54 56
+priors for band noise 0 54 56
+marginalising over timing param: 0 
+marginalising over timing param: 1 
+marginalising over timing param: 2 
+marginalising over timing param: 3 
+marginalising over timing param: 4 
+marginalising over timing param: 5 
+marginalising over timing param: 6 
+marginalising over timing param: 7 
+marginalising over timing param: 8 
+marginalising over timing param: 9 
+marginalising over timing param: 10 
+marginalising over timing param: 11 
+marginalising over timing param: 12 
+marginalising over timing param: 13 
+marginalising over timing param: 14 
+marginalising over timing param: 15 
+marginalising over timing param: 16 
+marginalising over timing param: 17 
+marginalising over timing param: 20 
+marginalising over timing param: 21 
+marginalising over timing param: 22 
+marginalising over timing param: 23 
+marginalising over timing param: 24 
+marginalising over timing param: 25 
+marginalising over timing param: 26 
+marginalising over timing param: 27 
+marginalising over timing param: 28 
+marginalising over timing param: 29 
+marginalising over timing param: 30 
+marginalising over timing param: 31 
+marginalising over timing param: 32 
+marginalising over timing param: 33 
+marginalising over timing param: 34 
+marginalising over timing param: 35 
+marginalising over timing param: 36 
+marginalising over timing param: 37 
+marginalising over timing param: 38 
+marginalising over timing param: 39 
+marginalising over timing param: 40 
+marginalising over timing param: 41 
+marginalising over timing param: 42 
+marginalising over timing param: 43 
+marginalising over timing param: 44 
+marginalising over timing param: 45 
+marginalising over timing param: 46 
+marginalising over timing param: 47 
+marginalising over timing param: 48 
+marginalising over timing param: 49 
+Set to use custom priors, updating from setPriors function 
+
+Priors:
+Prior on KOM : 0 -> 360
+Prior on KIN : 0 -> 180
+Prior on Red Noise Log Amplitude : -20 -> -10
+Prior on Red Noise Slope : 0 -> 6
+Prior on DM Log Amplitude : -20 -> -10
+Prior on DM Slope : 0 -> 6
+Prior on 0 - 1000 Noise Log Amplitude : -20 -> -10
+Prior on 0 - 1000 Noise Slope : 0 -> 6
+
+
+Pre-Computing Matrices: totalsize = 924
+param 0 in, 0 1 
+param 1 in, 0 1 
+param 2 in, -20 -10 
+param 3 in, 0 6 
+param 4 in, -20 -10 
+param 5 in, 0 6 
+param 6 in, -20 -10 
+param 7 in, 0 6 
+Not an MJD PreJump: 36 5.41e-07 
+Not an MJD PreJump: 37 -1.31e-06 
+Not an MJD PreJump: 38 1.71e-07 
+Not an MJD PreJump: 39 4.25e-07 
+Not an MJD PreJump: 40 -1.533e-06 
+Not an MJD PreJump: 41 5.56169e-07 
+Not an MJD PreJump: 42 1.32435e-06 
+Not an MJD PreJump: 43 2.29581e-07 
+Not an MJD PreJump: 44 -2.9763e-06 
+Not an MJD PreJump: 45 -0.00110602 
+Not an MJD PreJump: 46 -0.00110509 
+Not an MJD PreJump: 47 -0.00112747 
+Not an MJD PreJump: 48 -0.0011246 
+Not an MJD PreJump: 49 -0.00110116 
+Not an MJD PreJump: 50 -0.00110072 
+Not an MJD PreJump: 51 -0.00114419 
+about to do priors for band noise 54 56
+priors for band noise 0 54 56
+marginalising over timing param: 0 
+marginalising over timing param: 1 
+marginalising over timing param: 2 
+marginalising over timing param: 3 
+marginalising over timing param: 4 
+marginalising over timing param: 5 
+marginalising over timing param: 6 
+marginalising over timing param: 7 
+marginalising over timing param: 8 
+marginalising over timing param: 9 
+marginalising over timing param: 10 
+marginalising over timing param: 11 
+marginalising over timing param: 12 
+marginalising over timing param: 13 
+marginalising over timing param: 14 
+marginalising over timing param: 15 
+marginalising over timing param: 16 
+marginalising over timing param: 17 
+marginalising over timing param: 20 
+marginalising over timing param: 21 
+marginalising over timing param: 22 
+marginalising over timing param: 23 
+marginalising over timing param: 24 
+marginalising over timing param: 25 
+marginalising over timing param: 26 
+marginalising over timing param: 27 
+marginalising over timing param: 28 
+marginalising over timing param: 29 
+marginalising over timing param: 30 
+marginalising over timing param: 31 
+marginalising over timing param: 32 
+marginalising over timing param: 33 
+marginalising over timing param: 34 
+marginalising over timing param: 35 
+marginalising over timing param: 36 
+marginalising over timing param: 37 
+marginalising over timing param: 38 
+marginalising over timing param: 39 
+marginalising over timing param: 40 
+marginalising over timing param: 41 
+marginalising over timing param: 42 
+marginalising over timing param: 43 
+marginalising over timing param: 44 
+marginalising over timing param: 45 
+marginalising over timing param: 46 
+marginalising over timing param: 47 
+marginalising over timing param: 48 
+marginalising over timing param: 49 
+Set to use custom priors, updating from setPriors function 
+
+Priors:
+Prior on KOM : 0 -> 360
+Prior on KIN : 0 -> 180
+Prior on Red Noise Log Amplitude : -20 -> -10
+Prior on Red Noise Slope : 0 -> 6
+Prior on DM Log Amplitude : -20 -> -10
+Prior on DM Slope : 0 -> 6
+Prior on 0 - 1000 Noise Log Amplitude : -20 -> -10
+Prior on 0 - 1000 Noise Slope : 0 -> 6
+
+
+Pre-Computing Matrices: totalsize = 924
+param 0 in, 0 1 
+param 1 in, 0 1 
+param 2 in, -20 -10 
+param 3 in, 0 6 
+param 4 in, -20 -10 
+param 5 in, 0 6 
+param 6 in, -20 -10 
+param 7 in, 0 6 
+Not an MJD PreJump: 36 5.41e-07 
+Not an MJD PreJump: 37 -1.31e-06 
+Not an MJD PreJump: 38 1.71e-07 
+Not an MJD PreJump: 39 4.25e-07 
+Not an MJD PreJump: 40 -1.533e-06 
+Not an MJD PreJump: 41 5.56169e-07 
+Not an MJD PreJump: 42 1.32435e-06 
+Not an MJD PreJump: 43 2.29581e-07 
+Not an MJD PreJump: 44 -2.9763e-06 
+Not an MJD PreJump: 45 -0.00110602 
+Not an MJD PreJump: 46 -0.00110509 
+Not an MJD PreJump: 47 -0.00112747 
+Not an MJD PreJump: 48 -0.0011246 
+Not an MJD PreJump: 49 -0.00110116 
+Not an MJD PreJump: 50 -0.00110072 
+Not an MJD PreJump: 51 -0.00114419 
+about to do priors for band noise 54 56
+priors for band noise 0 54 56
+marginalising over timing param: 0 
+marginalising over timing param: 1 
+marginalising over timing param: 2 
+marginalising over timing param: 3 
+marginalising over timing param: 4 
+marginalising over timing param: 5 
+marginalising over timing param: 6 
+marginalising over timing param: 7 
+marginalising over timing param: 8 
+marginalising over timing param: 9 
+marginalising over timing param: 10 
+marginalising over timing param: 11 
+marginalising over timing param: 12 
+marginalising over timing param: 13 
+marginalising over timing param: 14 
+marginalising over timing param: 15 
+marginalising over timing param: 16 
+marginalising over timing param: 17 
+marginalising over timing param: 20 
+marginalising over timing param: 21 
+marginalising over timing param: 22 
+marginalising over timing param: 23 
+marginalising over timing param: 24 
+marginalising over timing param: 25 
+marginalising over timing param: 26 
+marginalising over timing param: 27 
+marginalising over timing param: 28 
+marginalising over timing param: 29 
+marginalising over timing param: 30 
+marginalising over timing param: 31 
+marginalising over timing param: 32 
+marginalising over timing param: 33 
+marginalising over timing param: 34 
+marginalising over timing param: 35 
+marginalising over timing param: 36 
+marginalising over timing param: 37 
+marginalising over timing param: 38 
+marginalising over timing param: 39 
+marginalising over timing param: 40 
+marginalising over timing param: 41 
+marginalising over timing param: 42 
+marginalising over timing param: 43 
+marginalising over timing param: 44 
+marginalising over timing param: 45 
+marginalising over timing param: 46 
+marginalising over timing param: 47 
+marginalising over timing param: 48 
+marginalising over timing param: 49 
+Set to use custom priors, updating from setPriors function 
+
+Priors:
+Prior on KOM : 0 -> 360
+Prior on KIN : 0 -> 180
+Prior on Red Noise Log Amplitude : -20 -> -10
+Prior on Red Noise Slope : 0 -> 6
+Prior on DM Log Amplitude : -20 -> -10
+Prior on DM Slope : 0 -> 6
+Prior on 0 - 1000 Noise Log Amplitude : -20 -> -10
+Prior on 0 - 1000 Noise Slope : 0 -> 6
+
+
+Pre-Computing Matrices: totalsize = 924
+param 0 in, 0 1 
+param 1 in, 0 1 
+param 2 in, -20 -10 
+param 3 in, 0 6 
+param 4 in, -20 -10 
+param 5 in, 0 6 
+param 6 in, -20 -10 
+param 7 in, 0 6 
+ my rank           0
+ my rank           2
+ my rank           3
+ my rank           1
+ MultiNest Warning: no resume file found, starting from scratch
+ *****************************************************
+ MultiNest v3.6
+ Copyright Farhan Feroz & Mike Hobson
+ Release Mar 2014
+
+ no. of live points =  100
+ dimensionality =    8
+ *****************************************************
+ Starting MultiNest
+ generating live points
+ live points generated, starting sampling
+Acceptance Rate:                        0.909091
+Replacements:                                150
+Total Samples:                               165
+Nested Sampling ln(Z):              64711.621633
+Importance Nested Sampling ln(Z):   72274.506640 +/-  0.997019
+Acceptance Rate:                        0.729927
+Replacements:                                200
+Total Samples:                               274
+Nested Sampling ln(Z):              68366.611309
+Importance Nested Sampling ln(Z):   72274.010204 +/-  0.998187
+Acceptance Rate:                        0.586854
+Replacements:                                250
+Total Samples:                               426
+Nested Sampling ln(Z):              70354.736067
+Importance Nested Sampling ln(Z):   72273.571481 +/-  0.998831
+Acceptance Rate:                        0.466563
+Replacements:                                300
+Total Samples:                               643
+Nested Sampling ln(Z):              71017.720154
+Importance Nested Sampling ln(Z):   72273.162906 +/-  0.999223
+Acceptance Rate:                        0.338491
+Replacements:                                350
+Total Samples:                              1034
+Nested Sampling ln(Z):              71409.070135
+Importance Nested Sampling ln(Z):   72272.687482 +/-  0.999517
+Acceptance Rate:                        0.238237
+Replacements:                                400
+Total Samples:                              1679
+Nested Sampling ln(Z):              71580.113380
+Importance Nested Sampling ln(Z):   72272.204055 +/-  0.999702
+Acceptance Rate:                        0.173410
+Replacements:                                450
+Total Samples:                              2595
+Nested Sampling ln(Z):              71714.138079
+Importance Nested Sampling ln(Z):   72271.768877 +/-  0.999807
+Acceptance Rate:                        0.111433
+Replacements:                                500
+Total Samples:                              4487
+Nested Sampling ln(Z):              71836.519467
+Importance Nested Sampling ln(Z):   72271.221442 +/-  0.999889
+Acceptance Rate:                        0.073392
+Replacements:                                550
+Total Samples:                              7494
+Nested Sampling ln(Z):              71926.318849
+Importance Nested Sampling ln(Z):   72318.134874 +/-  0.990931
+Acceptance Rate:                        0.045868
+Replacements:                                600
+Total Samples:                             13081
+Nested Sampling ln(Z):              71984.229827
+Importance Nested Sampling ln(Z):   72317.577853 +/-  0.990960
+Acceptance Rate:                        0.042373
+Replacements:                                650
+Total Samples:                             15340
+Nested Sampling ln(Z):              72044.844547
+Importance Nested Sampling ln(Z):   72316.907650 +/-  0.990965
+Acceptance Rate:                        0.042288
+Replacements:                                700
+Total Samples:                             16553
+Nested Sampling ln(Z):              72097.234747
+Importance Nested Sampling ln(Z):   72316.386609 +/-  0.990968
+Acceptance Rate:                        0.041098
+Replacements:                                750
+Total Samples:                             18249
+Nested Sampling ln(Z):              72137.830476
+Importance Nested Sampling ln(Z):   72315.836033 +/-  0.942225
+Acceptance Rate:                        0.040655
+Replacements:                                800
+Total Samples:                             19678
+Nested Sampling ln(Z):              72180.770149
+Importance Nested Sampling ln(Z):   72338.499797 +/-  0.840604
+Acceptance Rate:                        0.038675
+Replacements:                                850
+Total Samples:                             21978
+Nested Sampling ln(Z):              72208.757288
+Importance Nested Sampling ln(Z):   72349.156637 +/-  0.999956
+Acceptance Rate:                        0.037192
+Replacements:                                900
+Total Samples:                             24199
+Nested Sampling ln(Z):              72235.051524
+Importance Nested Sampling ln(Z):   72378.865318 +/-  0.999979
+Acceptance Rate:                        0.035216
+Replacements:                                950
+Total Samples:                             26976
+Nested Sampling ln(Z):              72261.331081
+Importance Nested Sampling ln(Z):   72378.321824 +/-  0.998284
+Acceptance Rate:                        0.033928
+Replacements:                               1000
+Total Samples:                             29474
+Nested Sampling ln(Z):              72278.193212
+Importance Nested Sampling ln(Z):   72381.870076 +/-  0.982508
+Acceptance Rate:                        0.032032
+Replacements:                               1050
+Total Samples:                             32780
+Nested Sampling ln(Z):              72299.030430
+Importance Nested Sampling ln(Z):   72382.562064 +/-  0.772276
+Acceptance Rate:                        0.031165
+Replacements:                               1100
+Total Samples:                             35296
+Nested Sampling ln(Z):              72316.056346
+Importance Nested Sampling ln(Z):   72382.117403 +/-  0.772154
+Acceptance Rate:                        0.029517
+Replacements:                               1150
+Total Samples:                             38960
+Nested Sampling ln(Z):              72331.281850
+Importance Nested Sampling ln(Z):   72382.268689 +/-  0.632940
+Acceptance Rate:                        0.028721
+Replacements:                               1200
+Total Samples:                             41782
+Nested Sampling ln(Z):              72339.644712
+Importance Nested Sampling ln(Z):   72381.953292 +/-  0.630882
+Acceptance Rate:                        0.027363
+Replacements:                               1250
+Total Samples:                             45682
+Nested Sampling ln(Z):              72348.682708
+Importance Nested Sampling ln(Z):   72382.195189 +/-  0.563841
+Acceptance Rate:                        0.025741
+Replacements:                               1300
+Total Samples:                             50503
+Nested Sampling ln(Z):              72354.535616
+Importance Nested Sampling ln(Z):   72384.703137 +/-  0.728634
+Acceptance Rate:                        0.024955
+Replacements:                               1350
+Total Samples:                             54097
+Nested Sampling ln(Z):              72358.825475
+Importance Nested Sampling ln(Z):   72397.011519 +/-  0.999626
+Acceptance Rate:                        0.023443
+Replacements:                               1400
+Total Samples:                             59720
+Nested Sampling ln(Z):              72365.585486
+Importance Nested Sampling ln(Z):   72398.880879 +/-  0.924828
+Acceptance Rate:                        0.022320
+Replacements:                               1450
+Total Samples:                             64964
+Nested Sampling ln(Z):              72369.167975
+Importance Nested Sampling ln(Z):   72398.341507 +/-  0.919150
+Acceptance Rate:                        0.021327
+Replacements:                               1500
+Total Samples:                             70334
+Nested Sampling ln(Z):              72372.715681
+Importance Nested Sampling ln(Z):   72397.903074 +/-  0.885305
+Acceptance Rate:                        0.020041
+Replacements:                               1550
+Total Samples:                             77342
+Nested Sampling ln(Z):              72375.918452
+Importance Nested Sampling ln(Z):   72397.378351 +/-  0.863078
+Acceptance Rate:                        0.018965
+Replacements:                               1600
+Total Samples:                             84368
+Nested Sampling ln(Z):              72379.151254
+Importance Nested Sampling ln(Z):   72397.575181 +/-  0.591723
+Acceptance Rate:                        0.018200
+Replacements:                               1650
+Total Samples:                             90657
+Nested Sampling ln(Z):              72382.274911
+Importance Nested Sampling ln(Z):   72397.212895 +/-  0.509949
+Acceptance Rate:                        0.017678
+Replacements:                               1700
+Total Samples:                             96164
+Nested Sampling ln(Z):              72384.724626
+Importance Nested Sampling ln(Z):   72398.507306 +/-  0.679574
+Acceptance Rate:                        0.017257
+Replacements:                               1750
+Total Samples:                            101410
+Nested Sampling ln(Z):              72387.075078
+Importance Nested Sampling ln(Z):   72401.875162 +/-  0.809691
+Acceptance Rate:                        0.016983
+Replacements:                               1800
+Total Samples:                            105989
+Nested Sampling ln(Z):              72389.766552
+Importance Nested Sampling ln(Z):   72401.629511 +/-  0.704731
+Acceptance Rate:                        0.016448
+Replacements:                               1850
+Total Samples:                            112476
+Nested Sampling ln(Z):              72391.832206
+Importance Nested Sampling ln(Z):   72401.493914 +/-  0.518865
+Acceptance Rate:                        0.015918
+Replacements:                               1900
+Total Samples:                            119364
+Nested Sampling ln(Z):              72393.399104
+Importance Nested Sampling ln(Z):   72401.277335 +/-  0.406829
+Acceptance Rate:                        0.015529
+Replacements:                               1950
+Total Samples:                            125575
+Nested Sampling ln(Z):              72394.650166
+Importance Nested Sampling ln(Z):   72400.944465 +/-  0.347467
+Acceptance Rate:                        0.015254
+Replacements:                               2000
+Total Samples:                            131112
+Nested Sampling ln(Z):              72395.927357
+Importance Nested Sampling ln(Z):   72401.338236 +/-  0.368048
+Acceptance Rate:                        0.014990
+Replacements:                               2050
+Total Samples:                            136755
+Nested Sampling ln(Z):              72397.137933
+Importance Nested Sampling ln(Z):   72401.345415 +/-  0.272458
+Acceptance Rate:                        0.014606
+Replacements:                               2100
+Total Samples:                            143775
+Nested Sampling ln(Z):              72398.162015
+Importance Nested Sampling ln(Z):   72401.148469 +/-  0.209756
+slurmstepd: error: acct_gather_profile/influxdb _send_data: curl_easy_perform failed to send data (discarded). Reason: Couldn't connect to server
+slurmstepd: error: acct_gather_profile/influxdb _send_data: curl_easy_perform failed to send data (discarded). Reason: Couldn't connect to server
+Acceptance Rate:                        0.014133
+Replacements:                               2150
+Total Samples:                            152127
+Nested Sampling ln(Z):              72399.007260
+Importance Nested Sampling ln(Z):   72401.151557 +/-  0.175839
+Acceptance Rate:                        0.013587
+Replacements:                               2200
+Total Samples:                            161923
+Nested Sampling ln(Z):              72399.601975
+Importance Nested Sampling ln(Z):   72401.259829 +/-  0.204297
+Acceptance Rate:                        0.013082
+Replacements:                               2250
+Total Samples:                            171989
+Nested Sampling ln(Z):              72400.093693
+Importance Nested Sampling ln(Z):   72401.187269 +/-  0.145983
+Acceptance Rate:                        0.012650
+Replacements:                               2300
+Total Samples:                            181819
+Nested Sampling ln(Z):              72400.483856
+Importance Nested Sampling ln(Z):   72401.112312 +/-  0.109592
+Acceptance Rate:                        0.012301
+Replacements:                               2350
+Total Samples:                            191038
+Nested Sampling ln(Z):              72400.804988
+Importance Nested Sampling ln(Z):   72401.138521 +/-  0.084127
+Acceptance Rate:                        0.011890
+Replacements:                               2400
+Total Samples:                            201845
+Nested Sampling ln(Z):              72401.072981
+Importance Nested Sampling ln(Z):   72401.175257 +/-  0.079488
+Acceptance Rate:                        0.011625
+Replacements:                               2450
+Total Samples:                            210745
+Nested Sampling ln(Z):              72401.281813
+Importance Nested Sampling ln(Z):   72401.253301 +/-  0.062957
+Acceptance Rate:                        0.011411
+Replacements:                               2500
+Total Samples:                            219080
+Nested Sampling ln(Z):              72401.439727
+Importance Nested Sampling ln(Z):   72401.263532 +/-  0.049090
+Acceptance Rate:                        0.011164
+Replacements:                               2550
+Total Samples:                            228415
+Nested Sampling ln(Z):              72401.562208
+Importance Nested Sampling ln(Z):   72401.289192 +/-  0.039604
+Acceptance Rate:                        0.010899
+Replacements:                               2600
+Total Samples:                            238546
+Nested Sampling ln(Z):              72401.659240
+Importance Nested Sampling ln(Z):   72401.344678 +/-  0.032420
+Acceptance Rate:                        0.010780
+Replacements:                               2650
+Total Samples:                            245815
+Nested Sampling ln(Z):              72401.730249
+Importance Nested Sampling ln(Z):   72401.360698 +/-  0.029127
+Acceptance Rate:                        0.010757
+Replacements:                               2656
+Total Samples:                            246918
+Nested Sampling ln(Z):              72401.737387
+Importance Nested Sampling ln(Z):   72401.358602 +/-  0.028710
+ ln(ev)=   72401.911545258365      +/-  0.46260558039222016     
+ Total Likelihood Evaluations:       246918
+ Sampling finished. Exiting MultiNest
+Processing Posteriors 
+Getting Errors 
+text output
+
+
+TempoNest Results for PSR J1643-1224
+
+
+Evidence = 0	
+
+PARAMETER          Tempo2-Fit              TempoNest-Fit          Uncertainty   Difference   Fit
+---------------------------------------------------------------------------------------------------
+ELONG           251.08722154224           251.087221465818          0             -7.6422e-08   M
+ELAT            9.77833280533218          9.77833276085841          0             -4.4474e-08   M
+F0 (s^-1)       216.373337095062          216.373337095063          0             1.7053e-12    M
+F1 (s^-2)       -8.64385462709737e-16     -8.64391912521634e-16     0             -6.4498e-21   M
+DM1 (cm^-3 pc y -0.000812587242523709     -0.00119451156863112      0             -0.00038192   M
+DM2 (cm^-3 pc y 4.59115730044091e-05      -4.7451042910068e-05      0             -9.3363e-05   M
+PMELONG         5.45171869635401          5.40151069936135          0             -0.050208     M
+PMELAT          4.50574178007618          4.62536190658712          0             0.11962       M
+PX (mas)        1.08470248001675          0.822032751238287         0             -0.26267      M
+PB (d)          147.017396852073          147.017397802761          0             9.5069e-07    M
+T0 (MJD)        49577.9688697758          49577.9682031643          0             -0.00066661   M
+A1 (lt-s)       25.0726145162354          25.0726139112192          0             -6.0502e-07   M
+OM (deg)        321.849767483663          321.848134472039          0             -0.001633     M
+ECC             0.000505746390693607      0.000505740284429978      0             -6.1063e-09   M
+FD1             0.000189784082180243      0.000182197571939197      0             -7.5865e-06   M
+FD2             -0.000189578200341451     -0.000185032990886252     0             4.5452e-06    M
+FD3             5.92493497282689e-05      5.82880971252775e-05      0             -9.6125e-07   M
+KOM             161.30053643027           305.60428293561           35.382        144.3         M
+KIN             71.729638888522           152.700419421003          24.721        80.971        M
+DM_S1YR (cm^-3  -2.72081726825861e-05     0                         0             2.7208e-05    M
+DM_C1YR (cm^-3  -0.000410079042907633     0                         0             0.00041008    M
+NE_SW (cm^-3)   8.57880375762621          4                         0             -4.5788       M
+---------------------------------------------------------------------------------------------------
+Jump 1 ( -h 20CM_H-OH_CPSR2m 1.2205320630069e-06 1): 1.2205320630069e-06 0 M
+Jump 2 ( -h 20CM_H-OH_CPSR2n 2.6679198694439e-06 1): 2.6679198694439e-06 0 M
+Jump 3 ( -h 20CM_MULTI_CPSR2m 3.2655977990605e-06 1): 3.2655977990605e-06 0 M
+Jump 4 ( -h 20CM_MULTI_CPSR2n 3.5041530067549e-06 1): 3.5041530067549e-06 0 M
+Jump 5 ( -g 50CM_CPSR2 1.2463416920296e-05 1): 1.2463416920296e-05 0 M
+Jump 6 ( -h 20CM_H-OH_PDFB1 2.8527165519466e-06 1): 2.8527165519466e-06 0 M
+Jump 7 ( -h 20CM_MULTI_PDFB1 3.2582816001805e-06 1): 3.2582816001805e-06 0 M
+Jump 8 ( -g 10CM_PDFB1 2.6843067711734e-07 1): 2.6843067711734e-07 0 M
+Jump 9 ( -g 20CM_PDFB2 3.8177608420823e-06 1): 3.8177608420823e-06 0 M
+Jump 10 ( -g 10CM_PDFB2 3.3705790949452e-08 1): 3.3705790949452e-08 0 M
+Jump 11 ( -g 20CM_PDFB3 2.4639553292282e-06 1): 2.4639553292282e-06 0 M
+Jump 12 ( -g 40CM_PDFB3 -5.56314076676e-06 1): -5.56314076676e-06 0 M
+Jump 13 ( -g 40CM_CASPSR -6.9932758730191e-06 1): -6.9932758730191e-06 0 M
+Jump 14 ( -g 20CM_PDFB4 2.1320757150466e-06 1): 2.1320757150466e-06 0 M
+Jump 15 ( -g 10CM_WBCORR 3.8281740969908e-07 1): 3.8281740969908e-07 0 M
+Jump 16 ( -h 20CM_H-OH_PDFB4 -6.3635864158396e-07 1): -6.3635864158396e-07 0 M
+Jump 17 ( -cpsr2_50cm 1 -2.36e-06 0): -2.36e-06 0 N
+Jump 18 ( -cpsr2m_1341 1 -1.72e-06 0): -1.72e-06 0 N
+Jump 19 ( -cpsr2n_1405 1 -1.8e-06 0): -1.8e-06 0 N
+Jump 20 ( -dfb3_J0437_55319_56160 1 2.2e-07 0): 2.2e-07 0 N
+Jump 21 ( -dfb3_J0437_56160_60000 1 4.5e-07 0): 4.5e-07 0 N
+Jump 22 ( -pdfb1_512_ch 1 -1.22813e-05 0): -1.22813e-05 0 N
+Processing Posteriors 
+Getting Errors 
+text output
+
+
+TempoNest Results for PSR J1643-1224
+
+
+Evidence = 0	
+
+PARAMETER          Tempo2-Fit              TempoNest-Fit          Uncertainty   Difference   Fit
+---------------------------------------------------------------------------------------------------
+ELONG           251.08722154224           251.087221465818          0             -7.6422e-08   M
+ELAT            9.77833280533218          9.77833276085841          0             -4.4474e-08   M
+F0 (s^-1)       216.373337095062          216.373337095063          0             1.7053e-12    M
+F1 (s^-2)       -8.64385462709737e-16     -8.64391912521634e-16     0             -6.4498e-21   M
+DM1 (cm^-3 pc y -0.000812587242523709     -0.00119451156863112      0             -0.00038192   M
+DM2 (cm^-3 pc y 4.59115730044091e-05      -4.7451042910068e-05      0             -9.3363e-05   M
+PMELONG         5.45171869635401          5.40151069936135          0             -0.050208     M
+PMELAT          4.50574178007618          4.62536190658712          0             0.11962       M
+PX (mas)        1.08470248001675          0.822032751238287         0             -0.26267      M
+PB (d)          147.017396852073          147.017397802761          0             9.5069e-07    M
+T0 (MJD)        49577.9688697758          49577.9682031643          0             -0.00066661   M
+A1 (lt-s)       25.0726145162354          25.0726139112192          0             -6.0502e-07   M
+OM (deg)        321.849767483663          321.848134472039          0             -0.001633     M
+ECC             0.000505746390693607      0.000505740284429978      0             -6.1063e-09   M
+FD1             0.000189784082180243      0.000182197571939197      0             -7.5865e-06   M
+FD2             -0.000189578200341451     -0.000185032990886252     0             4.5452e-06    M
+FD3             5.92493497282689e-05      5.82880971252775e-05      0             -9.6125e-07   M
+KOM             161.30053643027           305.60428293561           35.382        144.3         M
+KIN             71.729638888522           152.700419421003          24.721        80.971        M
+DM_S1YR (cm^-3  -2.72081726825861e-05     0                         0             2.7208e-05    M
+DM_C1YR (cm^-3  -0.000410079042907633     0                         0             0.00041008    M
+NE_SW (cm^-3)   8.57880375762621          4                         0             -4.5788       M
+---------------------------------------------------------------------------------------------------
+Jump 1 ( -h 20CM_H-OH_CPSR2m 1.2205320630069e-06 1): 1.2205320630069e-06 0 M
+Jump 2 ( -h 20CM_H-OH_CPSR2n 2.6679198694439e-06 1): 2.6679198694439e-06 0 M
+Jump 3 ( -h 20CM_MULTI_CPSR2m 3.2655977990605e-06 1): 3.2655977990605e-06 0 M
+Jump 4 ( -h 20CM_MULTI_CPSR2n 3.5041530067549e-06 1): 3.5041530067549e-06 0 M
+Jump 5 ( -g 50CM_CPSR2 1.2463416920296e-05 1): 1.2463416920296e-05 0 M
+Jump 6 ( -h 20CM_H-OH_PDFB1 2.8527165519466e-06 1): 2.8527165519466e-06 0 M
+Jump 7 ( -h 20CM_MULTI_PDFB1 3.2582816001805e-06 1): 3.2582816001805e-06 0 M
+Jump 8 ( -g 10CM_PDFB1 2.6843067711734e-07 1): 2.6843067711734e-07 0 M
+Jump 9 ( -g 20CM_PDFB2 3.8177608420823e-06 1): 3.8177608420823e-06 0 M
+Jump 10 ( -g 10CM_PDFB2 3.3705790949452e-08 1): 3.3705790949452e-08 0 M
+Jump 11 ( -g 20CM_PDFB3 2.4639553292282e-06 1): 2.4639553292282e-06 0 M
+Jump 12 ( -g 40CM_PDFB3 -5.56314076676e-06 1): -5.56314076676e-06 0 M
+Jump 13 ( -g 40CM_CASPSR -6.9932758730191e-06 1): -6.9932758730191e-06 0 M
+Jump 14 ( -g 20CM_PDFB4 2.1320757150466e-06 1): 2.1320757150466e-06 0 M
+Jump 15 ( -g 10CM_WBCORR 3.8281740969908e-07 1): 3.8281740969908e-07 0 M
+Jump 16 ( -h 20CM_H-OH_PDFB4 -6.3635864158396e-07 1): -6.3635864158396e-07 0 M
+Jump 17 ( -cpsr2_50cm 1 -2.36e-06 0): -2.36e-06 0 N
+Jump 18 ( -cpsr2m_1341 1 -1.72e-06 0): -1.72e-06 0 N
+Jump 19 ( -cpsr2n_1405 1 -1.8e-06 0): -1.8e-06 0 N
+Jump 20 ( -dfb3_J0437_55319_56160 1 2.2e-07 0): 2.2e-07 0 N
+Jump 21 ( -dfb3_J0437_56160_60000 1 4.5e-07 0): 4.5e-07 0 N
+Jump 22 ( -pdfb1_512_ch 1 -1.22813e-05 0): -1.22813e-05 0 N
+Processing Posteriors 
+Getting Errors 
+text output
+
+
+TempoNest Results for PSR J1643-1224
+
+
+Evidence = 0	
+
+PARAMETER          Tempo2-Fit              TempoNest-Fit          Uncertainty   Difference   Fit
+---------------------------------------------------------------------------------------------------
+ELONG           251.08722154224           251.087221465818          0             -7.6422e-08   M
+ELAT            9.77833280533218          9.77833276085841          0             -4.4474e-08   M
+F0 (s^-1)       216.373337095062          216.373337095063          0             1.7053e-12    M
+F1 (s^-2)       -8.64385462709737e-16     -8.64391912521634e-16     0             -6.4498e-21   M
+DM1 (cm^-3 pc y -0.000812587242523709     -0.00119451156863112      0             -0.00038192   M
+DM2 (cm^-3 pc y 4.59115730044091e-05      -4.7451042910068e-05      0             -9.3363e-05   M
+PMELONG         5.45171869635401          5.40151069936135          0             -0.050208     M
+PMELAT          4.50574178007618          4.62536190658712          0             0.11962       M
+PX (mas)        1.08470248001675          0.822032751238287         0             -0.26267      M
+PB (d)          147.017396852073          147.017397802761          0             9.5069e-07    M
+T0 (MJD)        49577.9688697758          49577.9682031643          0             -0.00066661   M
+A1 (lt-s)       25.0726145162354          25.0726139112192          0             -6.0502e-07   M
+OM (deg)        321.849767483663          321.848134472039          0             -0.001633     M
+ECC             0.000505746390693607      0.000505740284429978      0             -6.1063e-09   M
+FD1             0.000189784082180243      0.000182197571939197      0             -7.5865e-06   M
+FD2             -0.000189578200341451     -0.000185032990886252     0             4.5452e-06    M
+FD3             5.92493497282689e-05      5.82880971252775e-05      0             -9.6125e-07   M
+KOM             161.30053643027           305.60428293561           35.382        144.3         M
+KIN             71.729638888522           152.700419421003          24.721        80.971        M
+DM_S1YR (cm^-3  -2.72081726825861e-05     0                         0             2.7208e-05    M
+DM_C1YR (cm^-3  -0.000410079042907633     0                         0             0.00041008    M
+NE_SW (cm^-3)   8.57880375762621          4                         0             -4.5788       M
+---------------------------------------------------------------------------------------------------
+Jump 1 ( -h 20CM_H-OH_CPSR2m 1.2205320630069e-06 1): 1.2205320630069e-06 0 M
+Jump 2 ( -h 20CM_H-OH_CPSR2n 2.6679198694439e-06 1): 2.6679198694439e-06 0 M
+Jump 3 ( -h 20CM_MULTI_CPSR2m 3.2655977990605e-06 1): 3.2655977990605e-06 0 M
+Jump 4 ( -h 20CM_MULTI_CPSR2n 3.5041530067549e-06 1): 3.5041530067549e-06 0 M
+Jump 5 ( -g 50CM_CPSR2 1.2463416920296e-05 1): 1.2463416920296e-05 0 M
+Jump 6 ( -h 20CM_H-OH_PDFB1 2.8527165519466e-06 1): 2.8527165519466e-06 0 M
+Jump 7 ( -h 20CM_MULTI_PDFB1 3.2582816001805e-06 1): 3.2582816001805e-06 0 M
+Jump 8 ( -g 10CM_PDFB1 2.6843067711734e-07 1): 2.6843067711734e-07 0 M
+Jump 9 ( -g 20CM_PDFB2 3.8177608420823e-06 1): 3.8177608420823e-06 0 M
+Jump 10 ( -g 10CM_PDFB2 3.3705790949452e-08 1): 3.3705790949452e-08 0 M
+Jump 11 ( -g 20CM_PDFB3 2.4639553292282e-06 1): 2.4639553292282e-06 0 M
+Jump 12 ( -g 40CM_PDFB3 -5.56314076676e-06 1): -5.56314076676e-06 0 M
+Jump 13 ( -g 40CM_CASPSR -6.9932758730191e-06 1): -6.9932758730191e-06 0 M
+Jump 14 ( -g 20CM_PDFB4 2.1320757150466e-06 1): 2.1320757150466e-06 0 M
+Jump 15 ( -g 10CM_WBCORR 3.8281740969908e-07 1): 3.8281740969908e-07 0 M
+Jump 16 ( -h 20CM_H-OH_PDFB4 -6.3635864158396e-07 1): -6.3635864158396e-07 0 M
+Jump 17 ( -cpsr2_50cm 1 -2.36e-06 0): -2.36e-06 0 N
+Jump 18 ( -cpsr2m_1341 1 -1.72e-06 0): -1.72e-06 0 N
+Jump 19 ( -cpsr2n_1405 1 -1.8e-06 0): -1.8e-06 0 N
+Jump 20 ( -dfb3_J0437_55319_56160 1 2.2e-07 0): 2.2e-07 0 N
+Jump 21 ( -dfb3_J0437_56160_60000 1 4.5e-07 0): 4.5e-07 0 N
+Jump 22 ( -pdfb1_512_ch 1 -1.22813e-05 0): -1.22813e-05 0 N
+Processing Posteriors 
+Getting Errors 
+text output
+
+
+TempoNest Results for PSR J1643-1224
+
+
+Evidence = 0	
+
+PARAMETER          Tempo2-Fit              TempoNest-Fit          Uncertainty   Difference   Fit
+---------------------------------------------------------------------------------------------------
+ELONG           251.08722154224           251.087221465818          0             -7.6422e-08   M
+ELAT            9.77833280533218          9.77833276085841          0             -4.4474e-08   M
+F0 (s^-1)       216.373337095062          216.373337095063          0             1.7053e-12    M
+F1 (s^-2)       -8.64385462709737e-16     -8.64391912521634e-16     0             -6.4498e-21   M
+DM1 (cm^-3 pc y -0.000812587242523709     -0.00119451156863112      0             -0.00038192   M
+DM2 (cm^-3 pc y 4.59115730044091e-05      -4.7451042910068e-05      0             -9.3363e-05   M
+PMELONG         5.45171869635401          5.40151069936135          0             -0.050208     M
+PMELAT          4.50574178007618          4.62536190658712          0             0.11962       M
+PX (mas)        1.08470248001675          0.822032751238287         0             -0.26267      M
+PB (d)          147.017396852073          147.017397802761          0             9.5069e-07    M
+T0 (MJD)        49577.9688697758          49577.9682031643          0             -0.00066661   M
+A1 (lt-s)       25.0726145162354          25.0726139112192          0             -6.0502e-07   M
+OM (deg)        321.849767483663          321.848134472039          0             -0.001633     M
+ECC             0.000505746390693607      0.000505740284429978      0             -6.1063e-09   M
+FD1             0.000189784082180243      0.000182197571939197      0             -7.5865e-06   M
+FD2             -0.000189578200341451     -0.000185032990886252     0             4.5452e-06    M
+FD3             5.92493497282689e-05      5.82880971252775e-05      0             -9.6125e-07   M
+KOM             161.30053643027           305.60428293561           35.382        144.3         M
+KIN             71.729638888522           152.700419421003          24.721        80.971        M
+DM_S1YR (cm^-3  -2.72081726825861e-05     0                         0             2.7208e-05    M
+DM_C1YR (cm^-3  -0.000410079042907633     0                         0             0.00041008    M
+NE_SW (cm^-3)   8.57880375762621          4                         0             -4.5788       M
+---------------------------------------------------------------------------------------------------
+Jump 1 ( -h 20CM_H-OH_CPSR2m 1.2205320630069e-06 1): 1.2205320630069e-06 0 M
+Jump 2 ( -h 20CM_H-OH_CPSR2n 2.6679198694439e-06 1): 2.6679198694439e-06 0 M
+Jump 3 ( -h 20CM_MULTI_CPSR2m 3.2655977990605e-06 1): 3.2655977990605e-06 0 M
+Jump 4 ( -h 20CM_MULTI_CPSR2n 3.5041530067549e-06 1): 3.5041530067549e-06 0 M
+Jump 5 ( -g 50CM_CPSR2 1.2463416920296e-05 1): 1.2463416920296e-05 0 M
+Jump 6 ( -h 20CM_H-OH_PDFB1 2.8527165519466e-06 1): 2.8527165519466e-06 0 M
+Jump 7 ( -h 20CM_MULTI_PDFB1 3.2582816001805e-06 1): 3.2582816001805e-06 0 M
+Jump 8 ( -g 10CM_PDFB1 2.6843067711734e-07 1): 2.6843067711734e-07 0 M
+Jump 9 ( -g 20CM_PDFB2 3.8177608420823e-06 1): 3.8177608420823e-06 0 M
+Jump 10 ( -g 10CM_PDFB2 3.3705790949452e-08 1): 3.3705790949452e-08 0 M
+Jump 11 ( -g 20CM_PDFB3 2.4639553292282e-06 1): 2.4639553292282e-06 0 M
+Jump 12 ( -g 40CM_PDFB3 -5.56314076676e-06 1): -5.56314076676e-06 0 M
+Jump 13 ( -g 40CM_CASPSR -6.9932758730191e-06 1): -6.9932758730191e-06 0 M
+Jump 14 ( -g 20CM_PDFB4 2.1320757150466e-06 1): 2.1320757150466e-06 0 M
+Jump 15 ( -g 10CM_WBCORR 3.8281740969908e-07 1): 3.8281740969908e-07 0 M
+Jump 16 ( -h 20CM_H-OH_PDFB4 -6.3635864158396e-07 1): -6.3635864158396e-07 0 M
+Jump 17 ( -cpsr2_50cm 1 -2.36e-06 0): -2.36e-06 0 N
+Jump 18 ( -cpsr2m_1341 1 -1.72e-06 0): -1.72e-06 0 N
+Jump 19 ( -cpsr2n_1405 1 -1.8e-06 0): -1.8e-06 0 N
+Jump 20 ( -dfb3_J0437_55319_56160 1 2.2e-07 0): 2.2e-07 0 N
+Jump 21 ( -dfb3_J0437_56160_60000 1 4.5e-07 0): 4.5e-07 0 N
+Jump 22 ( -pdfb1_512_ch 1 -1.22813e-05 0): -1.22813e-05 0 N
+Jump 23 ( -pdfb1_post_2006 1 -1.3e-07 0): -1.3e-07 0 N
+Jump 24 ( -pdfb1_pre_2006 1 -1.13e-06 0): -1.13e-06 0 N
+Jump 25 ( -pdfb2_1024_MHz 1 -5.435e-06 0): -5.435e-06 0 N
+Jump 26 ( -pdfb2_256MHz_1024_ch 1 -1.1395e-05 0): -1.1395e-05 0 N
+Jump 27 ( -pdfb2_256MHz_2048_ch 1 -1.435e-05 0): -1.435e-05 0 N
+Jump 28 ( -pdfb3_1024_MHz 1 1.03e-06 0): 1.03e-06 0 N
+Jump 29 ( -pdfb3_256MHz_2048ch 1 8.32e-06 0): 8.32e-06 0 N
+Jump 30 ( -pdfb3_64MHz_1024ch 1 1.494e-05 0): 1.494e-05 0 N
+Jump 31 ( -pdfb4.*_1024_[1,2]... 1 2.23e-06 0): 2.23e-06 0 N
+Jump 32 ( -pdfb4_256MHz_1024ch 1 5.05e-06 0): 5.05e-06 0 N
+Jump 33 ( -pdfb4_256MHz_2048ch 1 9.22e-06 0): 9.22e-06 0 N
+Jump 34 ( -pdfb4_55319_56055_cals 1 9.27e-07 0): 9.27e-07 0 N
+Jump 35 ( -pdfb4_56055_56110_cals 1 3.82e-07 0): 3.82e-07 0 N
+Jump 36 ( -pdfb4_56110_56160_cals 1 5.41e-07 0): 5.41e-07 0 N
+Jump 37 ( -caspsr_55500_57575_cals 1 -1.31e-06 0): -1.31e-06 0 N
+Jump 38 ( -pdfb4_57575_65000_cals 1 1.71e-07 0): 1.71e-07 0 N
+Jump 39 ( -pdfb4_56160_57575_cals 1 4.25e-07 0): 4.25e-07 0 N
+Jump 40 ( -caspsr_57575_65000_cals 1 -1.533e-06 0): -1.533e-06 0 N
+Jump 41 ( -j 10CM_55319_PDFB4 5.5616928521941e-07 1): 5.5616928521941e-07 0 M
+Jump 42 ( -j 20CM_55319_PDFB4 1.3243509050829e-06 1): 1.3243509050829e-06 0 M
+Jump 43 ( -j 20CM_55319_PDFB3 2.2958063274365e-07 1): 2.2958063274365e-07 0 M
+Jump 44 ( -j 40CM_55319_PDFB3 -2.9763039981814e-06 1): -2.9763039981814e-06 0 M
+Jump 45 ( -f MULTI_cpsr2n -0.0011060245584582 1): -0.0011060245584582 0 M
+Jump 46 ( -f MULTI_cpsr2m -0.0011050878378518 1): -0.0011050878378518 0 M
+Jump 47 ( -f H-OH_cpsr2n -0.0011274684340721 1): -0.0011274684340721 0 M
+Jump 48 ( -f H-OH_cpsr2m -0.0011245973262076 1): -0.0011245973262076 0 M
+Jump 49 ( -f MULTI_fptm -0.0011011621008547 1): -0.0011011621008547 0 M
+Jump 50 ( -f H-OH_fptm -0.0011007160395903 1): -0.0011007160395903 0 M
+Jump 51 ( -f MULTI_AFB -0.0011441928836478 1): -0.0011441928836478 0 M
+------------------------------------------------------------------------------
+Stochastic Parameters:
+Power Law Red Noise Model:
+Log Amplitude: -12.832 +/- 0.0598235
+Spectral Index: 1.18949 +/- 0.246492
+Power Law DM Model:
+Log Amplitude: -11.7219 +/- 0.226327
+Spectral Index: 3.74136 +/- 0.607494
+------------------------------------------------------------------------------
+
+Derived parameters:
+
+P0 (s)      = 0.00462164152674991       0            
+P1          = 1.84630399102344e-20      0            
+tau_c (Myr) = 3968.8
+bs (G)      = 2.956e+08
+
+Binary model: T2
+Mass function                  = 0.000782968162  +- 0.000000000086 solar masses 
+Minimum, median and maximum companion mass: 0.1191 < 0.1388 < 0.2946 solar masses
+
+Parallax distance is 1216.5 (+/- 0) pc.
+Total proper motion = 7.1113 +/- 0 mas/yr
+Total time span = 8810.857 days = 24.123 years
+writing par file results/J1643-DM_annual-J1643-1224-.par. 
+finished output 
+The stop date/time was: Tue Oct  6 03:25:19 2020
+Total Wall clock run time: 53828 
+Jump 23 ( -pdfb1_post_2006 1 -1.3e-07 0): -1.3e-07 0 N
+Jump 24 ( -pdfb1_pre_2006 1 -1.13e-06 0): -1.13e-06 0 N
+Jump 25 ( -pdfb2_1024_MHz 1 -5.435e-06 0): -5.435e-06 0 N
+Jump 26 ( -pdfb2_256MHz_1024_ch 1 -1.1395e-05 0): -1.1395e-05 0 N
+Jump 27 ( -pdfb2_256MHz_2048_ch 1 -1.435e-05 0): -1.435e-05 0 N
+Jump 28 ( -pdfb3_1024_MHz 1 1.03e-06 0): 1.03e-06 0 N
+Jump 29 ( -pdfb3_256MHz_2048ch 1 8.32e-06 0): 8.32e-06 0 N
+Jump 30 ( -pdfb3_64MHz_1024ch 1 1.494e-05 0): 1.494e-05 0 N
+Jump 31 ( -pdfb4.*_1024_[1,2]... 1 2.23e-06 0): 2.23e-06 0 N
+Jump 32 ( -pdfb4_256MHz_1024ch 1 5.05e-06 0): 5.05e-06 0 N
+Jump 33 ( -pdfb4_256MHz_2048ch 1 9.22e-06 0): 9.22e-06 0 N
+Jump 34 ( -pdfb4_55319_56055_cals 1 9.27e-07 0): 9.27e-07 0 N
+Jump 35 ( -pdfb4_56055_56110_cals 1 3.82e-07 0): 3.82e-07 0 N
+Jump 36 ( -pdfb4_56110_56160_cals 1 5.41e-07 0): 5.41e-07 0 N
+Jump 37 ( -caspsr_55500_57575_cals 1 -1.31e-06 0): -1.31e-06 0 N
+Jump 38 ( -pdfb4_57575_65000_cals 1 1.71e-07 0): 1.71e-07 0 N
+Jump 39 ( -pdfb4_56160_57575_cals 1 4.25e-07 0): 4.25e-07 0 N
+Jump 40 ( -caspsr_57575_65000_cals 1 -1.533e-06 0): -1.533e-06 0 N
+Jump 41 ( -j 10CM_55319_PDFB4 5.5616928521941e-07 1): 5.5616928521941e-07 0 M
+Jump 42 ( -j 20CM_55319_PDFB4 1.3243509050829e-06 1): 1.3243509050829e-06 0 M
+Jump 43 ( -j 20CM_55319_PDFB3 2.2958063274365e-07 1): 2.2958063274365e-07 0 M
+Jump 44 ( -j 40CM_55319_PDFB3 -2.9763039981814e-06 1): -2.9763039981814e-06 0 M
+Jump 45 ( -f MULTI_cpsr2n -0.0011060245584582 1): -0.0011060245584582 0 M
+Jump 46 ( -f MULTI_cpsr2m -0.0011050878378518 1): -0.0011050878378518 0 M
+Jump 47 ( -f H-OH_cpsr2n -0.0011274684340721 1): -0.0011274684340721 0 M
+Jump 48 ( -f H-OH_cpsr2m -0.0011245973262076 1): -0.0011245973262076 0 M
+Jump 49 ( -f MULTI_fptm -0.0011011621008547 1): -0.0011011621008547 0 M
+Jump 50 ( -f H-OH_fptm -0.0011007160395903 1): -0.0011007160395903 0 M
+Jump 51 ( -f MULTI_AFB -0.0011441928836478 1): -0.0011441928836478 0 M
+------------------------------------------------------------------------------
+Stochastic Parameters:
+Power Law Red Noise Model:
+Log Amplitude: -12.832 +/- 0.0598235
+Spectral Index: 1.18949 +/- 0.246492
+Power Law DM Model:
+Log Amplitude: -11.7219 +/- 0.226327
+Spectral Index: 3.74136 +/- 0.607494
+------------------------------------------------------------------------------
+
+Derived parameters:
+
+P0 (s)      = 0.00462164152674991       0            
+P1          = 1.84630399102344e-20      0            
+tau_c (Myr) = 3968.8
+bs (G)      = 2.956e+08
+
+Binary model: T2
+Mass function                  = 0.000782968162  +- 0.000000000086 solar masses 
+Minimum, median and maximum companion mass: 0.1191 < 0.1388 < 0.2946 solar masses
+
+Parallax distance is 1216.5 (+/- 0) pc.
+Total proper motion = 7.1113 +/- 0 mas/yr
+Total time span = 8810.857 days = 24.123 years
+writing par file results/J1643-DM_annual-J1643-1224-.par. 
+finished output 
+The stop date/time was: Tue Oct  6 03:25:19 2020
+Total Wall clock run time: 53828 
+Jump 23 ( -pdfb1_post_2006 1 -1.3e-07 0): -1.3e-07 0 N
+Jump 24 ( -pdfb1_pre_2006 1 -1.13e-06 0): -1.13e-06 0 N
+Jump 25 ( -pdfb2_1024_MHz 1 -5.435e-06 0): -5.435e-06 0 N
+Jump 26 ( -pdfb2_256MHz_1024_ch 1 -1.1395e-05 0): -1.1395e-05 0 N
+Jump 27 ( -pdfb2_256MHz_2048_ch 1 -1.435e-05 0): -1.435e-05 0 N
+Jump 28 ( -pdfb3_1024_MHz 1 1.03e-06 0): 1.03e-06 0 N
+Jump 29 ( -pdfb3_256MHz_2048ch 1 8.32e-06 0): 8.32e-06 0 N
+Jump 30 ( -pdfb3_64MHz_1024ch 1 1.494e-05 0): 1.494e-05 0 N
+Jump 31 ( -pdfb4.*_1024_[1,2]... 1 2.23e-06 0): 2.23e-06 0 N
+Jump 32 ( -pdfb4_256MHz_1024ch 1 5.05e-06 0): 5.05e-06 0 N
+Jump 33 ( -pdfb4_256MHz_2048ch 1 9.22e-06 0): 9.22e-06 0 N
+Jump 34 ( -pdfb4_55319_56055_cals 1 9.27e-07 0): 9.27e-07 0 N
+Jump 35 ( -pdfb4_56055_56110_cals 1 3.82e-07 0): 3.82e-07 0 N
+Jump 36 ( -pdfb4_56110_56160_cals 1 5.41e-07 0): 5.41e-07 0 N
+Jump 37 ( -caspsr_55500_57575_cals 1 -1.31e-06 0): -1.31e-06 0 N
+Jump 38 ( -pdfb4_57575_65000_cals 1 1.71e-07 0): 1.71e-07 0 N
+Jump 39 ( -pdfb4_56160_57575_cals 1 4.25e-07 0): 4.25e-07 0 N
+Jump 40 ( -caspsr_57575_65000_cals 1 -1.533e-06 0): -1.533e-06 0 N
+Jump 41 ( -j 10CM_55319_PDFB4 5.5616928521941e-07 1): 5.5616928521941e-07 0 M
+Jump 42 ( -j 20CM_55319_PDFB4 1.3243509050829e-06 1): 1.3243509050829e-06 0 M
+Jump 43 ( -j 20CM_55319_PDFB3 2.2958063274365e-07 1): 2.2958063274365e-07 0 M
+Jump 44 ( -j 40CM_55319_PDFB3 -2.9763039981814e-06 1): -2.9763039981814e-06 0 M
+Jump 45 ( -f MULTI_cpsr2n -0.0011060245584582 1): -0.0011060245584582 0 M
+Jump 46 ( -f MULTI_cpsr2m -0.0011050878378518 1): -0.0011050878378518 0 M
+Jump 47 ( -f H-OH_cpsr2n -0.0011274684340721 1): -0.0011274684340721 0 M
+Jump 48 ( -f H-OH_cpsr2m -0.0011245973262076 1): -0.0011245973262076 0 M
+Jump 49 ( -f MULTI_fptm -0.0011011621008547 1): -0.0011011621008547 0 M
+Jump 50 ( -f H-OH_fptm -0.0011007160395903 1): -0.0011007160395903 0 M
+Jump 51 ( -f MULTI_AFB -0.0011441928836478 1): -0.0011441928836478 0 M
+------------------------------------------------------------------------------
+Stochastic Parameters:
+Power Law Red Noise Model:
+Log Amplitude: -12.832 +/- 0.0598235
+Spectral Index: 1.18949 +/- 0.246492
+Power Law DM Model:
+Log Amplitude: -11.7219 +/- 0.226327
+Spectral Index: 3.74136 +/- 0.607494
+------------------------------------------------------------------------------
+
+Derived parameters:
+
+P0 (s)      = 0.00462164152674991       0            
+P1          = 1.84630399102344e-20      0            
+tau_c (Myr) = 3968.8
+bs (G)      = 2.956e+08
+
+Binary model: T2
+Mass function                  = 0.000782968162  +- 0.000000000086 solar masses 
+Minimum, median and maximum companion mass: 0.1191 < 0.1388 < 0.2946 solar masses
+
+Parallax distance is 1216.5 (+/- 0) pc.
+Total proper motion = 7.1113 +/- 0 mas/yr
+Total time span = 8810.857 days = 24.123 years
+writing par file results/J1643-DM_annual-J1643-1224-.par. 
+finished output 
+The stop date/time was: Tue Oct  6 03:25:19 2020
+Total Wall clock run time: 53828 
+Jump 23 ( -pdfb1_post_2006 1 -1.3e-07 0): -1.3e-07 0 N
+Jump 24 ( -pdfb1_pre_2006 1 -1.13e-06 0): -1.13e-06 0 N
+Jump 25 ( -pdfb2_1024_MHz 1 -5.435e-06 0): -5.435e-06 0 N
+Jump 26 ( -pdfb2_256MHz_1024_ch 1 -1.1395e-05 0): -1.1395e-05 0 N
+Jump 27 ( -pdfb2_256MHz_2048_ch 1 -1.435e-05 0): -1.435e-05 0 N
+Jump 28 ( -pdfb3_1024_MHz 1 1.03e-06 0): 1.03e-06 0 N
+Jump 29 ( -pdfb3_256MHz_2048ch 1 8.32e-06 0): 8.32e-06 0 N
+Jump 30 ( -pdfb3_64MHz_1024ch 1 1.494e-05 0): 1.494e-05 0 N
+Jump 31 ( -pdfb4.*_1024_[1,2]... 1 2.23e-06 0): 2.23e-06 0 N
+Jump 32 ( -pdfb4_256MHz_1024ch 1 5.05e-06 0): 5.05e-06 0 N
+Jump 33 ( -pdfb4_256MHz_2048ch 1 9.22e-06 0): 9.22e-06 0 N
+Jump 34 ( -pdfb4_55319_56055_cals 1 9.27e-07 0): 9.27e-07 0 N
+Jump 35 ( -pdfb4_56055_56110_cals 1 3.82e-07 0): 3.82e-07 0 N
+Jump 36 ( -pdfb4_56110_56160_cals 1 5.41e-07 0): 5.41e-07 0 N
+Jump 37 ( -caspsr_55500_57575_cals 1 -1.31e-06 0): -1.31e-06 0 N
+Jump 38 ( -pdfb4_57575_65000_cals 1 1.71e-07 0): 1.71e-07 0 N
+Jump 39 ( -pdfb4_56160_57575_cals 1 4.25e-07 0): 4.25e-07 0 N
+Jump 40 ( -caspsr_57575_65000_cals 1 -1.533e-06 0): -1.533e-06 0 N
+Jump 41 ( -j 10CM_55319_PDFB4 5.5616928521941e-07 1): 5.5616928521941e-07 0 M
+Jump 42 ( -j 20CM_55319_PDFB4 1.3243509050829e-06 1): 1.3243509050829e-06 0 M
+Jump 43 ( -j 20CM_55319_PDFB3 2.2958063274365e-07 1): 2.2958063274365e-07 0 M
+Jump 44 ( -j 40CM_55319_PDFB3 -2.9763039981814e-06 1): -2.9763039981814e-06 0 M
+Jump 45 ( -f MULTI_cpsr2n -0.0011060245584582 1): -0.0011060245584582 0 M
+Jump 46 ( -f MULTI_cpsr2m -0.0011050878378518 1): -0.0011050878378518 0 M
+Jump 47 ( -f H-OH_cpsr2n -0.0011274684340721 1): -0.0011274684340721 0 M
+Jump 48 ( -f H-OH_cpsr2m -0.0011245973262076 1): -0.0011245973262076 0 M
+Jump 49 ( -f MULTI_fptm -0.0011011621008547 1): -0.0011011621008547 0 M
+Jump 50 ( -f H-OH_fptm -0.0011007160395903 1): -0.0011007160395903 0 M
+Jump 51 ( -f MULTI_AFB -0.0011441928836478 1): -0.0011441928836478 0 M
+------------------------------------------------------------------------------
+Stochastic Parameters:
+Power Law Red Noise Model:
+Log Amplitude: -12.832 +/- 0.0598235
+Spectral Index: 1.18949 +/- 0.246492
+Power Law DM Model:
+Log Amplitude: -11.7219 +/- 0.226327
+Spectral Index: 3.74136 +/- 0.607494
+------------------------------------------------------------------------------
+
+Derived parameters:
+
+P0 (s)      = 0.00462164152674991       0            
+P1          = 1.84630399102344e-20      0            
+tau_c (Myr) = 3968.8
+bs (G)      = 2.956e+08
+
+Binary model: T2
+Mass function                  = 0.000782968162  +- 0.000000000086 solar masses 
+Minimum, median and maximum companion mass: 0.1191 < 0.1388 < 0.2946 solar masses
+
+Parallax distance is 1216.5 (+/- 0) pc.
+Total proper motion = 7.1113 +/- 0 mas/yr
+Total time span = 8810.857 days = 24.123 years
+writing par file results/J1643-DM_annual-J1643-1224-.par. 
+finished output 
+The stop date/time was: Tue Oct  6 03:25:19 2020
+Total Wall clock run time: 53828 

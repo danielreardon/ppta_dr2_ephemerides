@@ -3,3 +3,6 @@
 *checkpoints*
 /fscrunched/results/*IS*
 /fscrunched/results/*.dat
+/final/tempo2/kopeikin/results/*.points
+/final/tempo2/kopeikin/results/*.ptprob
+/final/tempo2/kopeikin/results/*.iterinfo

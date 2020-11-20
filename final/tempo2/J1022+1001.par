@@ -138,7 +138,6 @@ TNDMC 92
 TNRedAmp -99
 TNRedGam 20
 TNRedC 0
-TNGroupSetSpan 0
 TNsubtractRed 1
 TNsubtractDM 1
 DM_SERIES TAYLOR
