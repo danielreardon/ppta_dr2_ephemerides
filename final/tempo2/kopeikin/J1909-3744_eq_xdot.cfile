@@ -140,7 +140,7 @@ FitForBand[0][3] = 0;
 #Set Custom priors to  overwrite the default values for the priors sent to multinest, and the long double priors used by tempo2, you need to be aware of what dimension is what if you use this function.
 
 # XDOT
-TempoPriors[16][2] = 0;
+TempoPriors[13][2] = 0;
 # M2 
 TempoPriors[17][2] = 0;
 # KOM

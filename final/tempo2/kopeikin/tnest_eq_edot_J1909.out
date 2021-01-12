@@ -42555,3 +42555,11 @@ Replacements:                               1300
 Total Samples:                            316925
 Nested Sampling ln(Z):            **************
 Importance Nested Sampling ln(Z): ************** +/-  0.999998
+Acceptance Rate:                        0.003349
+Replacements:                               1350
+Total Samples:                            403073
+Nested Sampling ln(Z):            **************
+Importance Nested Sampling ln(Z): ************** +/-  0.999999
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+slurmstepd: error: *** JOB 16469346 ON john12 CANCELLED AT 2021-01-12T09:52:56 ***
+slurmstepd: error: *** STEP 16469346.1 ON john12 CANCELLED AT 2021-01-12T09:52:56 ***
