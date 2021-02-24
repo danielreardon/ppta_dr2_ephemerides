@@ -1,0 +1,225 @@
+This program comes with ABSOLUTELY NO WARRANTY.
+This is free software, and you are welcome to redistribute it
+under conditions of GPL license.
+
+Warning: longdouble is an IEEE754 80-bit float.
+ --- the size of a double is 8 bytes
+[tempo2Util.C:396] Warning: [TIM1] Please place MODE flags in the parameter file 
+[preProcess.C:158] Warning: PSR J1909-3744 uses DM2+ but does not define DM_SERIES. Assume Taylor. This has behaviour has changed since June 2020!
+See https://bitbucket.org/psrsoft/tempo2/issues/27/tempo2-dm-polynomial-is-not-a-taylor
+
+Updating TOA errors using TN parameters.
+[clkcorr.C:157] Note, using '/home/dreardon/tempo2/clock' to look for extra clock files
+[clkcorr.C:179] Loaded extra clock correction ao2gps.clk : UTC(AO) -> UTC(GPS) badness 1
+[clkcorr.C:179] Loaded extra clock correction ao2nist.clk : UTC(AO) -> UTC(NIST) badness 100
+[clkcorr.C:179] Loaded extra clock correction aus2utc.clk : UTC(AUS) -> UTC badness 1
+[clkcorr.C:179] Loaded extra clock correction ced2gps.clk : UTC(ced) -> UTC(GPS) badness 1
+[clkcorr.C:179] Loaded extra clock correction eff2gps.clk : UTC(EFF) -> UTC(GPS) badness 1
+[clkcorr.C:179] Loaded extra clock correction effix2gps.clk : UTC(EFFIX) -> UTC(GPS) badness 1
+[clkcorr.C:179] Loaded extra clock correction gb1402nist.clk : UTC(GB140) -> UTC(NIST) badness 1
+[clkcorr.C:179] Loaded extra clock correction gb8532nist.clk : UTC(GB853) -> UTC(NIST) badness 1
+[clkcorr.C:179] Loaded extra clock correction gbt2gps.clk : UTC(GBT) -> UTC(GPS) badness 1
+[clkcorr.C:179] Loaded extra clock correction gps2utc.clk : UTC(GPS) -> UTC badness 1
+[clkcorr.C:179] Loaded extra clock correction hob2gps.clk : UTC(hob) -> UTC(GPS) badness 1
+[clkcorr.C:179] Loaded extra clock correction jb2gps.clk : UTC(JBROACH) -> UTC(GPS) badness 1
+[clkcorr.C:179] Loaded extra clock correction jb422jb.clk : UTC(JB42) -> UTC(JBROACH) badness 1
+[clkcorr.C:179] Loaded extra clock correction jb422jbafb.clk : UTC(JB42) -> UTC(JBAFB) badness 1
+[clkcorr.C:179] Loaded extra clock correction jbafb2gps.clk : UTC(JBAFB) -> UTC(GPS) badness 1
+[clkcorr.C:179] Loaded extra clock correction jbafb2utc.clk : UTC(JBAFB) -> UTC badness 1
+[clkcorr.C:179] Loaded extra clock correction jbdfb2gps.clk : UTC(JBDFB) -> UTC(GPS) badness 1
+[clkcorr.C:179] Loaded extra clock correction jbdfb2jb.clk : UTC(JBDFB) -> UTC(JB) badness 1
+[clkcorr.C:179] Loaded extra clock correction jbm42gps.clk : UTC(JBM4) -> UTC(GPS) badness 1
+[clkcorr.C:179] Loaded extra clock correction jbmk22jb.clk : UTC(JBMK2) -> UTC(JB) badness 1
+[clkcorr.C:179] Loaded extra clock correction jbmk2dfb2jbdfb.clk : UTC(JBMK2DFB) -> UTC(JBDFB) badness 1
+[clkcorr.C:179] Loaded extra clock correction jbmk2roach2jbroach.clk : UTC(JBMK2ROACH) -> UTC(JBROACH) badness 1
+[clkcorr.C:179] Loaded extra clock correction jbroach2gps.clk : UTC(JBROACH) -> UTC(GPS) badness 1
+[clkcorr.C:179] Loaded extra clock correction jbroach2jb.clk : UTC(JBROACH) -> UTC(JB) badness 1
+[clkcorr.C:179] Loaded extra clock correction mk2utc.clk : UTC(meerkat) -> UTC badness 1
+[clkcorr.C:179] Loaded extra clock correction mk2utc_2019.clk : UTC(meerkat) -> UTC badness 1
+[clkcorr.C:179] Loaded extra clock correction mk_dummy.clk : UTC(meerkat) -> UTC badness 1e+03
+[clkcorr.C:179] Loaded extra clock correction mo2gps.clk : UTC(mo) -> UTC(GPS) badness 1
+[clkcorr.C:179] Loaded extra clock correction ncy2gps.clk : UTC(NCY) -> UTC(GPS) badness 1
+[clkcorr.C:179] Loaded extra clock correction ncy2obspm.clk : UTC(NCY) -> UTC(OP) badness 1
+[clkcorr.C:179] Loaded extra clock correction ncyobs2obspm.clk : UTC(NCYOBS) -> UTC(OP) badness 1
+[clkcorr.C:179] Loaded extra clock correction nist2tai.clk : TA(NIST) -> TAI badness 1
+[clkcorr.C:179] Loaded extra clock correction nist2tt_nist.clk : UTC(NIST) -> TT(UTC(NIST)) badness 1
+[clkcorr.C:179] Loaded extra clock correction nist2utc.clk : UTC(NIST) -> UTC badness 1
+[clkcorr.C:179] Loaded extra clock correction obspm2gps.clk : UTC(OP) -> UTC(GPS) badness 1
+[clkcorr.C:179] Loaded extra clock correction obspm2utc.clk : UTC(OP) -> UTC badness 1
+[clkcorr.C:179] Loaded extra clock correction pks2aus.clk : UTC(PKS) -> UTC(AUS) badness 100
+[clkcorr.C:179] Loaded extra clock correction pks2gps.clk : UTC(PKS) -> UTC(GPS) badness 1
+[clkcorr.C:179] Loaded extra clock correction pks2gps.dr2e.clk : UTC(PKS) -> UTC(GPS) badness 1e+03
+[clkcorr.C:179] Loaded extra clock correction pks2tid.clk : UTC(PKS) -> UTC(TID) badness 1
+[clkcorr.C:179] Loaded extra clock correction pks2tt_toasim.clk : UTC(PKS) -> TT(TOASIM) badness 1e+03
+[clkcorr.C:179] Loaded extra clock correction ptb2tai.clk : TA(PTB) -> TAI badness 1
+[clkcorr.C:179] Loaded extra clock correction tai2tt_bipm01.clk : TAI -> TT(BIPM01) badness 1
+[clkcorr.C:179] Loaded extra clock correction tai2tt_bipm05.clk : TAI -> TT(BIPM2005) badness 1
+[clkcorr.C:179] Loaded extra clock correction tai2tt_bipm06.clk : TAI -> TT(BIPM2006) badness 1
+[clkcorr.C:179] Loaded extra clock correction tai2tt_bipm2003.clk : TAI -> TT(BIPM2003) badness 1
+[clkcorr.C:179] Loaded extra clock correction tai2tt_bipm2004.clk : TAI -> TT(BIPM2004) badness 1
+[clkcorr.C:179] Loaded extra clock correction tai2tt_bipm2004ext.clk : TAI -> TT(BIPM2004ext) badness 1
+[clkcorr.C:179] Loaded extra clock correction tai2tt_bipm2010.clk : TAI -> TT(BIPM2010) badness 1
+[clkcorr.C:179] Loaded extra clock correction tai2tt_bipm2011.clk : TAI -> TT(BIPM2011) badness 1
+[clkcorr.C:179] Loaded extra clock correction tai2tt_bipm2012.clk : TAI -> TT(BIPM2012) badness 1
+[clkcorr.C:179] Loaded extra clock correction tai2tt_bipm2013.clk : TAI -> TT(BIPM2013) badness 1
+[clkcorr.C:179] Loaded extra clock correction tai2tt_bipm2014.clk : TAI -> TT(BIPM2014) badness 1
+[clkcorr.C:179] Loaded extra clock correction tai2tt_bipm2015.clk : TAI -> TT(BIPM2015) badness 1
+[clkcorr.C:179] Loaded extra clock correction tai2tt_bipm2016.clk : TAI -> TT(BIPM2016) badness 1
+[clkcorr.C:179] Loaded extra clock correction tai2tt_bipm2017.clk : TAI -> TT(BIPM2017) badness 1
+[clkcorr.C:179] Loaded extra clock correction tai2tt_bipm92.clk : TAI -> TT(BIPM92) badness 1
+[clkcorr.C:179] Loaded extra clock correction tai2tt_tai.clk : TAI -> TT(TAI) badness 1
+[clkcorr.C:179] Loaded extra clock correction tid2nist.clk : UTC(TID) -> UTC(NIST) badness 1
+[clkcorr.C:179] Loaded extra clock correction utc2tai.clk : UTC -> TAI badness 1
+[clkcorr.C:179] Loaded extra clock correction utc2ut1.clk : UTC -> UT1 badness 1
+[clkcorr.C:179] Loaded extra clock correction vla2nist.clk : UTC(VLA) -> UTC(NIST) badness 1
+[clkcorr.C:179] Loaded extra clock correction wsrt2gps.clk : UTC(wsrt) -> UTC(GPS) badness 1
+Using the following chain of clock corrections for UTC(pks) -> TT(BIPM2018)
+pks2gps.clk : UTC(PKS) <-> UTC(GPS)
+gps2utc.clk : UTC(GPS) <-> UTC
+utc2tai.clk : UTC <-> TAI
+tai2tt_bipm2018.clk : TAI <-> TT(BIPM2018)
+Using the following chain of clock corrections for UTC(pks) -> UTC
+pks2gps.clk : UTC(PKS) <-> UTC(GPS)
+gps2utc.clk : UTC(GPS) <-> UTC
+Loaded zenith wet delays for site PKS from pks.zwd
+Loaded surface atmospheric pressures for site PKS from pks.sap
+[tempo2Util.C:397] [TROP2] Assume standard atmospheric pressure (no data) for site pks at MJD 53041.2
+[tempo2Util.C:397] [TROP1] Assume zero zenith wet delay (no data) for site pks  at MJD 53041.2
+[tempo2Util.C:401] Warning: [DUP1] duplicated warnings have been suppressed.
+[TKfit.C:345] SVD nparams=24 nconst=0 ndata=4573
+[tempo2.C:567] Complete fit
+
+
+Results for PSR J1909-3744
+
+
+RMS pre-fit residual = 0.310 (us), RMS post-fit residual = 0.221 (us)
+Fit Chisq = 5801	Chisqr/nfree = 5800.52/4549 = 1.27512	pre/post = 1.40308
+Number of fit parameters: 24
+Number of points in fit = 4573
+Offset: -1.20906e-06 9.85708e-06 offset_e*sqrt(n) = 0.000666575 n = 4573
+
+
+PARAMETER       Pre-fit                   Post-fit                  Uncertainty   Difference   Fit
+---------------------------------------------------------------------------------------------------
+ELONG           284.220851214046          284.220851211554          9.8455e-10    -2.4918e-09   Y
+ELAT            -15.155520529867          -15.1555205322518         3.4368e-09    -2.3848e-09   Y
+F0 (s^-1)       339.315687129889          339.315687129887          6.3526e-14    -2.4443e-12   Y
+F1 (s^-2)       -1.61481112868585e-15     -1.61478541001537e-15     5.5479e-22    2.5719e-20    Y
+PEPOCH (MJD)    55635                     55635                     0             0             N
+POSEPOCH (MJD)  55635                     55635                     0             0             N
+DMEPOCH (MJD)   58990                     58990                     0             0             N
+DM (cm^-3 pc)   10.39103                  10.39103                  0             0             N
+DM1 (cm^-3 pc y -6.40766825456732e-05     -6.40766825456732e-05     0             0             N
+DM2 (cm^-3 pc y 1.88272663178103e-05      1.88272663178103e-05      0             0             N
+PMELONG         -13.8617648370744         -13.8590195094133         0.00071232    0.0027453     Y
+PMELAT          -34.3199773811157         -34.3105435014585         0.0025093     0.0094339     Y
+PX (mas)        0.86187832836648          0.859258179458945         0.0089072     -0.0026201    Y
+SINI            0.998178461347048         0.998180125314516         5.3428e-05    1.664e-06     Y
+PB (d)          1.53344947456838          1.53344947456699          3.7319e-12    -1.3884e-12   Y
+A1 (lt-s)       1.89799121042328          1.89799125690485          2.6169e-08    4.6482e-08    Y
+PBDOT           5.10149550739605e-13      5.10259442478086e-13      1.4e-15       1.0989e-16    Y
+XDOT            -4.68992499793332e-16     -5.72585183644147e-16     5.2634e-17    -1.0359e-16   Y
+TASC (MJD)      53630.723214899           53630.723214901           3.0077e-09    1.9281e-09    Y
+EPS1            4.04169856449273e-08      6.3286135030271e-08       9.7261e-09    2.2869e-08    Y
+EPS2            -9.22874975323408e-08     -8.23705021775954e-08     5.357e-09     9.917e-09     Y
+M2              0.207017829185523         0.206608395124935         0.0012735     -0.00040943   Y
+START (MJD)     53041.1660879336          53041.1660879336          0             0             N
+FINISH (MJD)    58220.8943286496          58220.8943286496          0             0             N
+TZRMJD          55618.1359953091          55618.1359953091          0             0             N
+TZRFRQ (MHz)    2780.5                    2780.5                    0             0             N
+TZRSITE         pks                      
+FD1             3.90766882017688e-05      4.25862102667008e-05      2.6614e-05    3.5095e-06    Y
+FD2             -3.52387991099875e-05     -3.81525956785332e-05     2.3884e-05    -2.9138e-06   Y
+FD3             1.0513393759052e-05       1.13083569176148e-05      7.1246e-06    7.9496e-07    Y
+TRES            0.31                      0.221073918307563         0             -0.088926     N
+EPHVER          TEMPO2                    TEMPO2                    0             0             N
+NE_SW (cm^-3)   4                         4                         0             0             N
+DM_SERIES       TAYLOR                   
+---------------------------------------------------------------------------------------------------
+[textOutput.C:296] Notice: Parameter uncertainties multiplied by sqrt(red. chisq)
+
+Jump 1 ( -g 10CM_PDFB1 6.396534151347e-08 1): -1.059549737232e-06 3.8851716226901e-08 Y
+Jump 2 ( -g 10CM_PDFB2 3.2118103229137e-08 1): -6.2354760627805e-07 3.1792050330292e-08 Y
+Jump 3 ( -g 10CM_WBCORR 1.6084620690139e-07 1): -2.2666047362155e-06 6.5834920958762e-08 Y
+Jump 4 ( -cpsr2_50cm 1 -2.36e-06 0): -2.36e-06 0 N
+Jump 5 ( -cpsr2m_1341 1 -1.72e-06 0): -1.72e-06 0 N
+Jump 6 ( -cpsr2n_1405 1 -1.8e-06 0): -1.8e-06 0 N
+Jump 7 ( -dfb3_J0437_55319_56160 1 2.2e-07 0): 2.2e-07 0 N
+Jump 8 ( -dfb3_J0437_56160_60000 1 4.5e-07 0): 4.5e-07 0 N
+Jump 9 ( -pdfb1_128_ch 1 -3.5547e-06 0): -3.5547e-06 0 N
+Jump 10 ( -pdfb1_512_ch 1 -1.22813e-05 0): -1.22813e-05 0 N
+Jump 11 ( -pdfb1_j1909_2006 1 1.22813e-05 0): 1.22813e-05 0 N
+Jump 12 ( -pdfb1_post_2006 1 -1.3e-07 0): -1.3e-07 0 N
+Jump 13 ( -pdfb1_pre_2006 1 -1.13e-06 0): -1.13e-06 0 N
+Jump 14 ( -pdfb2_1024_MHz 1 -5.435e-06 0): -5.435e-06 0 N
+Jump 15 ( -pdfb2_256MHz_1024_ch 1 -1.1395e-05 0): -1.1395e-05 0 N
+Jump 16 ( -pdfb3_1024_MHz 1 1.03e-06 0): 1.03e-06 0 N
+Jump 17 ( -pdfb3_256MHz_1024ch 1 4.295e-06 0): 4.295e-06 0 N
+Jump 18 ( -pdfb3_256MHz_2048ch 1 8.32e-06 0): 8.32e-06 0 N
+Jump 19 ( -pdfb3_64MHz_512ch 1 8.9e-06 0): 8.9e-06 0 N
+Jump 20 ( -pdfb4_56055_56110_cals 1 3.82e-07 0): 3.82e-07 0 N
+Jump 21 ( -pdfb4_56110_56160_cals 1 5.41e-07 0): 5.41e-07 0 N
+Jump 22 ( -pdfb4_56160_57575_cals 1 4.25e-07 0): 4.25e-07 0 N
+Jump 23 ( -pdfb4_57575_65000_cals 1 1.71e-07 0): 1.71e-07 0 N
+Jump 24 ( -wbb256_1024_128_3p 1 -6.2e-07 0): -6.2e-07 0 N
+Jump 25 ( -wbb256_512_128_3p_b 1 -6.2e-07 0): -6.2e-07 0 N
+Jump 26 ( -wbb_c_config 1 3.8e-07 0): 3.8e-07 0 N
+Jump 27 ( -caspsr_55500_57575_cals 1 -1.31e-06 0): -1.31e-06 0 N
+Jump 28 ( -caspsr_57575_65000_cals 1 -1.533e-06 0): -1.533e-06 0 N
+Jump 29 ( -pdfb4.*_1024_[1,2]... 1 2.23e-06 0): 2.23e-06 0 N
+Jump 30 ( -pdfb4_256MHz_1024ch 1 5.05e-06 0): 5.05e-06 0 N
+Jump 31 ( -pdfb4_55319_56055_cals 1 9.27e-07 0): 9.27e-07 0 N
+Jump 32 ( -j 10CM_55319_PDFB4 3.1072125529837e-07 1): 4.9858094291922e-07 2.5735400797327e-08 Y
+
+Derived parameters:
+
+P0 (s)      = 0.00294710807053613       5.5175e-19   
+P1          = 1.40251314470427e-20      4.8186e-27   
+tau_c (Myr) = 3331.6
+bs (G)      = 2.0573e+08
+
+Binary model: T2
+Mass function                  = 0.003121953334  +- 0.000000000114 solar masses 
+Minimum, median and maximum companion mass: 0.1954 < 0.2288 < 0.5065 solar masses
+Pulsar Mass (Shapiro Delay): 1.46958 (+/- 0.014225) Msun.
+
+Parallax distance is 1163.79 (+/- 12.0641) pc.
+Pbdot distance is 1157.82 (+/- 3.17678) pc.
+MTOT derived from sin i and m2 = 1.6762373884526
+Inclination angle (deg)        = 86.542801963426 (+ 0.05114151 - 0.05039683)
+
+Conversion from ELL1 parameters: 
+------------------------------------
+ECC = 1.03875090931652e-07 +/- 7.29099522487879e-09
+OM  = 142.464543107705 +/- 4.61935724071271 degrees
+T0  = 53631.3300542864 +/- 0.0196765303711339
+------------------------------------
+Total proper motion = 37.004 +/- 0.0023419 mas/yr
+Total time span = 5179.728 days = 14.181 years
+
+Tempo2 usage
+Units:                 TCB (tempo2)
+Time ephemeris:        IF99 (tempo2)
+Troposphere corr.?     Yes (tempo2)
+Dilate freq?           Yes (tempo2)
+Electron density (1AU) 4
+Solar system ephem     DE436
+Time scale             TT(BIPM2018)
+Binary model           T2
+
+[textOutput.C:1641] Warning: There are output parameters with very high covariance
+                 FD1        param_ZERO(0) -0.99974
+                 FD2        param_ZERO(0) +0.99897
+                 FD2                  FD1 -0.99974
+                 FD3        param_ZERO(0) -0.99770
+                 FD3                  FD1 +0.99898
+                 FD3                  FD2 -0.99975
+Notice: There were 4 warnings. Summaries are shown below, check logs for full details.
+Warning #1: [TIM1] Please place MODE flags in the parameter file 
+Warning #2: PSR J1909-3744 uses DM2+ but does not define DM_SERIES. Assume Taylor. This has behaviour has changed since June 2020!
+See https://bitbucket.org/psrsoft/tempo2/issues/27/tempo2-dm-polynomial-is-not-a-taylor
+
+Warning #3: [DUP1] duplicated warnings have been suppressed.
+Warning #4: There are output parameters with very high covariance
+Finishing off: time taken = 5.64 (s)
