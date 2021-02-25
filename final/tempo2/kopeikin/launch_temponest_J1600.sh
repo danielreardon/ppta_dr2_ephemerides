@@ -1,6 +1,6 @@
 #!/bin/bash
-#SBATCH --job-name=tnest_J1600_5
-#SBATCH --output=/fred/oz002/dreardon/ppta_dr2_ephemerides/final/tempo2/kopeikin/tnest_J1600_5.out
+#SBATCH --job-name=tnest_J1600_6
+#SBATCH --output=/fred/oz002/dreardon/ppta_dr2_ephemerides/final/tempo2/kopeikin/tnest_J1600_6.out
 #SBATCH --ntasks=16
 #SBATCH --time=168:00:00
 #SBATCH --mem-per-cpu=5g
