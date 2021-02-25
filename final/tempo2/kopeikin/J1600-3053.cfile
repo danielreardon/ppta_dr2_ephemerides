@@ -8,7 +8,7 @@ sampler = 0;
 
 
 # Root of the results files,relative to the directory in which TempoNest is run. This will be followed by the pulsar name, and then the individual output file extensions.
-root = results/J1600-DM_annual-M2-4-
+root = results/J1600-DM_annual-M2-5-
 
 # numTempo2its - sets the number of iterations Tempo2 should do before setting the priors.  Should only be set to 0 if all the priors are set in setTNPriors
 numTempo2its = 1;
@@ -145,8 +145,11 @@ Dpriors[16][1] = 1
 TempoPriors[16][0] = -0.5;
 TempoPriors[16][1] = 1;
 TempoPriors[16][2] = 0;
-TempoPriors[16][2] = 0;
 # M2
+Dpriors[17][0] = 0
+Dpriors[17][1] = 1
+TempoPriors[17][0] = 0.001;
+TempoPriors[17][1] = 1.5;
 TempoPriors[17][2] = 0;
 # KOM
 Dpriors[22][0] = 0
@@ -172,6 +175,6 @@ TempoPriors[23][2] = 0;
 
 IS = 1;
 ceff = 0;
-efr = 0.3;
+efr = 0.1;
 updInt = 500;
-nlive = 100;
+nlive = 300;

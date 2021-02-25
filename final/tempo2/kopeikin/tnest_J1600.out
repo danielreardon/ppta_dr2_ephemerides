@@ -25194,3 +25194,8 @@ Replacements:                              19900
 Total Samples:                           3788390
 Nested Sampling ln(Z):              90092.002292
 Importance Nested Sampling ln(Z):   90091.244942 +/-  0.045209
+Acceptance Rate:                        0.004072
+Replacements:                              19950
+Total Samples:                           4899299
+Nested Sampling ln(Z):              90092.007668
+Importance Nested Sampling ln(Z):   90091.244698 +/-  0.045221
